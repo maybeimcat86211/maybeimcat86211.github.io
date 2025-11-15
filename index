@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花蓮溪降路線介紹</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <h1>花蓮溪降路線</h1>
+    <nav>
+        <a href="index.html">首頁</a>
+        <a href="routes.html">路線介紹</a>
+        <a href="form.html">報名</a>
+    </nav>
+</header>
+
+<main>
+    <h2>熱門路線</h2>
+
+    <section class="route">
+        <h3>路線1：西林秘境</h3>
+        <img src="img/route1.jpg" alt="西林照片">
+        <p>西林秘境是一條初級溪降路線，適合新手和家庭體驗...</p>
+    </section>
+
+    <section class="route">
+        <h3>路線2：萬里溪</h3>
+        <!-- 如果照片在 Google 雲端 -->
+        <img src="https://drive.google.com/uc?export=view&id=GOOGLE_FILE_ID" alt="萬里溪照片">
+        <p>萬里溪是一條初級溪降路線，除了瀑布垂降之外...結束後還可以體驗野溪溫泉</p>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2025 花蓮溪降活動</p>
+</footer>
+</body>
+</html>
