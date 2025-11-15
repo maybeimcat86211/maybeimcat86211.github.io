@@ -1,56 +1,172 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>花蓮溪降活動</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canyoning Trips for Everyone | Bali Adventure</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <div class="logo">🏔️ Bali Canyoning</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#trips">Trips</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<header>
-    <h1>花蓮溪降活動</h1>
-    <nav>
-        <a href="index.html">首頁</a>
-        <a href="form.html">報名</a>
-    </nav>
-</header>
+    <main>
+        <section id="home" class="hero">
+            <h1>Canyoning Trips for Everyone</h1>
+            <p>Experience the thrill of Bali's most spectacular canyons</p>
+        </section>
 
-<main>
-    <h2>熱門路線</h2>
-    <div class="route-grid">
+        <section id="trips" class="trips-section">
+            <div class="trips-container">
+                <!-- Kalimudah Canyon -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="Kalimudah Canyon">
+                        <span class="badge">Family 👍</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>Kalimudah</h2>
+                        <p>A must-do Bali canyon! The perfect canyoning trip in Bali for everyone! Easy, fun, and beautiful. The first Bali canyon explored and opened in Indonesia by our Bali canyoning team.</p>
+                        <div class="price">145$</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('kalimudah')">LEARN MORE →</button>
+                            <button class="btn-book" onclick="openBooking('Kalimudah', 145)">BOOK NOW →</button>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="route-card">
-            <img src="img/route1.jpg" alt="路線1">
-            <span class="label">Family 👍</span>
-            <h3>西林秘境</h3>
-            <p>西林秘境是一條初級溪降路線，適合新手和家庭體驗。</p>
-            <p class="price">NT$1450</p>
-            <div class="btn-group">
-                <a class="btn" href="#">Learn More →</a>
-                <a class="btn btn-outline" href="form.html">Book Now →</a>
+                <!-- Kerenkali Canyon -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="Kerenkali Canyon">
+                        <span class="badge">Kids Friendly 😀</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>Kerenkali</h2>
+                        <p>If you had to choose just one sporty canyon with water in Bali, Kerenkali would be the one. Kerenkali is the perfect choice for Bali Canyoning enthusiasts, from beginners to advanced.</p>
+                        <div class="price">175$</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('kerenkali')">LEARN MORE →</button>
+                            <button class="btn-book" onclick="openBooking('Kerenkali', 175)">BOOK NOW →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Excalibur Canyon -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Excalibur Canyon">
+                        <span class="badge">Teenagers 😎</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>Excalibur Canyon</h2>
+                        <p>The power of rappelling, jumping (optional) and swimming in clear green/blue water. Excalibur it's all in one that no others canyons in Bali can offer.</p>
+                        <div class="price">160$</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('excalibur')">LEARN MORE →</button>
+                            <button class="btn-book" onclick="openBooking('Excalibur Canyon', 160)">BOOK NOW →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blue Gorge -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="Blue Gorge">
+                        <span class="badge">Family 👍</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>Blue Gorge</h2>
+                        <p>Blue Gorge is our newest canyon (2022) and Bali's most amazing Bali canyoning gorge with blue water offering multiple jumps, swims and rappels.</p>
+                        <div class="price">147$</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('bluegorge')">LEARN MORE →</button>
+                            <button class="btn-book" onclick="openBooking('Blue Gorge', 147)">BOOK NOW →</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="route-card">
-            <img src="img/route2.jpg" alt="路線2">
-            <span class="label">Kids Friendly 🐣</span>
-            <h3>萬里溪</h3>
-            <p>測試</p>
-            <p class="price">NT$1750</p>
-            <div class="btn-group">
-                <a class="btn" href="#">Learn More →</a>
-                <a class="btn btn-outline" href="form.html">Book Now →</a>
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>About Us</h2>
+                <p>We are Bali's premier canyoning adventure company, offering safe and thrilling experiences for adventurers of all levels. Our expert guides ensure your safety while you explore Bali's most stunning natural wonders.</p>
             </div>
-        </div>
+        </section>
 
-        <!-- 可依需求增加更多路線卡 -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <p>Email: info@balicanyoning.com</p>
+                <p>Phone: +62 123 456 789</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBooking()">&times;</span>
+            <h2>Book Your Adventure</h2>
+            <div id="bookingInfo"></div>
+            <form id="bookingForm">
+                <input type="hidden" id="tripName" name="tripName">
+                <input type="hidden" id="tripPrice" name="tripPrice">
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Preferred Date *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="participants">Number of Participants *</label>
+                    <input type="number" id="participants" name="participants" min="1" max="20" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Special Requests or Questions</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="promoCode">Promo Code (Optional)</label>
+                    <input type="text" id="promoCode" name="promoCode">
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Booking Request</button>
+            </form>
+        </div>
     </div>
-</main>
 
-<footer>
-    <p>© 2025 花蓮溪降活動</p>
-</footer>
+    <footer>
+        <p>&copy; 2025 Bali Canyoning Adventures. All rights reserved.</p>
+    </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
