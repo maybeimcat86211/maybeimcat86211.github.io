@@ -1,12 +1,12 @@
 // Google Form 設定
 // 請替換成您自己的 Google Form URL
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
+const GOOGLE_FORM_URL = 'https://forms.gle/aLLQMfR7f6g5qKvG7';
 
 // Google Form 欄位的 entry ID (需要從您的 Google Form 取得)
 const FORM_FIELDS = {
     tripName: 'entry.123456789',      // 行程名稱
     tripPrice: 'entry.987654321',     // 價格
-    name: 'entry.111111111',          // 姓名
+    name: 'entry.1623988474',          // 姓名
     email: 'entry.222222222',         // Email
     phone: 'entry.333333333',         // 電話
     date: 'entry.444444444',          // 日期
@@ -32,13 +32,13 @@ const tripDetails = {
         included: '專業教練、完整裝備、保險、午餐、接駁'
     },
     feicui: {
-        title: '翡翠谷',
+        title: '萬里溪',
         description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。',
         highlights: [
             '✓ 碧綠清澈深潭',
-            '✓ 多個天然滑水道',
+            '✓ 滑水道',
             '✓ 刺激跳水點',
-            '✓ 進階溯溪體驗',
+            '✓ 溫泉體驗',
             '✓ 絕佳攝影景點'
         ],
         duration: '約 5-6 小時',
@@ -46,28 +46,28 @@ const tripDetails = {
         included: '專業教練、完整裝備、保險、午餐、接駁'
     },
     huangjin: {
-        title: '黃金峽谷',
-        description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。',
+        title: '七腳川溪',
+        description: '暫無。',
         highlights: [
-            '✓ 親子友善路線',
-            '✓ 金黃色峽谷景觀',
-            '✓ 溫和地形安全',
-            '✓ 適合6歲以上兒童',
-            '✓ 家庭回憶首選'
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無'
         ],
         duration: '約 3-4 小時',
         difficulty: '入門',
         included: '專業教練、完整裝備、保險、點心、接駁'
     },
     blue: {
-        title: '藍色秘境',
-        description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。',
+        title: '暫無',
+        description: '暫無',
         highlights: [
-            '✓ 藍寶石般水潭',
-            '✓ 壯觀瀑布景觀',
-            '✓ IG打卡聖地',
-            '✓ 多個跳水點',
-            '✓ 絕美攝影角度'
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無',
+            '✓ 暫無'
         ],
         duration: '約 4-5 小時',
         difficulty: '初中級',
