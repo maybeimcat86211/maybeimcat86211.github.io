@@ -3,39 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>花蓮溪降路線介紹</title>
+<title>花蓮溪降活動</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <header>
-    <h1>花蓮溪降路線</h1>
+    <h1>花蓮溪降活動</h1>
     <nav>
         <a href="index.html">首頁</a>
-        <a href="routes.html">路線介紹</a>
         <a href="form.html">報名</a>
     </nav>
 </header>
 
 <main>
     <h2>熱門路線</h2>
+    <div class="route-grid">
 
-    <section class="route">
-        <h3>路線1：西林秘境</h3>
-        <img src="img/route1.jpg" alt="西林照片">
-        <p>西林秘境是一條初級溪降路線，適合新手和家庭體驗...</p>
-    </section>
+        <div class="route-card">
+            <img src="img/route1.jpg" alt="路線1">
+            <span class="label">Family 👍</span>
+            <h3>西林秘境</h3>
+            <p>西林秘境是一條初級溪降路線，適合新手和家庭體驗。</p>
+            <p class="price">NT$1450</p>
+            <div class="btn-group">
+                <a class="btn" href="#">Learn More →</a>
+                <a class="btn btn-outline" href="form.html">Book Now →</a>
+            </div>
+        </div>
 
-    <section class="route">
-        <h3>路線2：萬里溪</h3>
-        <!-- 如果照片在 Google 雲端 -->
-        <img src="https://drive.google.com/uc?export=view&id=GOOGLE_FILE_ID" alt="萬里溪照片">
-        <p>萬里溪是一條初級溪降路線，除了瀑布垂降之外...結束後還可以體驗野溪溫泉</p>
-    </section>
+        <div class="route-card">
+            <img src="img/route2.jpg" alt="路線2">
+            <span class="label">Kids Friendly 🐣</span>
+            <h3>萬里溪</h3>
+            <p>測試</p>
+            <p class="price">NT$1750</p>
+            <div class="btn-group">
+                <a class="btn" href="#">Learn More →</a>
+                <a class="btn btn-outline" href="form.html">Book Now →</a>
+            </div>
+        </div>
 
+        <!-- 可依需求增加更多路線卡 -->
+    </div>
 </main>
 
 <footer>
     <p>© 2025 花蓮溪降活動</p>
 </footer>
+
 </body>
 </html>
