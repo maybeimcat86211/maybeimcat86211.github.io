@@ -278,42 +278,56 @@ function validateForm(data) {
 
 // 提交到 Google Form
 function submitToGoogleForm(data, submitBtn, originalText) {
-  const scriptUrl = 'https://script.google.com/macros/s/你的ID/exec'; // 改成你剛部署的 URL
+    const scriptUrl = '你的 GAS Web App URL';
 
-  const formData = new FormData();
-  formData.append('name', data.name);
-  formData.append('birthDate', data.birthDate);
-  formData.append('idNumber', data.idNumber.toUpperCase());
-  formData.append('phone', data.phone);
-  formData.append('emergencyName', data.emergencyName);
-  formData.append('emergencyPhone', data.emergencyPhone);
-  formData.append('address', data.address);
-  formData.append('shoeSize', data.shoeSize);
-  formData.append('height', data.height);
-  formData.append('weight', data.weight);
-  formData.append('medicalConditions', data.medicalConditions || '無');
-  formData.append('tripName', data.tripName);    // 從 hidden input 拿
-  formData.append('tripPrice', data.tripPrice);
+    const formData = new FormData();
 
-  fetch(scriptUrl, {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors' // 這次可以安全用，因為 GAS 支援
-  })
-  .then(() => {
-    showSuccessMessage(data);
-    closeBooking();
-  })
-  .catch(err => {
-    console.error(err);
-    alert('送出失敗，請稍後再試');
-  })
-  .finally(() => {
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-  });
+    // 主報名人資訊（非參加者）
+    formData.append('tripName', document.getElementById('tripName').value);
+    formData.append('tripPrice', document.getElementById('tripPrice').value);
+    formData.append('mainPhone', document.getElementById('mainPhone').value);
+    formData.append('mainAddress', document.getElementById('mainAddress').value);
+    formData.append('emergencyName', document.getElementById('emergencyName').value);
+    formData.append('emergencyPhone', document.getElementById('emergencyPhone').value);
+
+    // 收集所有參加者資料
+    document.querySelectorAll('.participant-block').forEach((block, index) => {
+        const prefix = `participants[${index}]`;
+        const name = block.querySelector(`[name="${prefix}[name]"]`).value;
+        const birthDate = block.querySelector(`[name="${prefix}[birthDate]"]`).value;
+        const idNumber = block.querySelector(`[name="${prefix}[idNumber]"]`).value.toUpperCase();
+        const height = block.querySelector(`[name="${prefix}[height]"]`).value;
+        const weight = block.querySelector(`[name="${prefix}[weight]"]`).value;
+        const shoeSize = block.querySelector(`[name="${prefix}[shoeSize]"]`).value;
+        const medical = block.querySelector(`[name="${prefix}[medicalConditions]"]`).value || '無';
+
+        formData.append(`${prefix}[name]`, name);
+        formData.append(`${prefix}[birthDate]`, birthDate);
+        formData.append(`${prefix}[idNumber]`, idNumber);
+        formData.append(`${prefix}[height]`, height);
+        formData.append(`${prefix}[weight]`, weight);
+        formData.append(`${prefix}[shoeSize]`, shoeSize);
+        formData.append(`${prefix}[medicalConditions]`, medical);
+    });
+
+    fetch(scriptUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+    })
+    .then(() => {
+        showSuccessMessage(); // 可以改成顯示「已送出 X 位參加者」
+        closeBooking();
+    })
+    .catch(err => {
+        console.error(err);
+        alert('送出失敗，請稍後再試');
+    })
+    .finally(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
 }
-
 // 顯示成功訊息
 function showSuccessMessage(data) {
     const message = `
