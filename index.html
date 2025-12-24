@@ -124,31 +124,105 @@
             <div id="bookingInfo"></div>
             
             <form id="bookingForm">
-                <input type="hidden" id="tripName" name="tripName">
-                <input type="hidden" id="tripPrice" name="tripPrice">
+    <!-- 隱藏欄位：行程資訊 -->
+    <input type="hidden" id="tripName" name="tripName">
+    <input type="hidden" id="tripPrice" name="tripPrice">
+
+    <!-- 主報名人聯絡資訊（只填一次） -->
+    <div class="form-section">
+        <h3>📞 主報名人聯絡資訊</h3>
+        <div class="form-group">
+            <label for="mainPhone">聯絡電話 *</label>
+            <input type="tel" id="mainPhone" name="mainPhone" required placeholder="0912-345-678">
+        </div>
+        <div class="form-group">
+            <label for="mainAddress">聯絡地址 *</label>
+            <input type="text" id="mainAddress" name="mainAddress" required placeholder="請輸入完整地址">
+        </div>
+    </div>
+
+    <!-- 緊急聯絡人（只填一次） -->
+    <div class="form-section">
+        <h3>🚨 緊急聯絡人（全團共用）</h3>
+        <div class="form-group">
+            <label for="emergencyName">緊急聯絡人姓名 *</label>
+            <input type="text" id="emergencyName" name="emergencyName" required placeholder="請填寫家人或朋友">
+        </div>
+        <div class="form-group">
+            <label for="emergencyPhone">緊急聯絡人電話 *</label>
+            <input type="tel" id="emergencyPhone" name="emergencyPhone" required placeholder="0912-345-678">
+        </div>
+    </div>
+
+    <!-- 參加者清單 -->
+    <div class="form-section">
+        <h3>👥 參加者資料</h3>
+        <div id="participantsContainer">
+            <!-- 第一個參加者（預設顯示） -->
+            <div class="participant-block" data-index="0">
+                <h4>參加者 1 <span class="remove-participant" style="display:none;">- 移除</span></h4>
                 
-                <!-- 基本資料 -->
-                <div class="form-section">
-                    <h3>👤 基本資料</h3>
-                    
-                    <div class="form-group">
-                        <label for="name">姓名 Name *</label>
-                        <input type="text" id="name" name="name" required placeholder="請輸入您的真實姓名">
-                    </div>
+                <!-- 姓名 -->
+                <div class="form-group">
+                    <label>姓名 Name *</label>
+                    <input type="text" name="participants[0][name]" required placeholder="請輸入真實姓名">
+                </div>
 
-                    <div class="form-group">
-                        <label for="birthDate">出生年月日 Date of Birth *</label>
-                        <input type="date" id="birthDate" name="birthDate" required>
-                        <small>需年滿6歲以上才可參加</small>
-                    </div>
+                <!-- 出生年月日 -->
+                <div class="form-group">
+                    <label>出生年月日 *</label>
+                    <input type="date" name="participants[0][birthDate]" required>
+                </div>
 
+                <!-- 身分證 / 護照 -->
+                <div class="form-group">
+                    <label>身分證字號 / 護照號碼 *</label>
+                    <input type="text" name="participants[0][idNumber]" required placeholder="例如：A123456789">
+                </div>
+
+                <!-- 身高體重 -->
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="idNumber">身分證字號 ID / 護照號碼 Passport No. *</label>
-                        <input type="text" id="idNumber" name="idNumber" required placeholder="例如：A123456789 或護照號碼" maxlength="20">
-                        <small>🔒 此資料僅供保險使用，絕不外洩</small>
+                        <label>身高 (cm) *</label>
+                        <input type="number" name="participants[0][height]" required min="100" max="250">
+                    </div>
+                    <div class="form-group">
+                        <label>體重 (kg) *</label>
+                        <input type="number" name="participants[0][weight]" required min="30" max="200">
                     </div>
                 </div>
 
+                <!-- 鞋子尺寸 -->
+                <div class="form-group">
+                    <label>溯溪鞋尺寸 (cm) *</label>
+                    <select name="participants[0][shoeSize]" required>
+                        <option value="">請選擇</option>
+                        <!-- ... 原本的選項 ... -->
+                    </select>
+                </div>
+
+                <!-- 健康狀況 -->
+                <div class="form-group">
+                    <label>需要注意的疾病或事項</label>
+                    <textarea name="participants[0][medicalConditions]" rows="3" placeholder="例如：心臟病、高血壓... 如無請填「無」"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增參加者按鈕 -->
+        <button type="button" id="addParticipantBtn" class="btn-book">+ 新增一位參加者</button>
+    </div>
+
+    <!-- 同意條款 -->
+    <div class="form-group checkbox-group">
+        <label>
+            <input type="checkbox" id="agreeTerms" required>
+            我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
+        </label>
+    </div>
+
+    <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
+</form>
                 <!-- 聯絡資訊 -->
                 <div class="form-section">
                     <h3>📞 聯絡資訊</h3>
