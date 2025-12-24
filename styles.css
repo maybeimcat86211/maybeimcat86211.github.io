@@ -523,6 +523,32 @@ footer p {
     .hero h1 {
         font-size: 1.8rem;
     }
+    .progress-bar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}
+.progress {
+    height: 100%;
+    background: #2E86AB;
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+.step {
+    display: none;
+}
+.step.active {
+    display: block;
+}
+.btn-next {
+    background: #2E86AB;
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
     
     .form-row {
         grid-template-columns: 1fr;
