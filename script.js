@@ -470,7 +470,131 @@ document.getElementById('phone').addEventListener('input', function(e) {
 document.getElementById('emergencyPhone').addEventListener('input', function(e) {
     formatPhone(e.target);
 });
+// 在 script.js 中加入
 
+let currentStep = 1;
+let totalParticipants = 1;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 綁定下一步
+    document.querySelector('.btn-next').addEventListener('click', function() {
+        if (validateStep(1)) {
+            totalParticipants = parseInt(document.getElementById('participantCount').value);
+            document.getElementById('totalParticipants').value = totalParticipants;
+            generateParticipantSteps();
+            showStep(2);
+        }
+    });
+
+    // 動態產生參加者步驟
+    function generateParticipantSteps() {
+        const container = document.getElementById('participantSteps');
+        container.innerHTML = '';
+        for (let i = 1; i <= totalParticipants; i++) {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'step';
+            stepDiv.id = `step-${i+1}`;
+            stepDiv.innerHTML = `
+                <h3>參加者 ${i} 詳細資料</h3>
+                <div class="form-group">
+                    <label>姓名 *</label>
+                    <input type="text" name="participants[${i-1}][name]" required>
+                </div>
+                <div class="form-group">
+                    <label>出生年月日 *</label>
+                    <input type="date" name="participants[${i-1}][birthDate]" required>
+                </div>
+                <div class="form-group">
+                    <label>身分證 / 護照號碼 *</label>
+                    <input type="text" name="participants[${i-1}][idNumber]" required class="id-uppercase">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>身高 (cm) *</label>
+                        <input type="number" name="participants[${i-1}][height]" required min="100" max="250">
+                    </div>
+                    <div class="form-group">
+                        <label>體重 (kg) *</label>
+                        <input type="number" name="participants[${i-1}][weight]" required min="30" max="200">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>溯溪鞋尺寸 (cm) *</label>
+                    <select name="participants[${i-1}][shoeSize]" required>
+                        <option value="">請選擇</option>
+                        <option value="22">22 cm</option>
+                        <!-- ... 填入所有尺寸 ... -->
+                        <option value="30">30 cm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>健康狀況</label>
+                    <textarea name="participants[${i-1}][medicalConditions]" rows="3" placeholder="如無請填「無」"></textarea>
+                </div>
+                <button type="button" class="btn-next">下一步 →</button>
+            `;
+            container.appendChild(stepDiv);
+
+            // 綁定下一步
+            stepDiv.querySelector('.btn-next').addEventListener('click', function() {
+                if (validateStep(i+1)) {
+                    showStep(i+2);
+                }
+            });
+        }
+    }
+
+    // 顯示特定步驟
+    function showStep(stepNum) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`step-${stepNum}`) || document.querySelector('.step-final').classList.add('active');
+        updateProgress(stepNum);
+        currentStep = stepNum;
+    }
+
+    // 更新進度條
+    function updateProgress(step) {
+        const progress = ((step - 1) / (totalParticipants + 1)) * 100;
+        document.querySelector('.progress').style.width = progress + '%';
+    }
+
+    // 簡單驗證（可擴充）
+    function validateStep(stepNum) {
+        const step = document.querySelector(`.step-${stepNum}`) || document.querySelector('.step-1');
+        const required = step.querySelectorAll('[required]');
+        let valid = true;
+        required.forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = 'red';
+                valid = false;
+            } else {
+                field.style.borderColor = '';
+            }
+        });
+        if (!valid) alert('請填寫所有必填欄位！');
+        return valid;
+    }
+
+    // 身分證自動大寫（動態欄位）
+    document.addEventListener('input', e => {
+        if (e.target.classList.contains('id-uppercase')) {
+            e.target.value = e.target.value.toUpperCase();
+        }
+    });
+
+    // 電話格式化（同原程式碼）
+});
+
+// 表單送出時（修改原 submitToGoogleForm）
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('agreeTerms').checked) {
+        alert('請同意條款');
+        return;
+    }
+    // 收集所有資料的方式同之前，但現在 name 屬性已正確
+    // ... 原 fetch 程式碼 ...
+});
 /* 
 === 表單測試步驟 ===
 
