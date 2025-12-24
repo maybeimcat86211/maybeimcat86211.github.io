@@ -122,157 +122,233 @@
             <span class="close" onclick="closeBooking()">&times;</span>
             <h2>🎯 立即預訂探險行程</h2>
             <div id="bookingInfo"></div>
-            
-            <form id="bookingForm">
-    <!-- 隱藏欄位：行程資訊 -->
-    <input type="hidden" id="tripName" name="tripName">
-    <input type="hidden" id="tripPrice" name="tripPrice">
 
-    <!-- 主報名人聯絡資訊（只填一次） -->
-    <div class="form-section">
-        <h3>📞 主報名人聯絡資訊</h3>
-        <div class="form-group">
-            <label for="mainPhone">聯絡電話 *</label>
-            <input type="tel" id="mainPhone" name="mainPhone" required placeholder="0912-345-678">
-        </div>
-        <div class="form-group">
-            <label for="mainAddress">聯絡地址 *</label>
-            <input type="text" id="mainAddress" name="mainAddress" required placeholder="請輸入完整地址">
-        </div>
-    </div>
-
-    <!-- 緊急聯絡人（只填一次） -->
-    <div class="form-section">
-        <h3>🚨 緊急聯絡人（全團共用）</h3>
-        <div class="form-group">
-            <label for="emergencyName">緊急聯絡人姓名 *</label>
-            <input type="text" id="emergencyName" name="emergencyName" required placeholder="請填寫家人或朋友">
-        </div>
-        <div class="form-group">
-            <label for="emergencyPhone">緊急聯絡人電話 *</label>
-            <input type="tel" id="emergencyPhone" name="emergencyPhone" required placeholder="0912-345-678">
-        </div>
-    </div>
-
-    <!-- 參加者清單 -->
-    <div class="form-section">
-        <h3>👥 參加者資料</h3>
-        <div id="participantsContainer">
-            <!-- 第一個參加者（預設顯示） -->
-            <div class="participant-block" data-index="0">
-                <h4>參加者 1 <span class="remove-participant" style="display:none;">- 移除</span></h4>
-                
-                <!-- 姓名 -->
-                <div class="form-group">
-                    <label>姓名 Name *</label>
-                    <input type="text" name="participants[0][name]" required placeholder="請輸入真實姓名">
-                </div>
-
-                <!-- 出生年月日 -->
-                <div class="form-group">
-                    <label>出生年月日 *</label>
-                    <input type="date" name="participants[0][birthDate]" required>
-                </div>
-
-                <!-- 身分證 / 護照 -->
-                <div class="form-group">
-                    <label>身分證字號 / 護照號碼 *</label>
-                    <input type="text" name="participants[0][idNumber]" required placeholder="例如：A123456789">
-                </div>
-
-                <!-- 身高體重 -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>身高 (cm) *</label>
-                        <input type="number" name="participants[0][height]" required min="100" max="250">
-                    </div>
-                    <div class="form-group">
-                        <label>體重 (kg) *</label>
-                        <input type="number" name="participants[0][weight]" required min="30" max="200">
-                    </div>
-                </div>
-
-                <!-- 鞋子尺寸 -->
-                <div class="form-group">
-                    <label>溯溪鞋尺寸 (cm) *</label>
-                    <select name="participants[0][shoeSize]" required>
-                        <option value="">請選擇</option>
-                        <!-- ... 原本的選項 ... -->
-                    </select>
-                </div>
-
-                <!-- 健康狀況 -->
-                <div class="form-group">
-                    <label>需要注意的疾病或事項</label>
-                    <textarea name="participants[0][medicalConditions]" rows="3" placeholder="例如：心臟病、高血壓... 如無請填「無」"></textarea>
-                </div>
+            <!-- 進度條 -->
+            <div id="progressBar" class="progress-bar">
+                <div class="progress" style="width: 25%;"></div>
             </div>
+
+            <form id="bookingForm">
+                <!-- 隱藏欄位 -->
+                <input type="hidden" id="tripName" name="tripName">
+                <input type="hidden" id="tripPrice" name="tripPrice">
+                <input type="hidden" id="totalParticipants" name="totalParticipants" value="1">
+
+                <!-- 步驟 1: 主報名人 + 人數 -->
+                <div class="step step-1 active">
+                    <h3>📞 主報名人聯絡資訊</h3>
+                    <div class="form-group">
+                        <label for="mainPhone">聯絡電話 *</label>
+                        <input type="tel" id="mainPhone" required placeholder="0912-345-678">
+                    </div>
+                    <div class="form-group">
+                        <label for="mainAddress">聯絡地址 *</label>
+                        <input type="text" id="mainAddress" required placeholder="請輸入完整地址">
+                    </div>
+
+                    <h3>🚨 緊急聯絡人（全團共用）</h3>
+                    <div class="form-group">
+                        <label for="emergencyName">姓名 *</label>
+                        <input type="text" id="emergencyName" required placeholder="請填寫家人或朋友">
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyPhone">電話 *</label>
+                        <input type="tel" id="emergencyPhone" required placeholder="0912-345-678">
+                    </div>
+
+                    <h3>參加人數</h3>
+                    <div class="form-group">
+                        <label for="participantCount">報名幾位？（包含主報名人）</label>
+                        <select id="participantCount" required>
+                            <option value="1">1 位</option>
+                            <option value="2">2 位</option>
+                            <option value="3">3 位</option>
+                            <option value="4">4 位</option>
+                            <option value="5">5 位</option>
+                            <option value="6">6 位</option>
+                            <option value="7">7 位</option>
+                            <option value="8">8 位</option>
+                            <option value="9">9 位</option>
+                            <option value="10">10 位</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-next">下一步 →</button>
+                </div>
+
+                <!-- 動態生成的參加者步驟 -->
+                <div id="participantSteps"></div>
+
+                <!-- 最後確認步驟 -->
+                <div class="step step-final" id="finalStep">
+                    <h3>確認預訂</h3>
+                    <p style="text-align:center; color:#555;">請確認以上所有資料無誤</p>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="agreeTerms" required>
+                            我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
+                    <p class="form-note">* 為必填欄位 | 送出後我們會在24小時內與您聯繫確認行程</p>
+                </div>
+            </form>
         </div>
-
-        <!-- 新增參加者按鈕 -->
-        <button type="button" id="addParticipantBtn" class="btn-book">+ 新增一位參加者</button>
     </div>
 
-    <!-- 同意條款 -->
-    <div class="form-group checkbox-group">
-        <label>
-            <input type="checkbox" id="agreeTerms" required>
-            我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
-        </label>
-    </div>
+    <footer>
+        <p>&copy; 2025 洄瀾溪谷秘境探險 版權所有</p>
+        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
+    </footer>
 
-    <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
-</form>
-                <!-- 聯絡資訊 -->
-                <div class="form-section">
-                    <h3>📞 聯絡資訊</h3>
-                    
+    <script>
+        // 行程詳細資訊
+        const tripDetails = {
+            xilin: {
+                title: '西林秘境',
+                description: '西林秘境是教練們於2023年探勘並建置的一條溪谷路線，擁有30公尺高的壯觀瀑布和罕見的S型瀑布景觀。',
+                highlights: ['✓ 30公尺高瀑布垂降','✓ 罕見S型瀑布奇景','✓ 適合初學者體驗','✓ 專業教練全程指導','✓ 提供完整裝備'],
+                duration: '約 4-5 小時',
+                difficulty: '初級',
+                included: '專業教練、完整裝備、保險、午餐、接駁'
+            },
+            feicui: {
+                title: '翡翠谷',
+                description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。',
+                highlights: ['✓ 碧綠清澈深潭','✓ 多個天然滑水道','✓ 刺激跳水點','✓ 進階溯溪體驗','✓ 絕佳攝影景點'],
+                duration: '約 5-6 小時',
+                difficulty: '進階',
+                included: '專業教練、完整裝備、保險、午餐、接駁'
+            },
+            huangjin: {
+                title: '黃金峽谷',
+                description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。',
+                highlights: ['✓ 親子友善路線','✓ 金黃色峽谷景觀','✓ 溫和地形安全','✓ 適合6歲以上兒童','✓ 家庭回憶首選'],
+                duration: '約 3-4 小時',
+                difficulty: '入門',
+                included: '專業教練、完整裝備、保險、點心、接駁'
+            },
+            blue: {
+                title: '藍色秘境',
+                description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。',
+                highlights: ['✓ 藍寶石般水潭','✓ 壯觀瀑布景觀','✓ IG打卡聖地','✓ 多個跳水點','✓ 絕美攝影角度'],
+                duration: '約 4-5 小時',
+                difficulty: '初中級',
+                included: '專業教練、完整裝備、保險、午餐、接駁'
+            }
+        };
+
+        function showDetails(tripId) {
+            const trip = tripDetails[tripId];
+            if (!trip) return;
+            const detailsHTML = `【${trip.title}】\n${trip.description}\n\n⭐ 行程特色：\n${trip.highlights.join('\n')}\n\n⏰ 活動時間：${trip.duration}\n💪 難度等級：${trip.difficulty}\n📦 費用包含：${trip.included}\n\n注意事項：\n• 請穿著輕便運動服裝\n• 建議攜帶一套乾淨衣物\n• 活動當天請勿飲酒\n• 如有心臟病、高血壓等疾病請事先告知`;
+            alert(detailsHTML);
+        }
+
+        function showTerms() {
+            const terms = `【活動條款及個人資料使用聲明】\n\n一、活動參加條件\n1. 參加者需年滿12歲（親子路線可6歲以上）\n2. 具備基本游泳能力（部分路線）\n3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病\n4. 懷孕婦女不建議參加\n\n二、活動安全規定\n1. 必須全程穿著安全裝備\n2. 務必聽從教練指示\n3. 不得擅自脫隊或進行危險動作\n4. 活動前24小時內禁止飲酒\n\n三、取消政策\n1. 活動前7天取消，退款90%\n2. 活動前3天取消，退款50%\n3. 活動前1天取消，不予退款\n4. 因天候因素取消，可擇期或全額退款\n\n四、個人資料使用聲明\n1. 收集之個人資料僅供本活動使用\n2. 用於保險、緊急聯絡及活動通知\n3. 絕不提供給第三方\n4. 活動結束後將妥善保存或銷毀\n5. 您有權查詢、修改或刪除您的個人資料\n\n五、免責聲明\n1. 參加者需自行評估身體狀況\n2. 如隱瞞病史造成意外，本公司不負責任\n3. 活動中如因個人因素造成傷害，本公司不負賠償責任\n4. 本公司已投保活動相關保險\n\n如有疑問請洽：0912-345-678`;
+            alert(terms);
+        }
+
+        // 多步驟表單相關變數
+        let currentStep = 1;
+        let totalParticipants = 1;
+
+        function openBooking(tripName, price) {
+            const modal = document.getElementById('bookingModal');
+            const bookingInfo = document.getElementById('bookingInfo');
+            
+            document.getElementById('tripName').value = tripName;
+            document.getElementById('tripPrice').value = price;
+            
+            bookingInfo.innerHTML = `
+                <h3>📍 ${tripName}</h3>
+                <p><strong>💰 費用：</strong>NT$ ${price.toLocaleString()} / 人</p>
+                <p><strong>📋 說明：</strong>請詳細填寫以下資料，我們會在24小時內與您聯繫確認行程細節。</p>
+                <p style="color: #d9534f; font-weight: 600;">⚠️ 所有標註 * 的欄位為必填項目</p>
+                <p style="color: #2E86AB; font-size: 0.95rem;">🔒 您的個人資料將受到完善保護，僅供保險及活動使用</p>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // 重置表單
+            currentStep = 1;
+            totalParticipants = 1;
+            document.getElementById('participantSteps').innerHTML = '';
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.querySelector('.step-1').classList.add('active');
+            document.querySelector('.progress').style.width = '25%';
+        }
+
+        function closeBooking() {
+            const modal = document.getElementById('bookingModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('bookingForm').reset();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target == modal) closeBooking();
+        };
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeBooking();
+        });
+
+        // 下一步按鈕
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-next')) {
+                const step = e.target.closest('.step');
+                if (validateStep(step)) {
+                    if (step.classList.contains('step-1')) {
+                        totalParticipants = parseInt(document.getElementById('participantCount').value);
+                        document.getElementById('totalParticipants').value = totalParticipants;
+                        generateParticipantSteps();
+                        showStep(2);
+                    } else {
+                        const stepNum = parseInt(step.id.split('-')[1]);
+                        showStep(stepNum + 1);
+                    }
+                }
+            }
+        });
+
+        function generateParticipantSteps() {
+            const container = document.getElementById('participantSteps');
+            container.innerHTML = '';
+            for (let i = 1; i <= totalParticipants; i++) {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.id = `step-${i+1}`;
+                stepDiv.innerHTML = `
+                    <h3>參加者 ${i} 詳細資料</h3>
                     <div class="form-group">
-                        <label for="phone">聯絡電話 Contact Phone *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="0912-345-678">
+                        <label>姓名 Name *</label>
+                        <input type="text" name="participants[${i-1}][name]" required placeholder="請輸入真實姓名">
                     </div>
-
                     <div class="form-group">
-                        <label for="address">聯絡地址 Contact Address *</label>
-                        <input type="text" id="address" name="address" required placeholder="請輸入完整地址（縣市區鄉鎮路街巷弄號）">
+                        <label>出生年月日 Date of Birth *</label>
+                        <input type="date" name="participants[${i-1}][birthDate]" required>
                     </div>
-                </div>
-
-                <!-- 緊急聯絡人 -->
-                <div class="form-section">
-                    <h3>🚨 緊急聯絡人</h3>
-                    
                     <div class="form-group">
-                        <label for="emergencyName">緊急聯絡人姓名 Emergency Contact *</label>
-                        <input type="text" id="emergencyName" name="emergencyName" required placeholder="請填寫家人或朋友">
-                        <small>請填寫非本次參加者的親友</small>
+                        <label>身分證字號 / 護照號碼 ID / Passport No. *</label>
+                        <input type="text" name="participants[${i-1}][idNumber]" required placeholder="例如：A123456789" class="id-uppercase">
                     </div>
-
-                    <div class="form-group">
-                        <label for="emergencyPhone">緊急聯絡人電話 Emergency Contact Phone *</label>
-                        <input type="tel" id="emergencyPhone" name="emergencyPhone" required placeholder="0912-345-678">
-                    </div>
-                </div>
-
-                <!-- 身體資訊 -->
-                <div class="form-section">
-                    <h3>📏 身體資訊</h3>
-                    
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="height">身高 Height (cm) *</label>
-                            <input type="number" id="height" name="height" required placeholder="例如：170" min="100" max="250">
+                            <label>身高 Height (cm) *</label>
+                            <input type="number" name="participants[${i-1}][height]" required min="100" max="250" placeholder="例如：170">
                         </div>
-
                         <div class="form-group">
-                            <label for="weight">體重 Weight (kg) *</label>
-                            <input type="number" id="weight" name="weight" required placeholder="例如：65" min="30" max="200">
+                            <label>體重 Weight (kg) *</label>
+                            <input type="number" name="participants[${i-1}][weight]" required min="30" max="200" placeholder="例如：65">
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="shoeSize">溯溪鞋尺寸 Shoes Size (cm) *</label>
-                        <select id="shoeSize" name="shoeSize" required>
+                        <label>溯溪鞋尺寸 Shoes Size (cm) *</label>
+                        <select name="participants[${i-1}][shoeSize]" required>
                             <option value="">請選擇尺寸</option>
                             <option value="22">22 cm</option>
                             <option value="22.5">22.5 cm</option>
@@ -292,41 +368,106 @@
                             <option value="29.5">29.5 cm</option>
                             <option value="30">30 cm</option>
                         </select>
-                        <small>請依照平常穿鞋的大小選擇即可</small>
                     </div>
-                </div>
-
-                <!-- 健康狀況 -->
-                <div class="form-section">
-                    <h3>❤️ 健康狀況</h3>
-                    
                     <div class="form-group">
-                        <label for="medicalConditions">需要教練注意的疾病及事項</label>
-                        <textarea id="medicalConditions" name="medicalConditions" rows="4" placeholder="例如：心臟病、高血壓、氣喘、懼高症、不會游泳等
-如無特殊狀況請填寫「無」"></textarea>
-                        <small>⚠️ 為了您的安全，請務必誠實告知。如隱瞞病史造成意外，本公司不負責任</small>
+                        <label>需要教練注意的疾病及事項</label>
+                        <textarea name="participants[${i-1}][medicalConditions]" rows="3" placeholder="例如：心臟病、高血壓、氣喘... 如無請填「無」"></textarea>
                     </div>
-                </div>
+                    <button type="button" class="btn-next">下一步 →</button>
+                `;
+                container.appendChild(stepDiv);
+            }
+        }
 
-                <!-- 同意條款 -->
-                <div class="form-group checkbox-group">
-                    <label>
-                        <input type="checkbox" id="agreeTerms" required>
-                        我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
-                    </label>
-                </div>
+        function showStep(stepNum) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            const targetStep = document.getElementById(`step-${stepNum}`) || document.getElementById('finalStep');
+            targetStep.classList.add('active');
+            updateProgress(stepNum);
+            currentStep = stepNum;
+        }
 
-                <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
-                <p class="form-note">* 為必填欄位 | 送出後我們會在24小時內與您聯繫確認行程</p>
-            </form>
-        </div>
-    </div>
+        function updateProgress(step) {
+            const progress = ((step - 1) / (totalParticipants + 1)) * 100;
+            document.querySelector('.progress').style.width = progress + '%';
+        }
 
-    <footer>
-        <p>&copy; 2025 洄瀾溪谷秘境探險 版權所有</p>
-        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
-    </footer>
+        function validateStep(stepElement) {
+            const requiredFields = stepElement.querySelectorAll('[required]');
+            let valid = true;
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    field.style.boxShadow = '0 0 0 3px rgba(255,0,0,0.1)';
+                    valid = false;
+                } else {
+                    field.style.borderColor = '#ddd';
+                    field.style.boxShadow = 'none';
+                }
+            });
+            if (!valid) alert('請填寫所有必填欄位！');
+            return valid;
+        }
 
-    <script src="script.js"></script>
+        // 身分證自動轉大寫
+        document.addEventListener('input', e => {
+            if (e.target.classList.contains('id-uppercase')) {
+                e.target.value = e.target.value.toUpperCase();
+            }
+        });
+
+        // 表單提交
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!document.getElementById('agreeTerms').checked) {
+                alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
+                return;
+            }
+
+            const submitBtn = document.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '送出中，請稍候...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('tripName', document.getElementById('tripName').value);
+            formData.append('tripPrice', document.getElementById('tripPrice').value);
+            formData.append('mainPhone', document.getElementById('mainPhone').value);
+            formData.append('mainAddress', document.getElementById('mainAddress').value);
+            formData.append('emergencyName', document.getElementById('emergencyName').value);
+            formData.append('emergencyPhone', document.getElementById('emergencyPhone').value);
+
+            document.querySelectorAll('.step:not(.step-1):not(.step-final)').forEach((step, index) => {
+                const prefix = `participants[${index}]`;
+                const inputs = step.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.name) {
+                        formData.append(input.name, input.value.trim());
+                    }
+                });
+            });
+
+            // 這裡放你的 Google Apps Script URL
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8Pd6LfkGJu2ajvuZahplCoh5JxzztVknmqeqA6q3ASejvd5R93Yi3JsESNz5O8VQISg/exec';
+
+            fetch(scriptUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                alert(`✅ 預訂申請已成功送出！\n\n我們將於24小時內與您聯繫確認。\n\n感謝您選擇洄瀾溪谷探險！`);
+                closeBooking();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('送出失敗，請稍後再試或直接來電 0912-345-678');
+            })
+            .finally(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
 </body>
 </html>
