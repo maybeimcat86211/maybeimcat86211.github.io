@@ -278,40 +278,40 @@ function validateForm(data) {
 
 // 提交到 Google Form
 function submitToGoogleForm(data, submitBtn, originalText) {
-    // 創建 FormData 物件
-    const formData = new FormData();
-    
-    // 將資料對應到 Google Form 的欄位
-    formData.append(FORM_FIELDS.name, data.name);
-    formData.append(FORM_FIELDS.birthDate, data.birthDate);
-    formData.append(FORM_FIELDS.idNumber, data.idNumber.toUpperCase());
-    formData.append(FORM_FIELDS.phone, data.phone);
-    formData.append(FORM_FIELDS.emergencyName, data.emergencyName);
-    formData.append(FORM_FIELDS.emergencyPhone, data.emergencyPhone);
-    formData.append(FORM_FIELDS.address, data.address);
-    formData.append(FORM_FIELDS.shoeSize, data.shoeSize);
-    formData.append(FORM_FIELDS.height, data.height);
-    formData.append(FORM_FIELDS.weight, data.weight);
-    formData.append(FORM_FIELDS.medicalConditions, data.medicalConditions || '無');
-    
-    // 使用 fetch 提交表單
-    fetch(GOOGLE_FORM_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-    }).then(() => {
-        showSuccessMessage(data);
-        closeBooking();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }).catch((error) => {
-        console.error('Error:', error);
-        // 即使出現錯誤，資料通常也已成功提交
-        showSuccessMessage(data);
-        closeBooking();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    });
+  const scriptUrl = 'https://script.google.com/macros/s/你的ID/exec'; // 改成你剛部署的 URL
+
+  const formData = new FormData();
+  formData.append('name', data.name);
+  formData.append('birthDate', data.birthDate);
+  formData.append('idNumber', data.idNumber.toUpperCase());
+  formData.append('phone', data.phone);
+  formData.append('emergencyName', data.emergencyName);
+  formData.append('emergencyPhone', data.emergencyPhone);
+  formData.append('address', data.address);
+  formData.append('shoeSize', data.shoeSize);
+  formData.append('height', data.height);
+  formData.append('weight', data.weight);
+  formData.append('medicalConditions', data.medicalConditions || '無');
+  formData.append('tripName', data.tripName);    // 從 hidden input 拿
+  formData.append('tripPrice', data.tripPrice);
+
+  fetch(scriptUrl, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' // 這次可以安全用，因為 GAS 支援
+  })
+  .then(() => {
+    showSuccessMessage(data);
+    closeBooking();
+  })
+  .catch(err => {
+    console.error(err);
+    alert('送出失敗，請稍後再試');
+  })
+  .finally(() => {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  });
 }
 
 // 顯示成功訊息
