@@ -4,583 +4,255 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
-    <!-- Tailwind CSS (樣式庫) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#0ea5e9',
-              secondary: '#10b981',
-              dark: '#0f172a',
-            }
-          }
-        }
-      }
-    </script>
-    <!-- Lucide Icons (圖示庫) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        html { scroll-behavior: smooth; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .modal-open { overflow: hidden; }
-        
-        /* 動畫效果 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
-        .animate-slide-up { animation: slideUp 0.4s ease-out; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased font-sans">
-
-    <!-- Navbar -->
-    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 py-5">
-        <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
-            <a href="#home" class="flex items-center gap-2 text-2xl font-bold nav-text text-white drop-shadow-md">
-                <i data-lucide="mountain" class="w-8 h-8 text-secondary"></i>
-                <span>洄瀾溪谷探險</span>
-            </a>
-            <nav class="hidden md:flex gap-8">
-                <a href="#home" class="nav-link text-lg font-medium hover:text-secondary transition-colors text-white drop-shadow-sm">首頁</a>
-                <a href="#trips" class="nav-link text-lg font-medium hover:text-secondary transition-colors text-white drop-shadow-sm">探險路線</a>
-                <a href="#about" class="nav-link text-lg font-medium hover:text-secondary transition-colors text-white drop-shadow-sm">關於我們</a>
-                <a href="#contact" class="nav-link text-lg font-medium hover:text-secondary transition-colors text-white drop-shadow-sm">聯絡我們</a>
-            </nav>
-        </div>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏔️ 洄瀾溪谷探險</div>
+            <ul class="nav-links">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#trips">探險路線</a></li>
+                <li><a href="#about">關於我們</a></li>
+                <li><a href="#contact">聯絡我們</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1519834785169-98be25ec3f84?q=80&w=1920&auto=format&fit=crop" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-black/40"></div>
-        </div>
-        <div class="relative z-10 text-center text-white px-4 animate-slide-up">
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight drop-shadow-lg">洄瀾溪谷秘境探險</h1>
-            <p className="text-xl md:text-2xl font-light mb-10 max-w-2xl mx-auto drop-shadow-md">深入花蓮無人之境，體驗最純粹的大自然</p>
-            <a href="#trips" class="inline-block bg-secondary hover:bg-emerald-600 text-white font-bold py-4 px-10 rounded-full transition-transform hover:scale-105 shadow-lg backdrop-blur-sm bg-opacity-90">開始探險</a>
-        </div>
-    </section>
+    <main>
+        <section id="home" class="hero">
+            <h1>洄瀾溪谷秘境探險</h1>
+            <p>體驗花東最特別隱密的溪谷</p>
+        </section>
 
-    <!-- Trips List -->
-    <section id="trips" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">探險路線</h2>
-                <div class="w-20 h-1 bg-secondary mx-auto rounded-full"></div>
-            </div>
-            <div id="trip-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Trip Cards will be injected here by JS -->
-            </div>
-        </div>
-    </section>
+        <section id="trips" class="trips-section">
+            <div class="trips-container">
+                <!-- 西林秘境 -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
+                        <span class="badge">初級路線 👍</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>西林秘境</h2>
+                        <p>西林秘境是教練們於2023年探勘並建置的一條溪谷路線，除了有30公尺高的瀑布以外，還有一個罕見的S型瀑布，是花蓮最適合初學者體驗的溪谷路線。</p>
+                        <div class="price">NT$ 3,500</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('xilin')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('西林秘境', 3500)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Booking Modal (Hidden by default) -->
-    <div id="booking-modal" class="fixed inset-0 z-[70] hidden">
-        <div class="absolute inset-0 bg-gray-900/70 backdrop-blur-sm" onclick="closeModal()"></div>
-        
-        <!-- Modal Content Container -->
-        <div class="absolute inset-0 md:inset-4 bg-white md:rounded-2xl flex flex-col md:flex-row overflow-hidden animate-slide-up shadow-2xl max-w-7xl mx-auto h-full md:h-auto md:max-h-[95vh]">
+                <!-- 翡翠谷 -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
+                        <span class="badge">進階路線 😎</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>翡翠谷</h2>
+                        <p>隱藏在中央山脈深處的翡翠谷，擁有清澈見底的碧綠深潭，多個天然滑水道和跳水點，是進階玩家的最愛。需要良好的體能和游泳能力。</p>
+                        <div class="price">NT$ 4,200</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('feicui')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('翡翠谷', 4200)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 黃金峽谷 -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
+                        <span class="badge">親子友善 👨‍👩‍👧‍👦</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>黃金峽谷</h2>
+                        <p>最適合親子同遊的溪谷路線，擁有金黃色的峽谷岩壁和清涼的溪水。溫和的地形讓全家大小都能安全享受溯溪樂趣，創造難忘的家庭回憶。</p>
+                        <div class="price">NT$ 3,000</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('huangjin')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('黃金峽谷', 3000)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 藍色秘境 -->
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
+                        <span class="badge">網美景點 📸</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>藍色秘境</h2>
+                        <p>2024年最新開發的路線！宛如藍寶石般的深藍色水潭，搭配壯觀的瀑布景觀，是IG打卡聖地。適合喜愛攝影和追求美景的探險者。</p>
+                        <div class="price">NT$ 3,800</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="showDetails('blue')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('藍色秘境', 3800)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>關於我們</h2>
+                <p>我們是花蓮在地的專業溯溪團隊，由經驗豐富的教練帶領，致力於帶給每一位探險者安全且難忘的溪谷體驗。我們熟悉花東地區每一條溪谷路線，堅持以最高的安全標準和對大自然的尊重，讓您在探索秘境的同時，也能保護這片美麗的土地。</p>
+                <p>所有教練均具備專業證照，提供完整的裝備和保險，讓您可以安心享受溯溪的樂趣。</p>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2>聯絡我們</h2>
+                <p>📧 Email: info@hualien-canyon.com</p>
+                <p>📱 電話: 0912-345-678</p>
+                <p>📍 地址: 花蓮縣花蓮市中山路123號</p>
+                <p>⏰ 營業時間: 每日 08:00 - 18:00</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 預訂表單彈窗 -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBooking()">&times;</span>
+            <h2>🎯 立即預訂探險行程</h2>
+            <div id="bookingInfo"></div>
             
-            <!-- Left: Scrollable Form -->
-            <div class="flex-1 overflow-y-auto relative bg-gray-50">
-                <!-- Mobile Header -->
-                <div class="md:hidden sticky top-0 bg-white z-20 px-4 py-3 border-b flex justify-between items-center">
-                    <h2 class="font-bold text-gray-800" id="mobile-trip-title">行程預訂</h2>
-                    <button onclick="closeModal()"><i data-lucide="x" class="text-gray-500"></i></button>
+            <form id="bookingForm">
+                <input type="hidden" id="tripName" name="tripName">
+                <input type="hidden" id="tripPrice" name="tripPrice">
+                
+                <!-- 基本資料 -->
+                <div class="form-section">
+                    <h3>👤 基本資料</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">姓名 Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="請輸入您的真實姓名">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthDate">出生年月日 Date of Birth *</label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                        <small>需年滿6歲以上才可參加</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idNumber">身分證字號 ID / 護照號碼 Passport No. *</label>
+                        <input type="text" id="idNumber" name="idNumber" required placeholder="例如：A123456789 或護照號碼" maxlength="20">
+                        <small>🔒 此資料僅供保險使用，絕不外洩</small>
+                    </div>
                 </div>
 
-                <div class="p-4 md:p-8 pb-32 md:pb-10">
-                    <h2 class="hidden md:block text-3xl font-bold text-gray-800 mb-2">預訂行程</h2>
-                    <p class="hidden md:block text-gray-500 mb-8">請填寫詳細資料以確保您的保險權益</p>
+                <!-- 聯絡資訊 -->
+                <div class="form-section">
+                    <h3>📞 聯絡資訊</h3>
+                    
+                    <div class="form-group">
+                        <label for="phone">聯絡電話 Contact Phone *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="0912-345-678">
+                    </div>
 
-                    <form id="booking-form" class="space-y-6">
-                        <!-- Basic Info & Contact -->
-                        <section class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                <i data-lucide="calendar" class="text-blue-500"></i> 基本資訊
-                            </h3>
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">預計出發日期 *</label>
-                                    <input type="date" id="tripDate" required class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">聯絡人姓名 *</label>
-                                    <input type="text" id="contactName" required placeholder="王小明" class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">聯絡電話 *</label>
-                                    <input type="tel" id="contactPhone" required placeholder="0912345678" class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">聯絡地址 *</label>
-                                    <input type="text" id="contactAddress" required placeholder="保險寄送與聯絡用" class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">緊急聯絡人 *</label>
-                                    <input type="text" id="emergencyName" required class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">緊急聯絡電話 *</label>
-                                    <input type="tel" id="emergencyPhone" required class="w-full px-4 py-3 rounded-xl border bg-gray-50 focus:ring-2 focus:ring-secondary outline-none">
-                                </div>
-                            </div>
-                        </section>
+                    <div class="form-group">
+                        <label for="address">聯絡地址 Contact Address *</label>
+                        <input type="text" id="address" name="address" required placeholder="請輸入完整地址（縣市區鄉鎮路街巷弄號）">
+                    </div>
+                </div>
 
-                        <!-- Participants Container -->
-                        <div id="participants-container" class="space-y-4">
-                            <!-- JS will inject participant cards here -->
+                <!-- 緊急聯絡人 -->
+                <div class="form-section">
+                    <h3>🚨 緊急聯絡人</h3>
+                    
+                    <div class="form-group">
+                        <label for="emergencyName">緊急聯絡人姓名 Emergency Contact *</label>
+                        <input type="text" id="emergencyName" name="emergencyName" required placeholder="請填寫家人或朋友">
+                        <small>請填寫非本次參加者的親友</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emergencyPhone">緊急聯絡人電話 Emergency Contact Phone *</label>
+                        <input type="tel" id="emergencyPhone" name="emergencyPhone" required placeholder="0912-345-678">
+                    </div>
+                </div>
+
+                <!-- 身體資訊 -->
+                <div class="form-section">
+                    <h3>📏 身體資訊</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="height">身高 Height (cm) *</label>
+                            <input type="number" id="height" name="height" required placeholder="例如：170" min="100" max="250">
                         </div>
 
-                        <button type="button" onclick="addParticipant()" class="w-full py-4 border-2 border-dashed border-gray-300 rounded-2xl text-gray-500 font-bold hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="plus"></i> 新增一位參加者
-                        </button>
-
-                        <div class="pt-4 pb-8">
-                             <label class="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" id="agreeTerms" class="mt-1 w-5 h-5 text-secondary border-gray-300 rounded focus:ring-secondary">
-                                <span class="text-sm text-gray-600">我已確認所有資料填寫正確，並同意活動相關條款與隱私權政策。</span>
-                            </label>
+                        <div class="form-group">
+                            <label for="weight">體重 Weight (kg) *</label>
+                            <input type="number" id="weight" name="weight" required placeholder="例如：65" min="30" max="200">
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
 
-            <!-- Right: Sticky Summary -->
-            <div class="hidden md:flex w-96 bg-white border-l border-gray-200 flex-col shrink-0 z-30 shadow-xl">
-                 <div class="p-6 flex justify-between items-center border-b border-gray-100">
-                     <h3 class="font-bold text-gray-800">訂單摘要</h3>
-                     <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-full"><i data-lucide="x"></i></button>
-                 </div>
-                 <div class="p-6 flex-1 overflow-y-auto">
-                     <div class="aspect-video rounded-xl overflow-hidden mb-4">
-                         <img id="summary-image" src="" class="w-full h-full object-cover" />
-                     </div>
-                     <h4 id="summary-title" class="text-xl font-bold text-gray-900 mb-2"></h4>
-                     <div class="space-y-2 text-sm text-gray-600 mb-6 border-b pb-4">
-                         <div class="flex justify-between"><span>日期</span><span id="summary-date" class="font-medium text-gray-900">尚未選擇</span></div>
-                         <div class="flex justify-between"><span>難度</span><span id="summary-difficulty" class="font-medium text-gray-900"></span></div>
-                         <div class="flex justify-between"><span>時長</span><span id="summary-duration" class="font-medium text-gray-900"></span></div>
-                     </div>
-                     
-                     <div class="space-y-2">
-                         <div class="flex justify-between text-gray-600">
-                             <span>單價</span>
-                             <span id="summary-price"></span>
-                         </div>
-                         <div class="flex justify-between text-gray-600">
-                             <span>人數</span>
-                             <span id="summary-count">x 1 位</span>
-                         </div>
-                         <div class="flex justify-between text-2xl font-bold text-secondary pt-2 border-t mt-2">
-                             <span>總金額</span>
-                             <span id="summary-total"></span>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="p-6 border-t border-gray-100 bg-gray-50">
-                     <button onclick="submitBooking()" id="submit-btn-desktop" class="w-full py-4 bg-secondary hover:bg-emerald-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 transition-all">
-                        確認預訂 <i data-lucide="chevron-right"></i>
-                     </button>
-                 </div>
-            </div>
-
-            <!-- Mobile Bottom Bar -->
-            <div class="md:hidden bg-white border-t border-gray-200 p-4 shrink-0 flex items-center justify-between gap-4 z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-                <div>
-                    <div id="mobile-count" class="text-xs text-gray-500">1 人參加</div>
-                    <div id="mobile-total" class="text-xl font-bold text-secondary">NT$ 0</div>
+                    <div class="form-group">
+                        <label for="shoeSize">溯溪鞋尺寸 Shoes Size (cm) *</label>
+                        <select id="shoeSize" name="shoeSize" required>
+                            <option value="">請選擇尺寸</option>
+                            <option value="22">22 cm</option>
+                            <option value="22.5">22.5 cm</option>
+                            <option value="23">23 cm</option>
+                            <option value="23.5">23.5 cm</option>
+                            <option value="24">24 cm</option>
+                            <option value="24.5">24.5 cm</option>
+                            <option value="25">25 cm</option>
+                            <option value="25.5">25.5 cm</option>
+                            <option value="26">26 cm</option>
+                            <option value="26.5">26.5 cm</option>
+                            <option value="27">27 cm</option>
+                            <option value="27.5">27.5 cm</option>
+                            <option value="28">28 cm</option>
+                            <option value="28.5">28.5 cm</option>
+                            <option value="29">29 cm</option>
+                            <option value="29.5">29.5 cm</option>
+                            <option value="30">30 cm</option>
+                        </select>
+                        <small>請依照平常穿鞋的大小選擇即可</small>
+                    </div>
                 </div>
-                <button onclick="submitBooking()" id="submit-btn-mobile" class="flex-1 py-3 bg-secondary text-white rounded-xl font-bold shadow-md">確認預訂</button>
-            </div>
+
+                <!-- 健康狀況 -->
+                <div class="form-section">
+                    <h3>❤️ 健康狀況</h3>
+                    
+                    <div class="form-group">
+                        <label for="medicalConditions">需要教練注意的疾病及事項</label>
+                        <textarea id="medicalConditions" name="medicalConditions" rows="4" placeholder="例如：心臟病、高血壓、氣喘、懼高症、不會游泳等
+如無特殊狀況請填寫「無」"></textarea>
+                        <small>⚠️ 為了您的安全，請務必誠實告知。如隱瞞病史造成意外，本公司不負責任</small>
+                    </div>
+                </div>
+
+                <!-- 同意條款 -->
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="agreeTerms" required>
+                        我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
+                <p class="form-note">* 為必填欄位 | 送出後我們會在24小時內與您聯繫確認行程</p>
+            </form>
         </div>
     </div>
 
-    <!-- Javascript Logic -->
-    <script>
-        // ==========================================
-        // 1. 設定區域 (請修改這裡的 ID)
-        // ==========================================
-        
-        const GOOGLE_FORM_CONFIG = {
-            // 請換成您的 Google Form 'action' URL (通常結尾是 formResponse)
-            url: 'https://docs.google.com/forms/d/1VpRNCz8oOtBoZQdAW3XnD0kL7LvAeDSNL8q89gXW_ic/edit', 
-            
-            // 請換成您用「預覽 -> 檢查元素」找到的 entry ID
-            fields: {
-                name: 'entry.1623988474',          // 參加者姓名
-                birthDate: 'entry.1952703181',     // 生日
-                idNumber: 'entry.1812465871',      // 身分證
-                phone: 'entry.1933097253',         // 聯絡電話
-                emergencyName: 'entry.94106424',   // 緊急聯絡人
-                emergencyPhone: 'entry.1640555720',// 緊急電話
-                address: 'entry.1248469550',       // 地址
-                shoeSize: 'entry.516143478',       // 鞋號
-                height: 'entry.152310246',         // 身高
-                weight: 'entry.972135023',         // 體重
-                medicalConditions: 'entry.1995882209' // 健康狀況
-                // 注意：tripName (行程名稱+日期) 和 tripPrice (價格) 
-                // 如果您表單有這兩個欄位，請在這裡加這兩個 ID
-                // 如果沒有，Google Sheet 還是會收到，但您需要自己在 Sheet 裡面整理
-            }
-        };
+    <footer>
+        <p>&copy; 2025 洄瀾溪谷秘境探險 版權所有</p>
+        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
+    </footer>
 
-        const TRIPS = [
-            {
-                id: 'xilin',
-                title: '西林秘境',
-                price: 3500,
-                badge: '初級路線 👍',
-                imageUrl: 'https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800&auto=format&fit=crop',
-                description: '30公尺高瀑布垂降，罕見S型瀑布奇景，是花蓮最適合初學者體驗的溪谷路線。',
-                duration: '約 4-5 小時',
-                difficulty: '初級'
-            },
-            {
-                id: 'feicui',
-                title: '翡翠谷',
-                price: 4200,
-                badge: '進階路線 😎',
-                imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop',
-                description: '隱藏在中央山脈深處的翡翠谷，擁有清澈見底的碧綠深潭，多個天然滑水道和跳水點。',
-                duration: '約 5-6 小時',
-                difficulty: '進階'
-            },
-            {
-                id: 'huangjin',
-                title: '黃金峽谷',
-                price: 3000,
-                badge: '親子友善 👨‍👩‍👧‍👦',
-                imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop',
-                description: '最適合親子同遊的溪谷路線，擁有金黃色的峽谷岩壁和清涼的溪水。',
-                duration: '約 3-4 小時',
-                difficulty: '入門'
-            },
-            {
-                id: 'blue',
-                title: '藍色秘境',
-                price: 3800,
-                badge: '網美景點 📸',
-                imageUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&auto=format&fit=crop',
-                description: '宛如藍寶石般的深藍色水潭，搭配壯觀的瀑布景觀，是IG打卡聖地。',
-                duration: '約 4-5 小時',
-                difficulty: '初中級'
-            }
-        ];
-
-        // ==========================================
-        // 2. 應用程式狀態 (State)
-        // ==========================================
-        let currentTrip = null;
-        let participantCount = 1;
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            renderTrips();
-            lucide.createIcons();
-            
-            // 設定日期最小為今天
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tripDate').min = today;
-            
-            // 監聽日期變更以更新摘要
-            document.getElementById('tripDate').addEventListener('change', (e) => {
-                document.getElementById('summary-date').textContent = e.target.value || '尚未選擇';
-            });
-
-            // Navbar Scroll Effect
-            window.addEventListener('scroll', () => {
-                const nav = document.getElementById('navbar');
-                const navTexts = document.querySelectorAll('.nav-text, .nav-link');
-                const icon = document.querySelector('[data-lucide="mountain"]');
-                
-                if (window.scrollY > 20) {
-                    nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-md', 'py-3');
-                    nav.classList.remove('py-5');
-                    navTexts.forEach(el => {
-                        el.classList.remove('text-white', 'drop-shadow-md', 'drop-shadow-sm');
-                        el.classList.add('text-gray-900');
-                    });
-                } else {
-                    nav.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-md', 'py-3');
-                    nav.classList.add('py-5');
-                    navTexts.forEach(el => {
-                        el.classList.add('text-white', 'drop-shadow-md', 'drop-shadow-sm');
-                        el.classList.remove('text-gray-900');
-                    });
-                }
-            });
-        });
-
-        // ==========================================
-        // 3. UI 渲染邏輯
-        // ==========================================
-
-        function renderTrips() {
-            const container = document.getElementById('trip-container');
-            container.innerHTML = TRIPS.map(trip => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100 group">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="${trip.imageUrl}" alt="${trip.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"/>
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-800 shadow-sm">
-                            ${trip.badge}
-                        </div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl font-bold text-gray-800">${trip.title}</h3>
-                            <span class="text-xl font-bold text-secondary">NT$ ${trip.price.toLocaleString()}</span>
-                        </div>
-                        <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> ${trip.duration}</span>
-                            <span class="flex items-center gap-1"><i data-lucide="trending-up" class="w-4 h-4"></i> ${trip.difficulty}</span>
-                        </div>
-                        <p class="text-gray-600 mb-6 flex-1">${trip.description}</p>
-                        <button onclick="openModal('${trip.id}')" class="w-full py-3 bg-secondary text-white font-semibold rounded-lg hover:bg-emerald-600 transition-colors shadow-md">
-                            立即預訂
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function openModal(tripId) {
-            currentTrip = TRIPS.find(t => t.id === tripId);
-            if (!currentTrip) return;
-
-            // Reset Form
-            document.getElementById('booking-form').reset();
-            document.getElementById('participants-container').innerHTML = '';
-            participantCount = 0;
-            addParticipant(); // Add the first one
-
-            // Update Summary UI
-            document.getElementById('summary-image').src = currentTrip.imageUrl;
-            document.getElementById('summary-title').textContent = currentTrip.title;
-            document.getElementById('mobile-trip-title').textContent = currentTrip.title + ' 預訂';
-            document.getElementById('summary-difficulty').textContent = currentTrip.difficulty;
-            document.getElementById('summary-duration').textContent = currentTrip.duration;
-            document.getElementById('summary-price').textContent = `NT$ ${currentTrip.price.toLocaleString()}`;
-            document.getElementById('summary-date').textContent = '尚未選擇';
-
-            updateTotal();
-
-            // Show Modal
-            const modal = document.getElementById('booking-modal');
-            modal.classList.remove('hidden');
-            document.body.classList.add('modal-open');
-        }
-
-        function closeModal() {
-            document.getElementById('booking-modal').classList.add('hidden');
-            document.body.classList.remove('modal-open');
-            currentTrip = null;
-        }
-
-        // ==========================================
-        // 4. 參加者邏輯
-        // ==========================================
-
-        function addParticipant() {
-            participantCount++;
-            const id = Date.now(); // Unique ID for DOM element
-            const html = `
-                <div id="participant-${id}" class="participant-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md animate-fade-in">
-                    <div class="bg-gray-50/50 px-6 py-3 border-b border-gray-100 flex justify-between items-center">
-                        <span class="font-bold text-gray-700 participant-index">參加者</span>
-                        <button type="button" onclick="removeParticipant(${id})" class="delete-btn text-gray-400 hover:text-red-500 transition-colors ${participantCount === 1 ? 'hidden' : ''}">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                    <div class="p-6 grid grid-cols-2 md:grid-cols-6 gap-4">
-                        <div class="col-span-2 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">真實姓名 *</label>
-                            <input type="text" name="p_name" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none">
-                        </div>
-                        <div class="col-span-2 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">出生年月日 *</label>
-                            <input type="date" name="p_birth" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none">
-                        </div>
-                        <div class="col-span-2 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">身分證/護照 *</label>
-                            <input type="text" name="p_id" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none">
-                        </div>
-                        <div class="col-span-1 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">身高 (cm) *</label>
-                            <input type="number" name="p_height" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none">
-                        </div>
-                        <div class="col-span-1 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">體重 (kg) *</label>
-                            <input type="number" name="p_weight" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none">
-                        </div>
-                        <div class="col-span-2 md:col-span-2">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">鞋號 (cm) *</label>
-                            <select name="p_shoe" required class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none bg-white">
-                                <option value="">選擇</option>
-                                ${[22, 23, 24, 25, 26, 27, 28, 29, 30].map(s => `<option value="${s}">${s}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div class="col-span-2 md:col-span-6">
-                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">健康備註</label>
-                            <input type="text" name="p_medical" placeholder="無，或填寫過敏、病史" class="w-full px-3 py-2 rounded-lg border focus:border-secondary outline-none text-sm">
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('participants-container').insertAdjacentHTML('beforeend', html);
-            lucide.createIcons();
-            updateParticipantIndexes();
-            updateTotal();
-        }
-
-        function removeParticipant(id) {
-            const el = document.getElementById(`participant-${id}`);
-            if (el) el.remove();
-            updateParticipantIndexes();
-            updateTotal();
-        }
-
-        function updateParticipantIndexes() {
-            const cards = document.querySelectorAll('.participant-card');
-            participantCount = cards.length;
-            cards.forEach((card, index) => {
-                card.querySelector('.participant-index').textContent = `參加者 #${index + 1}`;
-                const deleteBtn = card.querySelector('.delete-btn');
-                if (cards.length > 1) {
-                    deleteBtn.classList.remove('hidden');
-                } else {
-                    deleteBtn.classList.add('hidden');
-                }
-            });
-        }
-
-        function updateTotal() {
-            if (!currentTrip) return;
-            const total = currentTrip.price * participantCount;
-            const formattedTotal = `NT$ ${total.toLocaleString()}`;
-            
-            document.getElementById('summary-count').textContent = `x ${participantCount} 位`;
-            document.getElementById('summary-total').textContent = formattedTotal;
-            
-            document.getElementById('mobile-count').textContent = `${participantCount} 人參加`;
-            document.getElementById('mobile-total').textContent = formattedTotal;
-        }
-
-        // ==========================================
-        // 5. 送出表單 (最重要部分)
-        // ==========================================
-
-        async function submitBooking() {
-            // 1. 驗證
-            const form = document.getElementById('booking-form');
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            const tripDate = document.getElementById('tripDate').value;
-            const contactName = document.getElementById('contactName').value;
-            const contactPhone = document.getElementById('contactPhone').value;
-            const contactAddress = document.getElementById('contactAddress').value;
-            const emergencyName = document.getElementById('emergencyName').value;
-            const emergencyPhone = document.getElementById('emergencyPhone').value;
-            const agreeTerms = document.getElementById('agreeTerms').checked;
-
-            if (!agreeTerms) {
-                alert('請勾選同意條款');
-                return;
-            }
-
-            // UI Loading 狀態
-            const btns = [document.getElementById('submit-btn-desktop'), document.getElementById('submit-btn-mobile')];
-            btns.forEach(btn => {
-                btn.disabled = true;
-                btn.textContent = '處理中...';
-            });
-
-            // 2. 收集所有參加者資料
-            const participantCards = document.querySelectorAll('.participant-card');
-            const total = participantCards.length;
-            
-            // 行程完整名稱 (含日期，因為 Google Form 欄位有限，我們把日期併入標題)
-            const fullTripName = `${currentTrip.title} (預約: ${tripDate})`;
-
-            // 3. 批次送出迴圈
-            try {
-                for (let i = 0; i < total; i++) {
-                    const card = participantCards[i];
-                    const formData = new FormData();
-                    
-                    // 填入 Google Form 對應欄位
-                    // 為了節省 Google Form 欄位，我們將參加者資料 + 聯絡人資料合併送出
-                    // 這樣 Google Sheet 每一行就是一個參加者，且都有聯絡人資訊
-                    
-                    const p_name = card.querySelector('[name="p_name"]').value;
-                    
-                    // 更新按鈕進度
-                    btns.forEach(btn => btn.textContent = `傳送中 (${i + 1}/${total})`);
-
-                    const mapping = {
-                        [GOOGLE_FORM_CONFIG.fields.name]: p_name,
-                        [GOOGLE_FORM_CONFIG.fields.birthDate]: card.querySelector('[name="p_birth"]').value,
-                        [GOOGLE_FORM_CONFIG.fields.idNumber]: card.querySelector('[name="p_id"]').value,
-                        [GOOGLE_FORM_CONFIG.fields.height]: card.querySelector('[name="p_height"]').value,
-                        [GOOGLE_FORM_CONFIG.fields.weight]: card.querySelector('[name="p_weight"]').value,
-                        [GOOGLE_FORM_CONFIG.fields.shoeSize]: card.querySelector('[name="p_shoe"]').value,
-                        [GOOGLE_FORM_CONFIG.fields.medicalConditions]: card.querySelector('[name="p_medical"]').value || '無',
-                        
-                        // 共用聯絡人資訊
-                        [GOOGLE_FORM_CONFIG.fields.phone]: contactPhone,
-                        [GOOGLE_FORM_CONFIG.fields.address]: contactAddress,
-                        [GOOGLE_FORM_CONFIG.fields.emergencyName]: emergencyName,
-                        [GOOGLE_FORM_CONFIG.fields.emergencyPhone]: emergencyPhone
-                    };
-
-                    // 轉換成 FormData
-                    for (const [entryId, value] of Object.entries(mapping)) {
-                        if (entryId && value) formData.append(entryId, value);
-                    }
-                    
-                    // 特殊處理：如果您想把行程名稱也塞進某個欄位，可以在 mapping 裡加
-                    // 例如 formData.append('entry.xxxxx', fullTripName);
-
-                    // 發送請求
-                    // mode: 'no-cors' 是必須的，因為 Google Form 不支援跨域回應
-                    // 這意味著我們收不到「成功」的回應，只能假設它成功
-                    await fetch(GOOGLE_FORM_CONFIG.url, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        body: formData
-                    });
-
-                    // 稍微延遲避免被 Google 阻擋
-                    await new Promise(r => setTimeout(r, 800));
-                }
-
-                alert(`✅ 預訂成功！\n\n共 ${total} 位參加者資料已送出。\n我們將盡快與您聯繫 (${contactPhone})。`);
-                closeModal();
-
-            } catch (error) {
-                console.error(error);
-                alert('⚠️ 傳送時發生錯誤，請檢查網路連線或稍後再試。');
-            } finally {
-                btns.forEach(btn => {
-                    btn.disabled = false;
-                    btn.textContent = '確認預訂';
-                });
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
