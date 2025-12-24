@@ -390,6 +390,62 @@ document.addEventListener('DOMContentLoaded', function() {
     birthDateInput.setAttribute('max', maxDate);
     birthDateInput.setAttribute('min', minDate);
 });
+// 參加者區塊模板（用於複製）
+const participantTemplate = document.querySelector('.participant-block').cloneNode(true);
+
+// 當前參加者數量
+let participantCount = 1;
+
+// 新增參加者
+document.getElementById('addParticipantBtn').addEventListener('click', function() {
+    participantCount++;
+    
+    const newBlock = participantTemplate.cloneNode(true);
+    newBlock.dataset.index = participantCount - 1;
+    
+    // 更新所有 name 屬性的索引
+    newBlock.querySelectorAll('[name]').forEach(el => {
+        const oldName = el.getAttribute('name');
+        const newName = oldName.replace(/\[\d+\]/, `[${participantCount - 1}]`);
+        el.setAttribute('name', newName);
+    });
+    
+    // 更新標題
+    newBlock.querySelector('h4').innerHTML = `參加者 ${participantCount} <span class="remove-participant">- 移除</span>`;
+    
+    // 顯示移除按鈕（從第二個開始）
+    newBlock.querySelector('.remove-participant').style.display = 'inline';
+    
+    // 清空輸入值
+    newBlock.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+        else el.value = '';
+    });
+    
+    document.getElementById('participantsContainer').appendChild(newBlock);
+});
+
+// 移除參加者（使用事件委託）
+document.getElementById('participantsContainer').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-participant')) {
+        const block = e.target.closest('.participant-block');
+        if (block) {
+            block.remove();
+            participantCount--;
+            // 重新編號剩餘的參加者
+            document.querySelectorAll('.participant-block').forEach((block, idx) => {
+                block.dataset.index = idx;
+                block.querySelector('h4').innerHTML = `參加者 ${idx + 1} ${idx > 0 ? '<span class="remove-participant">- 移除</span>' : ''}`;
+                // 更新 name 索引
+                block.querySelectorAll('[name]').forEach(el => {
+                    const oldName = el.getAttribute('name');
+                    const newName = oldName.replace(/\[\d+\]/, `[${idx}]`);
+                    el.setAttribute('name', newName);
+                });
+            });
+        }
+    }
+});
 
 // 身分證字號自動轉大寫
 document.getElementById('idNumber').addEventListener('input', function(e) {
