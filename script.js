@@ -1,18 +1,19 @@
-// Google Form 設定
-// 請替換成您自己的 Google Form URL
-const GOOGLE_FORM_URL = 'https://forms.gle/aLLQMfR7f6g5qKvG7';
+// Google Form 設定 - 已填入您的實際資料
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdO_TYqVbBvPMZ9xJGC3cKLxqKrj6X9YrRVQoQx0Xy5nrqC3Q/formResponse';
 
-// Google Form 欄位的 entry ID (需要從您的 Google Form 取得)
+// Google Form 欄位的 entry ID（已對應您的表單）
 const FORM_FIELDS = {
-    tripName: 'entry.123456789',      // 行程名稱
-    tripPrice: 'entry.987654321',     // 價格
-    name: 'entry.1623988474',          // 姓名
-    email: 'entry.222222222',         // Email
-    phone: 'entry.333333333',         // 電話
-    date: 'entry.444444444',          // 日期
-    participants: 'entry.555555555',  // 人數
-    message: 'entry.666666666',       // 訊息
-    promoCode: 'entry.777777777'      // 優惠碼
+    name: 'entry.1623988474',              // 姓名
+    birthDate: 'entry.1952703181',         // 出生年月日
+    idNumber: 'entry.1812465871',          // 身分證字號
+    phone: 'entry.1933097253',             // 聯絡電話
+    emergencyName: 'entry.94106424',       // 緊急聯絡人姓名
+    emergencyPhone: 'entry.1640555720',    // 緊急聯絡人電話
+    address: 'entry.1248469550',           // 聯絡地址
+    shoeSize: 'entry.516143478',           // 溯溪鞋尺寸
+    height: 'entry.152310246',             // 身高
+    weight: 'entry.972135023',             // 體重
+    medicalConditions: 'entry.1995882209'  // 需要注意的疾病及事項
 };
 
 // 行程詳細資訊
@@ -32,13 +33,13 @@ const tripDetails = {
         included: '專業教練、完整裝備、保險、午餐、接駁'
     },
     feicui: {
-        title: '萬里溪',
+        title: '翡翠谷',
         description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。',
         highlights: [
             '✓ 碧綠清澈深潭',
-            '✓ 滑水道',
+            '✓ 多個天然滑水道',
             '✓ 刺激跳水點',
-            '✓ 溫泉體驗',
+            '✓ 進階溯溪體驗',
             '✓ 絕佳攝影景點'
         ],
         duration: '約 5-6 小時',
@@ -46,28 +47,28 @@ const tripDetails = {
         included: '專業教練、完整裝備、保險、午餐、接駁'
     },
     huangjin: {
-        title: '七腳川溪',
-        description: '暫無。',
+        title: '黃金峽谷',
+        description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。',
         highlights: [
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無'
+            '✓ 親子友善路線',
+            '✓ 金黃色峽谷景觀',
+            '✓ 溫和地形安全',
+            '✓ 適合6歲以上兒童',
+            '✓ 家庭回憶首選'
         ],
         duration: '約 3-4 小時',
         difficulty: '入門',
         included: '專業教練、完整裝備、保險、點心、接駁'
     },
     blue: {
-        title: '暫無',
-        description: '暫無',
+        title: '藍色秘境',
+        description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。',
         highlights: [
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無',
-            '✓ 暫無'
+            '✓ 藍寶石般水潭',
+            '✓ 壯觀瀑布景觀',
+            '✓ IG打卡聖地',
+            '✓ 多個跳水點',
+            '✓ 絕美攝影角度'
         ],
         duration: '約 4-5 小時',
         difficulty: '初中級',
@@ -102,6 +103,48 @@ ${trip.highlights.join('\n')}
     alert(detailsHTML);
 }
 
+// 顯示活動條款
+function showTerms() {
+    const terms = `
+【活動條款及個人資料使用聲明】
+
+一、活動參加條件
+1. 參加者需年滿12歲（親子路線可6歲以上）
+2. 具備基本游泳能力（部分路線）
+3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病
+4. 懷孕婦女不建議參加
+
+二、活動安全規定
+1. 必須全程穿著安全裝備
+2. 務必聽從教練指示
+3. 不得擅自脫隊或進行危險動作
+4. 活動前24小時內禁止飲酒
+
+三、取消政策
+1. 活動前7天取消，退款90%
+2. 活動前3天取消，退款50%
+3. 活動前1天取消，不予退款
+4. 因天候因素取消，可擇期或全額退款
+
+四、個人資料使用聲明
+1. 收集之個人資料僅供本活動使用
+2. 用於保險、緊急聯絡及活動通知
+3. 絕不提供給第三方
+4. 活動結束後將妥善保存或銷毀
+5. 您有權查詢、修改或刪除您的個人資料
+
+五、免責聲明
+1. 參加者需自行評估身體狀況
+2. 如隱瞞病史造成意外，本公司不負責任
+3. 活動中如因個人因素造成傷害，本公司不負賠償責任
+4. 本公司已投保活動相關保險
+
+如有疑問請洽：0912-345-678
+    `;
+    
+    alert(terms);
+}
+
 // 開啟預訂表單
 function openBooking(tripName, price) {
     const modal = document.getElementById('bookingModal');
@@ -111,10 +154,11 @@ function openBooking(tripName, price) {
     document.getElementById('tripPrice').value = price;
     
     bookingInfo.innerHTML = `
-        <h3>${tripName}</h3>
-        <p><strong>費用：</strong>NT$ ${price.toLocaleString()} / 人</p>
-        <p><strong>說明：</strong>請填寫以下資料，我們會在24小時內與您聯繫確認行程細節。</p>
-        <p style="color: #2E86AB; font-weight: 600;">⚠️ 請確認您的聯絡方式正確，以便我們與您聯繫</p>
+        <h3>📍 ${tripName}</h3>
+        <p><strong>💰 費用：</strong>NT$ ${price.toLocaleString()} / 人</p>
+        <p><strong>📋 說明：</strong>請詳細填寫以下資料，我們會在24小時內與您聯繫確認行程細節。</p>
+        <p style="color: #d9534f; font-weight: 600;">⚠️ 所有標註 * 的欄位為必填項目</p>
+        <p style="color: #2E86AB; font-size: 0.95rem;">🔒 您的個人資料將受到完善保護，僅供保險及活動使用</p>
     `;
     
     modal.style.display = 'block';
@@ -164,7 +208,7 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     // 顯示載入中
     const submitBtn = document.querySelector('.btn-submit');
     const originalText = submitBtn.textContent;
-    submitBtn.textContent = '送出中...';
+    submitBtn.textContent = '送出中，請稍候...';
     submitBtn.disabled = true;
     
     // 提交到 Google Form
@@ -173,28 +217,59 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
 
 // 表單驗證
 function validateForm(data) {
-    // 驗證電話格式
+    // 驗證電話格式（台灣手機）
     const phoneRegex = /^09\d{8}$/;
-    const phoneWithDash = data.phone.replace(/-/g, '');
+    const phoneClean = data.phone.replace(/[-\s]/g, '');
+    const emergencyPhoneClean = data.emergencyPhone.replace(/[-\s]/g, '');
     
-    if (!phoneRegex.test(phoneWithDash)) {
-        alert('請輸入正確的手機號碼格式（例如：0912-345-678 或 0912345678）');
+    if (!phoneRegex.test(phoneClean)) {
+        alert('❌ 請輸入正確的手機號碼格式\n範例：0912-345-678 或 0912345678');
         return false;
     }
     
-    // 驗證日期不能是過去
-    const selectedDate = new Date(data.date);
+    if (!phoneRegex.test(emergencyPhoneClean)) {
+        alert('❌ 請輸入正確的緊急聯絡人手機號碼格式\n範例：0912-345-678 或 0912345678');
+        return false;
+    }
+    
+    // 驗證身分證格式（台灣身分證或護照）
+    const idRegex = /^[A-Z][12]\d{8}$/;
+    const idUpper = data.idNumber.toUpperCase();
+    
+    if (!idRegex.test(idUpper) && data.idNumber.length < 6) {
+        alert('❌ 請輸入正確的身分證字號（例如：A123456789）\n或護照號碼（至少6位）');
+        return false;
+    }
+    
+    // 驗證出生日期（必須是過去的日期且至少6歲）
+    const birthDate = new Date(data.birthDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const age = today.getFullYear() - birthDate.getFullYear();
     
-    if (selectedDate < today) {
-        alert('預訂日期不能早於今天，請重新選擇日期');
+    if (birthDate >= today) {
+        alert('❌ 出生日期不能是未來的日期');
         return false;
     }
     
-    // 驗證人數
-    if (data.participants < 1 || data.participants > 20) {
-        alert('參加人數必須在 1-20 人之間');
+    if (age < 6) {
+        alert('❌ 參加者需年滿6歲以上');
+        return false;
+    }
+    
+    // 驗證身高體重範圍
+    if (data.height < 100 || data.height > 250) {
+        alert('❌ 身高請輸入 100-250 公分之間的數值');
+        return false;
+    }
+    
+    if (data.weight < 30 || data.weight > 200) {
+        alert('❌ 體重請輸入 30-200 公斤之間的數值');
+        return false;
+    }
+    
+    // 檢查是否同意條款
+    if (!document.getElementById('agreeTerms').checked) {
+        alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
         return false;
     }
     
@@ -207,15 +282,17 @@ function submitToGoogleForm(data, submitBtn, originalText) {
     const formData = new FormData();
     
     // 將資料對應到 Google Form 的欄位
-    formData.append(FORM_FIELDS.tripName, data.tripName);
-    formData.append(FORM_FIELDS.tripPrice, data.tripPrice);
     formData.append(FORM_FIELDS.name, data.name);
-    formData.append(FORM_FIELDS.email, data.email);
+    formData.append(FORM_FIELDS.birthDate, data.birthDate);
+    formData.append(FORM_FIELDS.idNumber, data.idNumber.toUpperCase());
     formData.append(FORM_FIELDS.phone, data.phone);
-    formData.append(FORM_FIELDS.date, data.date);
-    formData.append(FORM_FIELDS.participants, data.participants);
-    formData.append(FORM_FIELDS.message, data.message || '無');
-    formData.append(FORM_FIELDS.promoCode, data.promoCode || '無');
+    formData.append(FORM_FIELDS.emergencyName, data.emergencyName);
+    formData.append(FORM_FIELDS.emergencyPhone, data.emergencyPhone);
+    formData.append(FORM_FIELDS.address, data.address);
+    formData.append(FORM_FIELDS.shoeSize, data.shoeSize);
+    formData.append(FORM_FIELDS.height, data.height);
+    formData.append(FORM_FIELDS.weight, data.weight);
+    formData.append(FORM_FIELDS.medicalConditions, data.medicalConditions || '無');
     
     // 使用 fetch 提交表單
     fetch(GOOGLE_FORM_URL, {
@@ -240,26 +317,34 @@ function submitToGoogleForm(data, submitBtn, originalText) {
 // 顯示成功訊息
 function showSuccessMessage(data) {
     const message = `
-✅ 預訂申請已送出！
+✅ 預訂申請已成功送出！
 
 親愛的 ${data.name}，
 
 感謝您選擇洄瀾溪谷探險！
 
-我們已收到您的預訂申請：
+📋 您的預訂資訊：
 📍 行程：${data.tripName}
-📅 日期：${data.date}
-👥 人數：${data.participants} 人
+💰 費用：NT$ ${data.tripPrice} / 人
+👤 姓名：${data.name}
+📱 電話：${data.phone}
 
-我們會在 24 小時內透過以下方式與您聯繫：
-📧 Email: ${data.email}
-📱 電話: ${data.phone}
+✉️ 我們會在 24 小時內透過以下方式與您聯繫：
+   📧 簡訊通知
+   📞 電話確認行程細節
 
-請留意來電和郵件（包含垃圾郵件匣）
+⚠️ 重要提醒：
+• 請保持電話暢通
+• 活動前一天會再次確認
+• 如需取消請提前告知
 
-如有任何問題，歡迎來電詢問：0912-345-678
+📞 如有任何問題，歡迎來電詢問：
+   0912-345-678
 
 期待與您一起探索花蓮的秘境溪谷！🌊
+祝您有個美好的一天！
+
+洄瀾溪谷探險團隊 敬上
     `;
     
     alert(message);
@@ -279,108 +364,88 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// 設定日期選擇器的最小日期為明天
+// 設定出生日期選擇器（最大為今天，最小為120年前）
 document.addEventListener('DOMContentLoaded', function() {
-    const dateInput = document.getElementById('date');
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0];
-    dateInput.setAttribute('min', tomorrowStr);
+    const birthDateInput = document.getElementById('birthDate');
+    const today = new Date();
+    const maxDate = today.toISOString().split('T')[0];
     
-    // 設定最大日期為3個月後
-    const maxDate = new Date();
-    maxDate.setMonth(maxDate.getMonth() + 3);
-    const maxDateStr = maxDate.toISOString().split('T')[0];
-    dateInput.setAttribute('max', maxDateStr);
+    const minYear = today.getFullYear() - 120;
+    const minDate = new Date(minYear, 0, 1).toISOString().split('T')[0];
+    
+    birthDateInput.setAttribute('max', maxDate);
+    birthDateInput.setAttribute('min', minDate);
+});
+
+// 身分證字號自動轉大寫
+document.getElementById('idNumber').addEventListener('input', function(e) {
+    e.target.value = e.target.value.toUpperCase();
+});
+
+// 電話號碼自動格式化
+function formatPhone(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 4 && value.length <= 7) {
+        value = value.slice(0, 4) + '-' + value.slice(4);
+    } else if (value.length > 7) {
+        value = value.slice(0, 4) + '-' + value.slice(4, 7) + '-' + value.slice(7, 10);
+    }
+    input.value = value;
+}
+
+document.getElementById('phone').addEventListener('input', function(e) {
+    formatPhone(e.target);
+});
+
+document.getElementById('emergencyPhone').addEventListener('input', function(e) {
+    formatPhone(e.target);
 });
 
 /* 
-=== Google Form 設定教學 ===
+=== 表單測試步驟 ===
 
-步驟一：建立 Google 表單
-1. 前往 https://forms.google.com
-2. 點擊「空白」建立新表單
-3. 設定表單標題：「洄瀾溪谷探險預訂表單」
+1. 在本地開啟 index.html
+2. 點擊任一行程的「立即預訂」
+3. 填寫所有欄位（使用測試資料）
+4. 送出表單
+5. 前往您的 Google Form 查看「回覆」
+6. 確認所有資料都正確對應
 
-步驟二：新增表單欄位
-請依序新增以下欄位（都選擇「簡答」題型）：
+測試用資料範例：
+- 姓名：王小明
+- 出生年月日：1990-01-01
+- 身分證：A123456789
+- 聯絡電話：0912-345-678
+- 緊急聯絡人：王大明
+- 緊急聯絡人電話：0923-456-789
+- 地址：花蓮縣花蓮市中山路123號
+- 鞋子尺寸：26 cm
+- 身高：170
+- 體重：65
+- 疾病：無
 
-1. 行程名稱 (tripName)
-2. 價格 (tripPrice)
-3. 姓名 (name) - 設為必填
-4. 電子郵件 (email) - 設為必填
-5. 聯絡電話 (phone) - 設為必填
-6. 預計日期 (date) - 設為必填
-7. 參加人數 (participants) - 設為必填
-8. 特殊需求 (message) - 改用「段落」題型
-9. 優惠代碼 (promoCode)
+=== 重要提醒 ===
 
-步驟三：取得表單 URL 和 Entry IDs
+1. Google Form URL 檢查：
+   ✓ 確認網址已從 /edit 改為 /formResponse
+   ✓ 當前設定的網址是正確的格式
 
-方法 A：使用瀏覽器開發者工具（推薦）
-1. 點擊右上角「傳送」
-2. 選擇「連結」標籤，複製連結
-3. 在新分頁中開啟這個連結
-4. 按 F12 開啟開發者工具
-5. 切換到「Network」（網路）標籤
-6. 填寫表單並點擊「提交」
-7. 在 Network 標籤中找到名為「formResponse」的請求
-8. 點擊它，查看「Payload」或「表單資料」
-9. 您會看到類似這樣的資料：
-   entry.123456789: 西林秘境
-   entry.987654321: 3500
-   ...
-10. 記下每個欄位的 entry.xxxxxxx 編號
+2. 資料隱私保護：
+   ✓ 收集身分證號碼需符合個資法
+   ✓ 建議在 Google Sheets 中設定存取權限
+   ✓ 定期備份並刪除舊資料
+   ✓ 不要公開分享含有個資的試算表
 
-方法 B：檢視網頁原始碼
-1. 在表單預覽頁面按右鍵 → 檢視網頁原始碼
-2. 搜尋 "entry." 找到所有的 entry ID
-3. 對應每個欄位的 entry ID
+3. 保險相關：
+   ✓ 確認您有為參加者投保
+   ✓ 保險需要的資料已收集完整
+   ✓ 保單資訊建議也告知參加者
 
-步驟四：更新程式碼
+4. 後續流程：
+   ✓ 收到預訂後24小時內聯繫
+   ✓ 確認日期、人數、集合地點
+   ✓ 提醒攜帶物品及注意事項
+   ✓ 活動前一天再次確認
 
-1. 將上方 GOOGLE_FORM_URL 改為您的表單網址：
-   從: https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform
-   改成: https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse
-
-2. 更新 FORM_FIELDS 物件中的 entry ID：
-   const FORM_FIELDS = {
-       tripName: 'entry.你的編號1',
-       tripPrice: 'entry.你的編號2',
-       name: 'entry.你的編號3',
-       email: 'entry.你的編號4',
-       phone: 'entry.你的編號5',
-       date: 'entry.你的編號6',
-       participants: 'entry.你的編號7',
-       message: 'entry.你的編號8',
-       promoCode: 'entry.你的編號9'
-   };
-
-步驟五：測試表單
-
-1. 儲存所有檔案
-2. 在瀏覽器中開啟 index.html
-3. 點擊「立即預訂」並填寫測試資料
-4. 送出後到 Google 表單查看「回覆」標籤
-5. 確認資料有正確送達
-
-步驟六：設定通知
-
-1. 在 Google 表單中點擊「回覆」標籤
-2. 點擊右上角的三個點 → 選取通知規則
-3. 設定「提交新回應時」傳送電子郵件通知
-
-🎉 完成！現在您的網站可以接收預訂資料了！
-
-常見問題：
-Q: 為什麼送出後沒看到成功訊息？
-A: 由於 CORS 限制，我們使用 no-cors 模式，但資料仍會成功送達 Google 表單
-
-Q: 可以連結到 Google Sheets 嗎？
-A: 可以！在表單的「回覆」標籤中點擊 Google Sheets 圖示即可建立試算表
-
-Q: 如何自訂自動回覆郵件？
-A: 可使用 Google Apps Script 設定自動回覆，或使用 Zapier/IFTTT 等服務
-
-需要更多協助嗎？歡迎詢問！
+祝您的溯溪事業順利！🎉
 */
