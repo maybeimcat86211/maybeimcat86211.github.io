@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Apps Script 測試頁面</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background: #2E86AB; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1B5E7E; }
+        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Google Apps Script 測試表單</h1>
+    <p>填寫後按送出，檢查你的 Google Sheet 是否收到資料。</p>
+
+    <form id="testForm">
+        <div class="form-group">
+            <label for="tripName">行程名稱</label>
+            <input type="text" id="tripName" name="tripName" value="西林秘境">
+        </div>
+        <div class="form-group">
+            <label for="mainPhone">主聯絡電話</label>
+            <input type="text" id="mainPhone" name="mainPhone" value="0912345678">
+        </div>
+        <div class="form-group">
+            <label for="participantName">參加者姓名 (第一位)</label>
+            <input type="text" id="participantName" name="participants[0][name]" value="王小明">
+        </div>
+        <div class="form-group">
+            <label for="shoeSize">鞋子尺寸</label>
+            <select id="shoeSize" name="participants[0][shoeSize]">
+                <option value="">請選擇</option>
+                <option value="25" selected>25 cm</option>
+                <option value="26">26 cm</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="medical">健康狀況</label>
+            <textarea id="medical" name="participants[0][medicalConditions]">無</textarea>
+        </div>
+
+        <button type="button" onclick="sendTest()">送出測試</button>
+    </form>
+
+    <div id="result">結果將顯示在這裡...</div>
+
+    <script>
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxbP4vDr4cRGHLR2bL9l59F2JLPhIhrgTQYlO_zQMOn9uggWY_nljKr8NOQ37sBjtcmTA/exec'; // ← 改成你的最新 Web App URL
+
+        async function sendTest() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '送出中...';
+
+            const formData = new FormData(document.getElementById('testForm'));
+            formData.append('totalParticipants', '1'); // 模擬 1 位參加者
+
+            try {
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const text = await response.text();
+                resultDiv.innerHTML = `<strong>伺服器回應：</strong><br>${text}<br><br>檢查你的 Google Sheet 是否有新資料。`;
+
+                if (text.includes('Success') || text.includes('OK') || text.includes('測試成功')) {
+                    resultDiv.style.borderColor = 'green';
+                } else if (text.includes('Error')) {
+                    resultDiv.style.borderColor = 'red';
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `<span class="error">錯誤：${err.message}</span><br>請確認 URL 是否正確，或檢查 Apps Script 部署。`;
+                resultDiv.style.borderColor = 'red';
+            }
+        }
+    </script>
+</body>
+</html>
