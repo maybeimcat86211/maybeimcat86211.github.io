@@ -278,7 +278,7 @@ function validateForm(data) {
 
 // 提交到 Google Form
 function submitToGoogleForm(data, submitBtn, originalText) {
-    const scriptUrl = '你的 GAS Web App URL';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyrChCgEYwGHqocQsDTZpjFWYcc9UxQh3GEdDsStHVv3gdo_oqCnR_mtUqXjAT5RyE2hA/exec';
 
     const formData = new FormData();
 
