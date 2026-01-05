@@ -1,20 +1,41 @@
-// Google Form 設定 - 已填入您的實際資料
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdO_TYqVbBvPMZ9xJGC3cKLxqKrj6X9YrRVQoQx0Xy5nrqC3Q/formResponse';
+const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
 
-// Google Form 欄位的 entry ID（已對應您的表單）
-const FORM_FIELDS = {
-    name: 'entry.1623988474',              // 姓名
-    birthDate: 'entry.1952703181',         // 出生年月日
-    idNumber: 'entry.1812465871',          // 身分證字號
-    phone: 'entry.1933097253',             // 聯絡電話
-    emergencyName: 'entry.94106424',       // 緊急聯絡人姓名
-    emergencyPhone: 'entry.1640555720',    // 緊急聯絡人電話
-    address: 'entry.1248469550',           // 聯絡地址
-    shoeSize: 'entry.516143478',           // 溯溪鞋尺寸
-    height: 'entry.152310246',             // 身高
-    weight: 'entry.972135023',             // 體重
-    medicalConditions: 'entry.1995882209'  // 需要注意的疾病及事項
-};
+async function submitBooking() {
+  const data = {
+    trip_name: document.getElementById('tripName').value,
+    trip_price: parseInt(document.getElementById('tripPrice').value),
+    main_phone: document.getElementById('mainPhone').value,
+    main_address: document.getElementById('mainAddress').value,
+    emergency_name: document.getElementById('emergencyName').value,
+    emergency_phone: document.getElementById('emergencyPhone').value,
+    participant_name: '王小明',  // 之後會改成動態
+    birth_date: '1990-01-01',
+    id_number: 'A123456789',
+    height: 170,
+    weight: 65,
+    shoe_size: 26,
+    medical_conditions: '無'
+  };
+
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (response.ok) {
+    alert('預訂成功！我們會在24小時內聯繫您');
+    closeBooking();
+  } else {
+    alert('送出失敗，請稍後再試');
+  }
+}
 
 // 行程詳細資訊
 const tripDetails = {
