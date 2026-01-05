@@ -3,80 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Apps Script 測試頁面</title>
+    <title>Supabase 連線測試</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { padding: 10px 20px; background: #2E86AB; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        h1 { color: #2E86AB; text-align: center; }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #2E86AB;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
         button:hover { background: #1B5E7E; }
-        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; }
-        .error { color: red; }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
-    <h1>Google Apps Script 測試表單</h1>
-    <p>填寫後按送出，檢查你的 Google Sheet 是否收到資料。</p>
+    <h1>🏊‍♂️ Supabase 連線測試</h1>
+    <p>填寫資料後送出，檢查 Supabase 是否成功收到。</p>
 
-    <form id="testForm">
-        <div class="form-group">
-            <label for="tripName">行程名稱</label>
-            <input type="text" id="tripName" name="tripName" value="西林秘境">
-        </div>
-        <div class="form-group">
-            <label for="mainPhone">主聯絡電話</label>
-            <input type="text" id="mainPhone" name="mainPhone" value="0912345678">
-        </div>
-        <div class="form-group">
-            <label for="participantName">參加者姓名 (第一位)</label>
-            <input type="text" id="participantName" name="participants[0][name]" value="王小明">
-        </div>
-        <div class="form-group">
-            <label for="shoeSize">鞋子尺寸</label>
-            <select id="shoeSize" name="participants[0][shoeSize]">
-                <option value="">請選擇</option>
-                <option value="25" selected>25 cm</option>
-                <option value="26">26 cm</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="medical">健康狀況</label>
-            <textarea id="medical" name="participants[0][medicalConditions]">無</textarea>
-        </div>
+    <div class="form-group">
+        <label>行程名稱</label>
+        <input type="text" id="tripName" value="西林秘境">
+    </div>
+    <div class="form-group">
+        <label>主報名人電話</label>
+        <input type="text" id="mainPhone" value="0912345678">
+    </div>
+    <div class="form-group">
+        <label>參加者姓名</label>
+        <input type="text" id="participantName" value="王小明">
+    </div>
+    <div class="form-group">
+        <label>身高 (cm)</label>
+        <input type="number" id="height" value="170">
+    </div>
+    <div class="form-group">
+        <label>溯溪鞋尺寸 (cm)</label>
+        <select id="shoeSize">
+            <option value="25" selected>25 cm</option>
+            <option value="25.5">25.5 cm</option>
+            <option value="26">26 cm</option>
+            <option value="26.5">26.5 cm</option>
+            <option value="27">27 cm</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>健康狀況</label>
+        <textarea id="medical" rows="3">無</textarea>
+    </div>
 
-        <button type="button" onclick="sendTest()">送出測試</button>
-    </form>
+    <button onclick="submitToSupabase()">送出測試資料到 Supabase</button>
 
     <div id="result">結果將顯示在這裡...</div>
 
     <script>
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwDfneAnpn7CW0-06U0-g7C5zhatgHQHoW-NmwcJH6SkUSFBV9akrmU0RlVxY2YSxwwUw/exec'; // ← 改成你的最新 Web App URL
+        // ==================== 請修改這三行 ====================
+        const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';          // 例如：https://abcde.supabase.co
+        const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45'; // 你的 anon key
+        const TABLE_NAME = 'bookings';  // 你的資料表名稱，預設是 bookings
+        // =====================================================
 
-        async function sendTest() {
+        async function submitToSupabase() {
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '送出中...';
+            resultDiv.innerHTML = '送出中，請稍候...';
+            resultDiv.className = '';
 
-            const formData = new FormData(document.getElementById('testForm'));
-            formData.append('totalParticipants', '1'); // 模擬 1 位參加者
+            const data = {
+                trip_name: document.getElementById('tripName').value.trim(),
+                main_phone: document.getElementById('mainPhone').value.trim(),
+                participant_name: document.getElementById('participantName').value.trim(),
+                height: parseInt(document.getElementById('height').value),
+                shoe_size: parseFloat(document.getElementById('shoeSize').value),
+                medical_conditions: document.getElementById('medical').value.trim() || '無'
+            };
 
             try {
-                const response = await fetch(scriptUrl, {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}`, {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'  // 不回傳資料，只回 status
+                    },
+                    body: JSON.stringify(data)
                 });
 
-                const text = await response.text();
-                resultDiv.innerHTML = `<strong>伺服器回應：</strong><br>${text}<br><br>檢查你的 Google Sheet 是否有新資料。`;
-
-                if (text.includes('Success') || text.includes('OK') || text.includes('測試成功')) {
-                    resultDiv.style.borderColor = 'green';
-                } else if (text.includes('Error')) {
-                    resultDiv.style.borderColor = 'red';
+                if (response.ok || response.status === 201) {
+                    resultDiv.innerHTML = '✅ 預訂成功！資料已成功寫入 Supabase。<br>請去 Supabase Dashboard 查看 bookings 表。';
+                    resultDiv.className = 'success';
+                } else {
+                    const errorText = await response.text();
+                    resultDiv.innerHTML = `❌ 送出失敗（狀態碼：${response.status}）<br>${errorText}`;
+                    resultDiv.className = 'error';
                 }
             } catch (err) {
-                resultDiv.innerHTML = `<span class="error">錯誤：${err.message}</span><br>請確認 URL 是否正確，或檢查 Apps Script 部署。`;
-                resultDiv.style.borderColor = 'red';
+                resultDiv.innerHTML = `❌ 網路錯誤：<br>${err.message}<br>請確認 URL、anon key 是否正確，或網路是否正常。`;
+                resultDiv.className = 'error';
             }
         }
     </script>
