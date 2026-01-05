@@ -1,6 +1,6 @@
 // ==================== 請修改這兩行 ====================
-const SUPABASE_URL = 'https://你的project.supabase.co';  // 例如：https://abcde.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxx';  // 你的 anon key
+const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';  // 例如：https://abcde.supabase.co
+const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';  // 你的 anon key
 // =====================================================
 
 // 行程詳細資訊
