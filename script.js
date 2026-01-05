@@ -1,172 +1,31 @@
-const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
-
-async function submitBooking() {
-  const data = {
-    trip_name: document.getElementById('tripName').value,
-    trip_price: parseInt(document.getElementById('tripPrice').value),
-    main_phone: document.getElementById('mainPhone').value,
-    main_address: document.getElementById('mainAddress').value,
-    emergency_name: document.getElementById('emergencyName').value,
-    emergency_phone: document.getElementById('emergencyPhone').value,
-    participant_name: '王小明',  // 之後會改成動態
-    birth_date: '1990-01-01',
-    id_number: 'A123456789',
-    height: 170,
-    weight: 65,
-    shoe_size: 26,
-    medical_conditions: '無'
-  };
-
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (response.ok) {
-    alert('預訂成功！我們會在24小時內聯繫您');
-    closeBooking();
-  } else {
-    alert('送出失敗，請稍後再試');
-  }
-}
+// ==================== 請修改這兩行 ====================
+const SUPABASE_URL = 'https://你的project.supabase.co';  // 例如：https://abcde.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxx';  // 你的 anon key
+// =====================================================
 
 // 行程詳細資訊
 const tripDetails = {
-    xilin: {
-        title: '西林秘境',
-        description: '西林秘境是教練們於2023年探勘並建置的一條溪谷路線，擁有30公尺高的壯觀瀑布和罕見的S型瀑布景觀。',
-        highlights: [
-            '✓ 30公尺高瀑布垂降',
-            '✓ 罕見S型瀑布奇景',
-            '✓ 適合初學者體驗',
-            '✓ 專業教練全程指導',
-            '✓ 提供完整裝備'
-        ],
-        duration: '約 4-5 小時',
-        difficulty: '初級',
-        included: '專業教練、完整裝備、保險、午餐、接駁'
-    },
-    feicui: {
-        title: '翡翠谷',
-        description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。',
-        highlights: [
-            '✓ 碧綠清澈深潭',
-            '✓ 多個天然滑水道',
-            '✓ 刺激跳水點',
-            '✓ 進階溯溪體驗',
-            '✓ 絕佳攝影景點'
-        ],
-        duration: '約 5-6 小時',
-        difficulty: '進階',
-        included: '專業教練、完整裝備、保險、午餐、接駁'
-    },
-    huangjin: {
-        title: '黃金峽谷',
-        description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。',
-        highlights: [
-            '✓ 親子友善路線',
-            '✓ 金黃色峽谷景觀',
-            '✓ 溫和地形安全',
-            '✓ 適合6歲以上兒童',
-            '✓ 家庭回憶首選'
-        ],
-        duration: '約 3-4 小時',
-        difficulty: '入門',
-        included: '專業教練、完整裝備、保險、點心、接駁'
-    },
-    blue: {
-        title: '藍色秘境',
-        description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。',
-        highlights: [
-            '✓ 藍寶石般水潭',
-            '✓ 壯觀瀑布景觀',
-            '✓ IG打卡聖地',
-            '✓ 多個跳水點',
-            '✓ 絕美攝影角度'
-        ],
-        duration: '約 4-5 小時',
-        difficulty: '初中級',
-        included: '專業教練、完整裝備、保險、午餐、接駁'
-    }
+    xilin: { title: '西林秘境', description: '西林秘境是教練們於2023年探勘並建置的一條溪谷路線，擁有30公尺高的壯觀瀑布和罕見的S型瀑布景觀。', highlights: ['✓ 30公尺高瀑布垂降','✓ 罕見S型瀑布奇景','✓ 適合初學者體驗','✓ 專業教練全程指導','✓ 提供完整裝備'], duration: '約 4-5 小時', difficulty: '初級', included: '專業教練、完整裝備、保險、午餐、接駁' },
+    feicui: { title: '翡翠谷', description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。', highlights: ['✓ 碧綠清澈深潭','✓ 多個天然滑水道','✓ 刺激跳水點','✓ 進階溯溪體驗','✓ 絕佳攝影景點'], duration: '約 5-6 小時', difficulty: '進階', included: '專業教練、完整裝備、保險、午餐、接駁' },
+    huangjin: { title: '黃金峽谷', description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。', highlights: ['✓ 親子友善路線','✓ 金黃色峽谷景觀','✓ 溫和地形安全','✓ 適合6歲以上兒童','✓ 家庭回憶首選'], duration: '約 3-4 小時', difficulty: '入門', included: '專業教練、完整裝備、保險、點心、接駁' },
+    blue: { title: '藍色秘境', description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。', highlights: ['✓ 藍寶石般水潭','✓ 壯觀瀑布景觀','✓ IG打卡聖地','✓ 多個跳水點','✓ 絕美攝影角度'], duration: '約 4-5 小時', difficulty: '初中級', included: '專業教練、完整裝備、保險、午餐、接駁' }
 };
 
-// 顯示行程詳情
 function showDetails(tripId) {
     const trip = tripDetails[tripId];
     if (!trip) return;
-
-    const detailsHTML = `
-【${trip.title}】
-
-${trip.description}
-
-⭐ 行程特色：
-${trip.highlights.join('\n')}
-
-⏰ 活動時間：${trip.duration}
-💪 難度等級：${trip.difficulty}
-📦 費用包含：${trip.included}
-
-注意事項：
-• 請穿著輕便運動服裝
-• 建議攜帶一套乾淨衣物
-• 活動當天請勿飲酒
-• 如有心臟病、高血壓等疾病請事先告知
-    `;
-
+    const detailsHTML = `【${trip.title}】\n${trip.description}\n\n⭐ 行程特色：\n${trip.highlights.join('\n')}\n\n⏰ 活動時間：${trip.duration}\n💪 難度等級：${trip.difficulty}\n📦 費用包含：${trip.included}\n\n注意事項：\n• 請穿著輕便運動服裝\n• 建議攜帶一套乾淨衣物\n• 活動當天請勿飲酒\n• 如有心臟病、高血壓等疾病請事先告知`;
     alert(detailsHTML);
 }
 
-// 顯示活動條款
 function showTerms() {
-    const terms = `
-【活動條款及個人資料使用聲明】
-
-一、活動參加條件
-1. 參加者需年滿12歲（親子路線可6歲以上）
-2. 具備基本游泳能力（部分路線）
-3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病
-4. 懷孕婦女不建議參加
-
-二、活動安全規定
-1. 必須全程穿著安全裝備
-2. 務必聽從教練指示
-3. 不得擅自脫隊或進行危險動作
-4. 活動前24小時內禁止飲酒
-
-三、取消政策
-1. 活動前7天取消，退款90%
-2. 活動前3天取消，退款50%
-3. 活動前1天取消，不予退款
-4. 因天候因素取消，可擇期或全額退款
-
-四、個人資料使用聲明
-1. 收集之個人資料僅供本活動使用
-2. 用於保險、緊急聯絡及活動通知
-3. 絕不提供給第三方
-4. 活動結束後將妥善保存或銷毀
-5. 您有權查詢、修改或刪除您的個人資料
-
-五、免責聲明
-1. 參加者需自行評估身體狀況
-2. 如隱瞞病史造成意外，本公司不負責任
-3. 活動中如因個人因素造成傷害，本公司不負賠償責任
-4. 本公司已投保活動相關保險
-
-如有疑問請洽：0912-345-678
-    `;
-    
+    const terms = `【活動條款及個人資料使用聲明】\n\n一、活動參加條件\n1. 參加者需年滿12歲（親子路線可6歲以上）\n2. 具備基本游泳能力（部分路線）\n3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病\n4. 懷孕婦女不建議參加\n\n二、活動安全規定\n1. 必須全程穿著安全裝備\n2. 務必聽從教練指示\n3. 不得擅自脫隊或進行危險動作\n4. 活動前24小時內禁止飲酒\n\n三、取消政策\n1. 活動前7天取消，退款90%\n2. 活動前3天取消，退款50%\n3. 活動前1天取消，不予退款\n4. 因天候因素取消，可擇期或全額退款\n\n四、個人資料使用聲明\n1. 收集之個人資料僅供本活動使用\n2. 用於保險、緊急聯絡及活動通知\n3. 絕不提供給第三方\n4. 活動結束後將妥善保存或銷毀\n5. 您有權查詢、修改或刪除您的個人資料\n\n五、免責聲明\n1. 參加者需自行評估身體狀況\n2. 如隱瞞病史造成意外，本公司不負責任\n3. 活動中如因個人因素造成傷害，本公司不負賠償責任\n4. 本公司已投保活動相關保險\n\n如有疑問請洽：0912-345-678`;
     alert(terms);
 }
 
-// 開啟預訂表單
+let currentStep = 1;
+let totalParticipants = 1;
+
 function openBooking(tripName, price) {
     const modal = document.getElementById('bookingModal');
     const bookingInfo = document.getElementById('bookingInfo');
@@ -184,9 +43,14 @@ function openBooking(tripName, price) {
     
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    currentStep = 1;
+    totalParticipants = 1;
+    document.getElementById('participantSteps').innerHTML = '';
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.step-1').classList.add('active');
+    document.querySelector('.progress').style.width = '25%';
 }
 
-// 關閉預訂表單
 function closeBooking() {
     const modal = document.getElementById('bookingModal');
     modal.style.display = 'none';
@@ -194,196 +58,180 @@ function closeBooking() {
     document.getElementById('bookingForm').reset();
 }
 
-// 點擊模態視窗外部關閉
 window.onclick = function(event) {
     const modal = document.getElementById('bookingModal');
-    if (event.target == modal) {
-        closeBooking();
-    }
-}
+    if (event.target == modal) closeBooking();
+};
 
-// ESC 鍵關閉視窗
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeBooking();
+    if (event.key === 'Escape') closeBooking();
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-next')) {
+        const step = e.target.closest('.step');
+        if (validateStep(step)) {
+            if (step.classList.contains('step-1')) {
+                totalParticipants = parseInt(document.getElementById('participantCount').value);
+                document.getElementById('totalParticipants').value = totalParticipants;
+                generateParticipantSteps();
+                showStep(2);
+            } else {
+                const stepNum = parseInt(step.id.split('-')[1]);
+                showStep(stepNum + 1);
+            }
+        }
     }
 });
 
-// 處理表單提交
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const data = {};
-    
-    // 收集表單資料
-    formData.forEach((value, key) => {
-        data[key] = value;
+function generateParticipantSteps() {
+    const container = document.getElementById('participantSteps');
+    container.innerHTML = '';
+    for (let i = 1; i <= totalParticipants; i++) {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'step';
+        stepDiv.id = `step-${i+1}`;
+        stepDiv.innerHTML = `
+            <h3>參加者 ${i} 詳細資料</h3>
+            <div class="form-group">
+                <label>姓名 Name *</label>
+                <input type="text" class="participant-name" required placeholder="請輸入真實姓名">
+            </div>
+            <div class="form-group">
+                <label>出生年月日 Date of Birth *</label>
+                <input type="date" class="participant-birthdate" required>
+            </div>
+            <div class="form-group">
+                <label>身分證字號 / 護照號碼 ID / Passport No. *</label>
+                <input type="text" class="participant-idnumber id-uppercase" required placeholder="例如：A123456789">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>身高 Height (cm) *</label>
+                    <input type="number" class="participant-height" required min="100" max="250" placeholder="例如：170">
+                </div>
+                <div class="form-group">
+                    <label>體重 Weight (kg) *</label>
+                    <input type="number" class="participant-weight" required min="30" max="200" placeholder="例如：65">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>溯溪鞋尺寸 Shoes Size (cm) *</label>
+                <select class="participant-shoesize" required>
+                    <option value="">請選擇尺寸</option>
+                    <option value="22">22 cm</option><option value="22.5">22.5 cm</option><option value="23">23 cm</option><option value="23.5">23.5 cm</option>
+                    <option value="24">24 cm</option><option value="24.5">24.5 cm</option><option value="25">25 cm</option><option value="25.5">25.5 cm</option>
+                    <option value="26">26 cm</option><option value="26.5">26.5 cm</option><option value="27">27 cm</option><option value="27.5">27.5 cm</option>
+                    <option value="28">28 cm</option><option value="28.5">28.5 cm</option><option value="29">29 cm</option><option value="29.5">29.5 cm</option>
+                    <option value="30">30 cm</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>需要教練注意的疾病及事項</label>
+                <textarea class="participant-medical" rows="3" placeholder="例如：心臟病、高血壓、氣喘... 如無請填「無」"></textarea>
+            </div>
+            <button type="button" class="btn-next">下一步 →</button>
+        `;
+        container.appendChild(stepDiv);
+    }
+}
+
+function showStep(stepNum) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const targetStep = document.getElementById(`step-${stepNum}`) || document.getElementById('finalStep');
+    targetStep.classList.add('active');
+    updateProgress(stepNum);
+    currentStep = stepNum;
+}
+
+function updateProgress(step) {
+    const progress = ((step - 1) / (totalParticipants + 1)) * 100;
+    document.querySelector('.progress').style.width = progress + '%';
+}
+
+function validateStep(stepElement) {
+    const requiredFields = stepElement.querySelectorAll('[required]');
+    let valid = true;
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = 'red';
+            field.style.boxShadow = '0 0 0 3px rgba(255,0,0,0.1)';
+            valid = false;
+        } else {
+            field.style.borderColor = '#ddd';
+            field.style.boxShadow = 'none';
+        }
     });
-    
-    // 驗證表單
-    if (!validateForm(data)) {
+    if (!valid) alert('請填寫所有必填欄位！');
+    return valid;
+}
+
+document.addEventListener('input', e => {
+    if (e.target.classList.contains('id-uppercase')) {
+        e.target.value = e.target.value.toUpperCase();
+    }
+});
+
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!document.getElementById('agreeTerms').checked) {
+        alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
         return;
     }
-    
-    // 顯示載入中
+
     const submitBtn = document.querySelector('.btn-submit');
     const originalText = submitBtn.textContent;
     submitBtn.textContent = '送出中，請稍候...';
     submitBtn.disabled = true;
-    
-    // 提交到 Google Form
-    submitToGoogleForm(data, submitBtn, originalText);
-});
 
-// 表單驗證
-function validateForm(data) {
-    // 驗證電話格式（台灣手機）
-    const phoneRegex = /^09\d{8}$/;
-    const phoneClean = data.phone.replace(/[-\s]/g, '');
-    const emergencyPhoneClean = data.emergencyPhone.replace(/[-\s]/g, '');
-    
-    if (!phoneRegex.test(phoneClean)) {
-        alert('❌ 請輸入正確的手機號碼格式\n範例：0912-345-678 或 0912345678');
-        return false;
-    }
-    
-    if (!phoneRegex.test(emergencyPhoneClean)) {
-        alert('❌ 請輸入正確的緊急聯絡人手機號碼格式\n範例：0912-345-678 或 0912345678');
-        return false;
-    }
-    
-    // 驗證身分證格式（台灣身分證或護照）
-    const idRegex = /^[A-Z][12]\d{8}$/;
-    const idUpper = data.idNumber.toUpperCase();
-    
-    if (!idRegex.test(idUpper) && data.idNumber.length < 6) {
-        alert('❌ 請輸入正確的身分證字號（例如：A123456789）\n或護照號碼（至少6位）');
-        return false;
-    }
-    
-    // 驗證出生日期（必須是過去的日期且至少6歲）
-    const birthDate = new Date(data.birthDate);
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    
-    if (birthDate >= today) {
-        alert('❌ 出生日期不能是未來的日期');
-        return false;
-    }
-    
-    if (age < 6) {
-        alert('❌ 參加者需年滿6歲以上');
-        return false;
-    }
-    
-    // 驗證身高體重範圍
-    if (data.height < 100 || data.height > 250) {
-        alert('❌ 身高請輸入 100-250 公分之間的數值');
-        return false;
-    }
-    
-    if (data.weight < 30 || data.weight > 200) {
-        alert('❌ 體重請輸入 30-200 公斤之間的數值');
-        return false;
-    }
-    
-    // 檢查是否同意條款
-    if (!document.getElementById('agreeTerms').checked) {
-        alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
-        return false;
-    }
-    
-    return true;
-}
+    const commonData = {
+        trip_name: document.getElementById('tripName').value,
+        trip_price: parseInt(document.getElementById('tripPrice').value),
+        main_phone: document.getElementById('mainPhone').value,
+        main_address: document.getElementById('mainAddress').value,
+        emergency_name: document.getElementById('emergencyName').value,
+        emergency_phone: document.getElementById('emergencyPhone').value
+    };
 
-// 提交到 Google Form
-function submitToGoogleForm(data, submitBtn, originalText) {
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyrChCgEYwGHqocQsDTZpjFWYcc9UxQh3GEdDsStHVv3gdo_oqCnR_mtUqXjAT5RyE2hA/exec';
-
-    const formData = new FormData();
-
-    // 主報名人資訊（非參加者）
-    formData.append('tripName', document.getElementById('tripName').value);
-    formData.append('tripPrice', document.getElementById('tripPrice').value);
-    formData.append('mainPhone', document.getElementById('mainPhone').value);
-    formData.append('mainAddress', document.getElementById('mainAddress').value);
-    formData.append('emergencyName', document.getElementById('emergencyName').value);
-    formData.append('emergencyPhone', document.getElementById('emergencyPhone').value);
-
-    // 收集所有參加者資料
-    document.querySelectorAll('.participant-block').forEach((block, index) => {
-        const prefix = `participants[${index}]`;
-        const name = block.querySelector(`[name="${prefix}[name]"]`).value;
-        const birthDate = block.querySelector(`[name="${prefix}[birthDate]"]`).value;
-        const idNumber = block.querySelector(`[name="${prefix}[idNumber]"]`).value.toUpperCase();
-        const height = block.querySelector(`[name="${prefix}[height]"]`).value;
-        const weight = block.querySelector(`[name="${prefix}[weight]"]`).value;
-        const shoeSize = block.querySelector(`[name="${prefix}[shoeSize]"]`).value;
-        const medical = block.querySelector(`[name="${prefix}[medicalConditions]"]`).value || '無';
-
-        formData.append(`${prefix}[name]`, name);
-        formData.append(`${prefix}[birthDate]`, birthDate);
-        formData.append(`${prefix}[idNumber]`, idNumber);
-        formData.append(`${prefix}[height]`, height);
-        formData.append(`${prefix}[weight]`, weight);
-        formData.append(`${prefix}[shoeSize]`, shoeSize);
-        formData.append(`${prefix}[medicalConditions]`, medical);
+    const participants = [];
+    document.querySelectorAll('#participantSteps .step').forEach(step => {
+        participants.push({
+            participant_name: step.querySelector('.participant-name').value.trim(),
+            birth_date: step.querySelector('.participant-birthdate').value,
+            id_number: step.querySelector('.participant-idnumber').value.toUpperCase().trim(),
+            height: parseInt(step.querySelector('.participant-height').value),
+            weight: parseInt(step.querySelector('.participant-weight').value),
+            shoe_size: parseFloat(step.querySelector('.participant-shoesize').value),
+            medical_conditions: step.querySelector('.participant-medical').value.trim() || '無'
+        });
     });
 
-    fetch(scriptUrl, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-    })
-    .then(() => {
-        showSuccessMessage(); // 可以改成顯示「已送出 X 位參加者」
-        closeBooking();
-    })
-    .catch(err => {
-        console.error(err);
-        alert('送出失敗，請稍後再試');
-    })
-    .finally(() => {
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(participants.map(p => ({ ...commonData, ...p })))
+        });
+
+        if (response.ok) {
+            alert(`✅ 預訂申請已成功送出！\n\n親愛的顧客，\n\n感謝您選擇洄瀾溪谷探險！\n\n📍 行程：${commonData.trip_name}\n💰 費用：NT$ ${commonData.trip_price} / 人\n👥 人數：${participants.length} 位\n\n✉️ 我們會在 24 小時內透過電話與您聯繫確認行程細節。\n\n⚠️ 重要提醒：\n• 請保持電話暢通\n• 活動前一天會再次確認\n\n📞 如有任何問題，歡迎來電：0912-345-678\n\n期待與您一起探索花蓮的秘境溪谷！🌊\n\n洄瀾溪谷探險團隊 敬上`);
+            closeBooking();
+        } else {
+            const error = await response.text();
+            alert('❌ 送出失敗，請稍後再試或來電詢問。\n錯誤訊息：' + error);
+        }
+    } catch (err) {
+        alert('❌ 網路錯誤，請檢查網路連線後再試。');
+    } finally {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
-    });
-}
-// 顯示成功訊息
-function showSuccessMessage(data) {
-    const message = `
-✅ 預訂申請已成功送出！
-
-親愛的 ${data.name}，
-
-感謝您選擇洄瀾溪谷探險！
-
-📋 您的預訂資訊：
-📍 行程：${data.tripName}
-💰 費用：NT$ ${data.tripPrice} / 人
-👤 姓名：${data.name}
-📱 電話：${data.phone}
-
-✉️ 我們會在 24 小時內透過以下方式與您聯繫：
-   📧 簡訊通知
-   📞 電話確認行程細節
-
-⚠️ 重要提醒：
-• 請保持電話暢通
-• 活動前一天會再次確認
-• 如需取消請提前告知
-
-📞 如有任何問題，歡迎來電詢問：
-   0912-345-678
-
-期待與您一起探索花蓮的秘境溪谷！🌊
-祝您有個美好的一天！
-
-洄瀾溪谷探險團隊 敬上
-    `;
-    
-    alert(message);
-}
+    }
+});
 
 // 平滑滾動
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -391,276 +239,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
 });
-
-// 設定出生日期選擇器（最大為今天，最小為120年前）
-document.addEventListener('DOMContentLoaded', function() {
-    const birthDateInput = document.getElementById('birthDate');
-    const today = new Date();
-    const maxDate = today.toISOString().split('T')[0];
-    
-    const minYear = today.getFullYear() - 120;
-    const minDate = new Date(minYear, 0, 1).toISOString().split('T')[0];
-    
-    birthDateInput.setAttribute('max', maxDate);
-    birthDateInput.setAttribute('min', minDate);
-});
-// 參加者區塊模板（用於複製）
-const participantTemplate = document.querySelector('.participant-block').cloneNode(true);
-
-// 當前參加者數量
-let participantCount = 1;
-
-// 新增參加者
-document.getElementById('addParticipantBtn').addEventListener('click', function() {
-    participantCount++;
-    
-    const newBlock = participantTemplate.cloneNode(true);
-    newBlock.dataset.index = participantCount - 1;
-    
-    // 更新所有 name 屬性的索引
-    newBlock.querySelectorAll('[name]').forEach(el => {
-        const oldName = el.getAttribute('name');
-        const newName = oldName.replace(/\[\d+\]/, `[${participantCount - 1}]`);
-        el.setAttribute('name', newName);
-    });
-    
-    // 更新標題
-    newBlock.querySelector('h4').innerHTML = `參加者 ${participantCount} <span class="remove-participant">- 移除</span>`;
-    
-    // 顯示移除按鈕（從第二個開始）
-    newBlock.querySelector('.remove-participant').style.display = 'inline';
-    
-    // 清空輸入值
-    newBlock.querySelectorAll('input, textarea, select').forEach(el => {
-        if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
-        else el.value = '';
-    });
-    
-    document.getElementById('participantsContainer').appendChild(newBlock);
-});
-
-// 移除參加者（使用事件委託）
-document.getElementById('participantsContainer').addEventListener('click', function(e) {
-    if (e.target.classList.contains('remove-participant')) {
-        const block = e.target.closest('.participant-block');
-        if (block) {
-            block.remove();
-            participantCount--;
-            // 重新編號剩餘的參加者
-            document.querySelectorAll('.participant-block').forEach((block, idx) => {
-                block.dataset.index = idx;
-                block.querySelector('h4').innerHTML = `參加者 ${idx + 1} ${idx > 0 ? '<span class="remove-participant">- 移除</span>' : ''}`;
-                // 更新 name 索引
-                block.querySelectorAll('[name]').forEach(el => {
-                    const oldName = el.getAttribute('name');
-                    const newName = oldName.replace(/\[\d+\]/, `[${idx}]`);
-                    el.setAttribute('name', newName);
-                });
-            });
-        }
-    }
-});
-
-// 身分證字號自動轉大寫
-document.getElementById('idNumber').addEventListener('input', function(e) {
-    e.target.value = e.target.value.toUpperCase();
-});
-
-// 電話號碼自動格式化
-function formatPhone(input) {
-    let value = input.value.replace(/\D/g, '');
-    if (value.length > 4 && value.length <= 7) {
-        value = value.slice(0, 4) + '-' + value.slice(4);
-    } else if (value.length > 7) {
-        value = value.slice(0, 4) + '-' + value.slice(4, 7) + '-' + value.slice(7, 10);
-    }
-    input.value = value;
-}
-
-document.getElementById('phone').addEventListener('input', function(e) {
-    formatPhone(e.target);
-});
-
-document.getElementById('emergencyPhone').addEventListener('input', function(e) {
-    formatPhone(e.target);
-});
-// 在 script.js 中加入
-
-let currentStep = 1;
-let totalParticipants = 1;
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 綁定下一步
-    document.querySelector('.btn-next').addEventListener('click', function() {
-        if (validateStep(1)) {
-            totalParticipants = parseInt(document.getElementById('participantCount').value);
-            document.getElementById('totalParticipants').value = totalParticipants;
-            generateParticipantSteps();
-            showStep(2);
-        }
-    });
-
-    // 動態產生參加者步驟
-    function generateParticipantSteps() {
-        const container = document.getElementById('participantSteps');
-        container.innerHTML = '';
-        for (let i = 1; i <= totalParticipants; i++) {
-            const stepDiv = document.createElement('div');
-            stepDiv.className = 'step';
-            stepDiv.id = `step-${i+1}`;
-            stepDiv.innerHTML = `
-                <h3>參加者 ${i} 詳細資料</h3>
-                <div class="form-group">
-                    <label>姓名 *</label>
-                    <input type="text" name="participants[${i-1}][name]" required>
-                </div>
-                <div class="form-group">
-                    <label>出生年月日 *</label>
-                    <input type="date" name="participants[${i-1}][birthDate]" required>
-                </div>
-                <div class="form-group">
-                    <label>身分證 / 護照號碼 *</label>
-                    <input type="text" name="participants[${i-1}][idNumber]" required class="id-uppercase">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>身高 (cm) *</label>
-                        <input type="number" name="participants[${i-1}][height]" required min="100" max="250">
-                    </div>
-                    <div class="form-group">
-                        <label>體重 (kg) *</label>
-                        <input type="number" name="participants[${i-1}][weight]" required min="30" max="200">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>溯溪鞋尺寸 (cm) *</label>
-                    <select name="participants[${i-1}][shoeSize]" required>
-                        <option value="">請選擇</option>
-                        <option value="22">22 cm</option>
-                        <!-- ... 填入所有尺寸 ... -->
-                        <option value="30">30 cm</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>健康狀況</label>
-                    <textarea name="participants[${i-1}][medicalConditions]" rows="3" placeholder="如無請填「無」"></textarea>
-                </div>
-                <button type="button" class="btn-next">下一步 →</button>
-            `;
-            container.appendChild(stepDiv);
-
-            // 綁定下一步
-            stepDiv.querySelector('.btn-next').addEventListener('click', function() {
-                if (validateStep(i+1)) {
-                    showStep(i+2);
-                }
-            });
-        }
-    }
-
-    // 顯示特定步驟
-    function showStep(stepNum) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(`step-${stepNum}`) || document.querySelector('.step-final').classList.add('active');
-        updateProgress(stepNum);
-        currentStep = stepNum;
-    }
-
-    // 更新進度條
-    function updateProgress(step) {
-        const progress = ((step - 1) / (totalParticipants + 1)) * 100;
-        document.querySelector('.progress').style.width = progress + '%';
-    }
-
-    // 簡單驗證（可擴充）
-    function validateStep(stepNum) {
-        const step = document.querySelector(`.step-${stepNum}`) || document.querySelector('.step-1');
-        const required = step.querySelectorAll('[required]');
-        let valid = true;
-        required.forEach(field => {
-            if (!field.value.trim()) {
-                field.style.borderColor = 'red';
-                valid = false;
-            } else {
-                field.style.borderColor = '';
-            }
-        });
-        if (!valid) alert('請填寫所有必填欄位！');
-        return valid;
-    }
-
-    // 身分證自動大寫（動態欄位）
-    document.addEventListener('input', e => {
-        if (e.target.classList.contains('id-uppercase')) {
-            e.target.value = e.target.value.toUpperCase();
-        }
-    });
-
-    // 電話格式化（同原程式碼）
-});
-
-// 表單送出時（修改原 submitToGoogleForm）
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!document.getElementById('agreeTerms').checked) {
-        alert('請同意條款');
-        return;
-    }
-    // 收集所有資料的方式同之前，但現在 name 屬性已正確
-    // ... 原 fetch 程式碼 ...
-});
-/* 
-=== 表單測試步驟 ===
-
-1. 在本地開啟 index.html
-2. 點擊任一行程的「立即預訂」
-3. 填寫所有欄位（使用測試資料）
-4. 送出表單
-5. 前往您的 Google Form 查看「回覆」
-6. 確認所有資料都正確對應
-
-測試用資料範例：
-- 姓名：王小明
-- 出生年月日：1990-01-01
-- 身分證：A123456789
-- 聯絡電話：0912-345-678
-- 緊急聯絡人：王大明
-- 緊急聯絡人電話：0923-456-789
-- 地址：花蓮縣花蓮市中山路123號
-- 鞋子尺寸：26 cm
-- 身高：170
-- 體重：65
-- 疾病：無
-
-=== 重要提醒 ===
-
-1. Google Form URL 檢查：
-   ✓ 確認網址已從 /edit 改為 /formResponse
-   ✓ 當前設定的網址是正確的格式
-
-2. 資料隱私保護：
-   ✓ 收集身分證號碼需符合個資法
-   ✓ 建議在 Google Sheets 中設定存取權限
-   ✓ 定期備份並刪除舊資料
-   ✓ 不要公開分享含有個資的試算表
-
-3. 保險相關：
-   ✓ 確認您有為參加者投保
-   ✓ 保險需要的資料已收集完整
-   ✓ 保單資訊建議也告知參加者
-
-4. 後續流程：
-   ✓ 收到預訂後24小時內聯繫
-   ✓ 確認日期、人數、集合地點
-   ✓ 提醒攜帶物品及注意事項
-   ✓ 活動前一天再次確認
-
-祝您的溯溪事業順利！🎉
-*/
