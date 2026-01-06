@@ -1,7 +1,7 @@
 // ==================== 修改這兩行 ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
-const MAX_SLOTS_PER_DAY = 10; // 每團上限人數
+const MAX_SLOTS_PER_DAY = 10;
 // =====================================================
 
 let selectedDate = null;
@@ -64,7 +64,6 @@ function toggleAccordion(header) {
     content.classList.toggle('active');
 }
 
-// 綁定點擊展開
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.accordion-header').forEach(header => {
         header.addEventListener('click', () => toggleAccordion(header));
