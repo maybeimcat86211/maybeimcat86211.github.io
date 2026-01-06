@@ -1,4 +1,4 @@
-alert('script.js loaded');
+console.log('SCRIPT V2 LOADED');
 // ==================== 基本設定 ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
