@@ -111,14 +111,18 @@ function generateCalendarWithRealData(availability) {
         const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
         const monthName = monthDate.toLocaleString('zh-TW', { year: 'numeric', month: 'long' });
 
-        let table = `<div class="month-calendar">
+        // 建立月份容器 div
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'month-calendar';
+        
+        let tableHTML = `
             <div class="month-title">${monthName}</div>
             <table class="calendar">
                 <thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead>
                 <tbody><tr>`;
 
         const firstDay = monthDate.getDay();
-        for (let i = 0; i < firstDay; i++) table += '<td></td>';
+        for (let i = 0; i < firstDay; i++) tableHTML += '<td></td>';
 
         const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= daysInMonth; d++) {
@@ -126,7 +130,7 @@ function generateCalendarWithRealData(availability) {
             const dateStr = dateObj.toISOString().split('T')[0];
 
             if (dateObj < today) {
-                table += `<td class="disabled"><div class="day-number">${d}</div></td>`;
+                tableHTML += `<td class="disabled"><div class="day-number">${d}</div></td>`;
             } else {
                 const info = availability[dateStr] || { remaining: MAX_SLOTS_PER_DAY };
                 let className = 'green';
@@ -139,16 +143,18 @@ function generateCalendarWithRealData(availability) {
                     className = 'yellow';
                 }
 
-                table += `<td class="${className}" onclick="selectDate('${dateStr}')">
+                tableHTML += `<td class="${className}" onclick="selectDate('${dateStr}')">
                     <div class="day-number">${d}</div>
                     <div class="status">${statusText}</div>
                 </td>`;
             }
 
-            if ((firstDay + d) % 7 === 0) table += '</tr><tr>';
+            if ((firstDay + d) % 7 === 0) tableHTML += '</tr><tr>';
         }
-        table += '</tr></tbody></table></div>';
-        container.innerHTML += table;
+        tableHTML += '</tr></tbody></table>';
+        
+        monthDiv.innerHTML = tableHTML;
+        container.appendChild(monthDiv);
     }
 }
 
