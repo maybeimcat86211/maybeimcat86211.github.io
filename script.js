@@ -1,17 +1,30 @@
 // ==================== 請修改這兩行 ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';  // 例如：https://abcde.supabase.co
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';  // 你的 anon key
+// ==================== 修改這兩行 ====================
+const MAX_SLOTS_PER_DAY = 10; // 每團上限人數，可自行調整
 // =====================================================
-const MAX_SLOTS_PER_DAY = 10; // 每團上限人數
-// =====================================================
+
+const tripDetails = {
+    xilin: { title: '西林秘境', description: '西林秘境是教練們於2023年探勘並建置的一條溪谷路線，擁有30公尺高的壯觀瀑布和罕見的S型瀑布景觀。', highlights: ['✓ 30公尺高瀑布垂降','✓ 罕見S型瀑布奇景','✓ 適合初學者體驗','✓ 專業教練全程指導','✓ 提供完整裝備'], duration: '約 4-5 小時', difficulty: '初級', included: '專業教練、完整裝備、保險、午餐、接駁' },
+    feicui: { title: '翡翠谷', description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。', highlights: ['✓ 碧綠清澈深潭','✓ 多個天然滑水道','✓ 刺激跳水點','✓ 進階溯溪體驗','✓ 絕佳攝影景點'], duration: '約 5-6 小時', difficulty: '進階', included: '專業教練、完整裝備、保險、午餐、接駁' },
+    huangjin: { title: '黃金峽谷', description: '最適合親子同遊的溫和路線，金黃色的峽谷岩壁搭配清涼溪水，讓全家大小都能安全享受。', highlights: ['✓ 親子友善路線','✓ 金黃色峽谷景觀','✓ 溫和地形安全','✓ 適合6歲以上兒童','✓ 家庭回憶首選'], duration: '約 3-4 小時', difficulty: '入門', included: '專業教練、完整裝備、保險、點心、接駁' },
+    blue: { title: '藍色秘境', description: '2024年最新開發！如藍寶石般的深藍水潭，搭配壯觀瀑布，是IG打卡必訪聖地。', highlights: ['✓ 藍寶石般水潭','✓ 壯觀瀑布景觀','✓ IG打卡聖地','✓ 多個跳水點','✓ 絕美攝影角度'], duration: '約 4-5 小時', difficulty: '初中級', included: '專業教練、完整裝備、保險、午餐、接駁' }
+};
+
+function showDetails(tripId) {
+    const trip = tripDetails[tripId];
+    if (!trip) return;
+    const detailsHTML = `【${trip.title}】\n${trip.description}\n\n⭐ 行程特色：\n${trip.highlights.join('\n')}\n\n⏰ 活動時間：${trip.duration}\n💪 難度等級：${trip.difficulty}\n📦 費用包含：${trip.included}\n\n注意事項：\n• 請穿著輕便運動服裝\n• 建議攜帶一套乾淨衣物\n• 活動當天請勿飲酒\n• 如有心臟病、高血壓等疾病請事先告知`;
+    alert(detailsHTML);
+}
+
+function showTerms() {
+    const terms = `【活動條款及個人資料使用聲明】\n\n一、活動參加條件\n1. 參加者需年滿12歲（親子路線可6歲以上）\n2. 具備基本游泳能力（部分路線）\n3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病\n4. 懷孕婦女不建議參加\n\n二、活動安全規定\n1. 必須全程穿著安全裝備\n2. 務必聽從教練指示\n3. 不得擅自脫隊或進行危險動作\n4. 活動前24小時內禁止飲酒\n\n三、取消政策\n1. 活動前7天取消，退款90%\n2. 活動前3天取消，退款50%\n3. 活動前1天取消，不予退款\n4. 因天候因素取消，可擇期或全額退款\n\n四、個人資料使用聲明\n1. 收集之個人資料僅供本活動使用\n2. 用於保險、緊急聯絡及活動通知\n3. 絕不提供給第三方\n4. 活動結束後將妥善保存或銷毀\n5. 您有權查詢、修改或刪除您的個人資料\n\n五、免責聲明\n1. 參加者需自行評估身體狀況\n2. 如隱瞞病史造成意外，本公司不負責任\n3. 活動中如因個人因素造成傷害，本公司不負賠償責任\n4. 本公司已投保活動相關保險\n\n如有疑問請洽：0912-345-678`;
+    alert(terms);
+}
 
 let selectedDate = null;
-
-const tripDetails = { /* 你的原本 tripDetails 保持不變 */ };
-
-function showDetails(tripId) { /* 保持原本 */ }
-
-function showTerms() { /* 保持原本 */ }
 
 function openBooking(tripName, price) {
     document.getElementById('tripName').value = tripName;
@@ -145,8 +158,8 @@ document.getElementById('confirmDateBtn').addEventListener('click', () => {
         return;
     }
     document.getElementById('selectedDateDisplay').textContent = `已選：${selectedDate}`;
-    toggleAccordion(document.querySelectorAll('.accordion-header')[0]); // 收合日期
-    toggleAccordion(document.querySelectorAll('.accordion-header')[1]); // 展開主報人
+    toggleAccordion(document.querySelectorAll('.accordion-header')[0]);
+    toggleAccordion(document.querySelectorAll('.accordion-header')[1]);
 });
 
 function generateParticipantFields() {
@@ -182,9 +195,22 @@ function generateParticipantFields() {
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
                     <option value="">請選擇</option>
-                    <!-- 你的鞋碼選項 -->
                     <option value="22">22 cm</option>
-                    <!-- ... 省略其餘 ... -->
+                    <option value="22.5">22.5 cm</option>
+                    <option value="23">23 cm</option>
+                    <option value="23.5">23.5 cm</option>
+                    <option value="24">24 cm</option>
+                    <option value="24.5">24.5 cm</option>
+                    <option value="25">25 cm</option>
+                    <option value="25.5">25.5 cm</option>
+                    <option value="26">26 cm</option>
+                    <option value="26.5">26.5 cm</option>
+                    <option value="27">27 cm</option>
+                    <option value="27.5">27.5 cm</option>
+                    <option value="28">28 cm</option>
+                    <option value="28.5">28.5 cm</option>
+                    <option value="29">29 cm</option>
+                    <option value="29.5">29.5 cm</option>
                     <option value="30">30 cm</option>
                 </select>
             </div>
@@ -196,20 +222,28 @@ function generateParticipantFields() {
     }
 }
 
+// 身分證自動大寫
+document.addEventListener('input', e => {
+    if (e.target.classList.contains('id-uppercase')) {
+        e.target.value = e.target.value.toUpperCase();
+    }
+});
+
+// 送出表單
 document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!document.getElementById('agreeTerms').checked) {
-        alert('請同意條款');
+        alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
         return;
     }
     if (!selectedDate) {
-        alert('請選擇日期');
+        alert('❌ 請先選擇探險日期');
         return;
     }
 
     const submitBtn = document.querySelector('.btn-submit');
     const originalText = submitBtn.textContent;
-    submitBtn.textContent = '送出中...';
+    submitBtn.textContent = '送出中，請稍候...';
     submitBtn.disabled = true;
 
     const commonData = {
@@ -224,11 +258,11 @@ document.getElementById('bookingForm').addEventListener('submit', async function
 
     const participants = [];
 
-    // 主報人（假設主報人也填個人資料，可自行加欄位）
+    // 主報人（可自行加姓名欄位）
     participants.push({
         ...commonData,
-        participant_name: '主報人', // 或加欄位讓主報人填姓名
-        birth_date: '', // 可加欄位
+        participant_name: '主報人',
+        birth_date: null,
         id_number: '',
         height: null,
         weight: null,
@@ -264,16 +298,27 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         });
 
         if (response.ok) {
-            alert(`✅ 預訂成功！\n日期：${selectedDate}\n人數：${participants.length} 位\n我們會在24小時內聯繫您`);
+            alert(`✅ 預訂申請已成功送出！\n\n親愛的顧客，\n\n感謝您選擇洄瀾溪谷探險！\n\n📍 行程：${commonData.trip_name}\n📅 日期：${selectedDate}\n👥 人數：${participants.length} 位\n\n✉️ 我們會在 24 小時內透過電話與您聯繫確認行程細節。\n\n期待與您一起探索花蓮的秘境溪谷！🌊\n\n洄瀾溪谷探險團隊 敬上`);
             closeBooking();
         } else {
             const err = await response.text();
-            alert('送出失敗：' + err);
+            alert('❌ 送出失敗，請稍後再試。\n錯誤訊息：' + err);
         }
     } catch (err) {
-        alert('網路錯誤，請再試一次');
+        alert('❌ 網路錯誤，請檢查連線後再試');
     } finally {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }
+});
+
+// 平滑滾動
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
 });
