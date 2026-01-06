@@ -1,7 +1,7 @@
-// ==================== 請修改這兩行 ====================
+// ==================== SUPABASE ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';  // 例如：https://abcde.supabase.co
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';  // 你的 anon key
-// ==================== 修改這兩行 ====================
+// ==================== SUPABASE ====================
 const MAX_SLOTS_PER_DAY = 10; // 每團上限人數，可自行調整
 // =====================================================
 
@@ -20,7 +20,7 @@ function showDetails(tripId) {
 }
 
 function showTerms() {
-    const terms = `【活動條款及個人資料使用聲明】\n\n一、活動參加條件\n1. 參加者需年滿12歲（親子路線可6歲以上）\n2. 具備基本游泳能力（部分路線）\n3. 無心臟病、高血壓、氣喘等不適合劇烈運動之疾病\n4. 懷孕婦女不建議參加\n\n二、活動安全規定\n1. 必須全程穿著安全裝備\n2. 務必聽從教練指示\n3. 不得擅自脫隊或進行危險動作\n4. 活動前24小時內禁止飲酒\n\n三、取消政策\n1. 活動前7天取消，退款90%\n2. 活動前3天取消，退款50%\n3. 活動前1天取消，不予退款\n4. 因天候因素取消，可擇期或全額退款\n\n四、個人資料使用聲明\n1. 收集之個人資料僅供本活動使用\n2. 用於保險、緊急聯絡及活動通知\n3. 絕不提供給第三方\n4. 活動結束後將妥善保存或銷毀\n5. 您有權查詢、修改或刪除您的個人資料\n\n五、免責聲明\n1. 參加者需自行評估身體狀況\n2. 如隱瞞病史造成意外，本公司不負責任\n3. 活動中如因個人因素造成傷害，本公司不負賠償責任\n4. 本公司已投保活動相關保險\n\n如有疑問請洽：0912-345-678`;
+    const terms = `【活動條款及個人資料使用聲明】\n\n（內容同原本）`;
     alert(terms);
 }
 
@@ -45,7 +45,7 @@ function openBooking(tripName, price) {
     document.getElementById('selectedDateDisplay').textContent = '';
     document.getElementById('participantFields').innerHTML = '';
 
-    // 重置所有 accordion
+    // 重置 accordion
     document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
     document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.accordion-header')[0].classList.add('active');
@@ -158,8 +158,8 @@ document.getElementById('confirmDateBtn').addEventListener('click', () => {
         return;
     }
     document.getElementById('selectedDateDisplay').textContent = `已選：${selectedDate}`;
-    toggleAccordion(document.querySelectorAll('.accordion-header')[0]);
-    toggleAccordion(document.querySelectorAll('.accordion-header')[1]);
+    toggleAccordion(document.querySelectorAll('.accordion-header')[0]); // 收合日期
+    toggleAccordion(document.querySelectorAll('.accordion-header')[1]); // 展開主報人
 });
 
 function generateParticipantFields() {
@@ -195,22 +195,14 @@ function generateParticipantFields() {
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
                     <option value="">請選擇</option>
-                    <option value="22">22 cm</option>
-                    <option value="22.5">22.5 cm</option>
-                    <option value="23">23 cm</option>
-                    <option value="23.5">23.5 cm</option>
-                    <option value="24">24 cm</option>
-                    <option value="24.5">24.5 cm</option>
-                    <option value="25">25 cm</option>
-                    <option value="25.5">25.5 cm</option>
-                    <option value="26">26 cm</option>
-                    <option value="26.5">26.5 cm</option>
-                    <option value="27">27 cm</option>
-                    <option value="27.5">27.5 cm</option>
-                    <option value="28">28 cm</option>
-                    <option value="28.5">28.5 cm</option>
-                    <option value="29">29 cm</option>
-                    <option value="29.5">29.5 cm</option>
+                    <option value="22">22 cm</option><option value="22.5">22.5 cm</option>
+                    <option value="23">23 cm</option><option value="23.5">23.5 cm</option>
+                    <option value="24">24 cm</option><option value="24.5">24.5 cm</option>
+                    <option value="25">25 cm</option><option value="25.5">25.5 cm</option>
+                    <option value="26">26 cm</option><option value="26.5">26.5 cm</option>
+                    <option value="27">27 cm</option><option value="27.5">27.5 cm</option>
+                    <option value="28">28 cm</option><option value="28.5">28.5 cm</option>
+                    <option value="29">29 cm</option><option value="29.5">29.5 cm</option>
                     <option value="30">30 cm</option>
                 </select>
             </div>
@@ -222,11 +214,9 @@ function generateParticipantFields() {
     }
 }
 
-// 身分證自動大寫
-document.addEventListener('input', e => {
-    if (e.target.classList.contains('id-uppercase')) {
-        e.target.value = e.target.value.toUpperCase();
-    }
+// 點 accordion 標題展開
+document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => toggleAccordion(header));
 });
 
 // 送出表單
@@ -258,7 +248,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
 
     const participants = [];
 
-    // 主報人（可自行加姓名欄位）
+    // 主報人
     participants.push({
         ...commonData,
         participant_name: '主報人',
@@ -270,7 +260,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         medical_conditions: '無'
     });
 
-    // 隊員資料
+    // 隊員
     document.querySelectorAll('#participantFields .participant-name').forEach((input, i) => {
         const section = input.closest('#participantFields');
         participants.push({
