@@ -31,6 +31,20 @@ function openBooking(tripName, price) {
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById('dateStep').classList.add('active');
     document.querySelector('.progress').style.width = '20%'; // 第一步
+    async function loadAvailability() {
+        const { data, error } = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_availability`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+  }).then(r => r.json());
+
+  // data 是 [{trip_date: '2026-01-10', booked: 3, remaining: 7}, ...]
+  // 之後用 remaining 決定顏色
+}
     generateCalendar(); // 產生日曆
 }
     // 產生美觀日曆（未來 3 個月，假資料先，之後連 Supabase）
