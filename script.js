@@ -44,6 +44,7 @@ function openBooking(tripName, price) {
     document.getElementById('selectedDateDisplay').textContent = '';
     document.getElementById('allParticipantFields').innerHTML = '';
 
+    // 重置 accordion
     document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
     document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.accordion-header')[0].classList.add('active');
@@ -64,8 +65,11 @@ function toggleAccordion(header) {
     content.classList.toggle('active');
 }
 
-document.querySelectorAll('.accordion-header').forEach(header => {
-    header.addEventListener('click', () => toggleAccordion(header));
+// 綁定所有 accordion header
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => toggleAccordion(header));
+    });
 });
 
 async function loadRealAvailability() {
@@ -141,7 +145,7 @@ function generateCalendarWithRealData(availability) {
         const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= daysInMonth; d++) {
             const currentDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
-            const dateStr = currentDate.toLocaleDateString('sv-SE'); // 修正時區問題，保證正確日期
+            const dateStr = currentDate.toLocaleDateString('sv-SE'); // 修正時區問題
 
             const td = document.createElement('td');
 
