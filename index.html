@@ -6,57 +6,64 @@
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* 日曆美化 */
-        .calendar {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 1rem;
-        }
-        .calendar th {
-            background: #2E86AB;
-            color: white;
-            padding: 12px;
-        }
-        .calendar td {
-            height: 80px;
-            vertical-align: top;
-            padding: 8px;
-            text-align: center;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .calendar .green {
-            background: #d4edda;
-        }
-        .calendar .green:hover {
-            background: #c3e6cb;
-        }
-        .calendar .yellow {
-            background: #fff3cd;
-        }
-        .calendar .yellow:hover {
-            background: #ffeaa7;
-        }
-        .calendar .red {
-            background: #f8d7da;
-            cursor: not-allowed;
-        }
-        .calendar .disabled {
-            background: #f5f5f5;
-            color: #aaa;
-            cursor: not-allowed;
-        }
-        .calendar .day-number {
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
-        .calendar .status {
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-    </style>
+    /* 日曆容器 - 橫向滾動 */
+    #calendarContainer {
+        overflow-x: auto;
+        white-space: nowrap;
+        margin: 20px 0;
+        padding: 10px 0;
+    }
+    .month-calendar {
+        display: inline-block;
+        width: 320px;
+        margin-right: 20px;
+        vertical-align: top;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 15px;
+    }
+    .month-title {
+        text-align: center;
+        font-size: 1.3rem;
+        color: #2E86AB;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .calendar th {
+        background: #2E86AB;
+        color: white;
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    .calendar td {
+        height: 60px;
+        text-align: center;
+        border: 1px solid #eee;
+        vertical-align: top;
+        padding: 5px;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+    .calendar .day-number {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    .calendar .status {
+        font-size: 0.8rem;
+        margin-top: 3px;
+    }
+    .calendar .green { background: #d4edda; cursor: pointer; }
+    .calendar .green:hover { background: #c3e6cb; transform: scale(1.05); }
+    .calendar .yellow { background: #fff3cd; cursor: pointer; }
+    .calendar .yellow:hover { background: #ffeaa7; transform: scale(1.05); }
+    .calendar .red { background: #f8d7da; cursor: not-allowed; }
+    .calendar .disabled { background: #f5f5f5; color: #ccc; cursor: not-allowed; }
+</style>
 </head>
 <body>
     <header>
