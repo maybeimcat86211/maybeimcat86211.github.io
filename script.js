@@ -201,6 +201,9 @@ function generateAllParticipantFields() {
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
                     <option value="">請選擇尺寸</option>
+                    <option value="">請選擇尺寸</option>
+                    <option value="19">19 cm</option>     
+                    <option value="19.5">19.5 cm</option> 
                     <option value="20">20 cm</option>
                     <option value="20.5">20.5 cm</option>
                     <option value="21">21 cm</option>
@@ -225,7 +228,7 @@ function generateAllParticipantFields() {
                     <option value="30.5">30.5 cm</option>
                     <option value="31">31 cm</option>
                 </select>
-                <small>從小孩 20 cm 到大人 31 cm（含半號）</small>
+                <small>從小孩 19 cm 到大人 31 cm（含半號）</small>
             </div>
             <div class="form-group">
                 <label>需要教練注意的疾病或事項</label>
