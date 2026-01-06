@@ -25,22 +25,64 @@ function showTerms() {
 
 let currentStep = 1;
 let totalParticipants = 1;
+let selectedDate = null; // 選擇的日期
 
 function openBooking(tripName, price) {
-    const modal = document.getElementById('bookingModal');
-    const bookingInfo = document.getElementById('bookingInfo');
-    
-    document.getElementById('tripName').value = tripName;
-    document.getElementById('tripPrice').value = price;
-    
-    bookingInfo.innerHTML = `
-        <h3>📍 ${tripName}</h3>
-        <p><strong>💰 費用：</strong>NT$ ${price.toLocaleString()} / 人</p>
-        <p><strong>📋 說明：</strong>請詳細填寫以下資料，我們會在24小時內與您聯繫確認行程細節。</p>
-        <p style="color: #d9534f; font-weight: 600;">⚠️ 所有標註 * 的欄位為必填項目</p>
-        <p style="color: #2E86AB; font-size: 0.95rem;">🔒 您的個人資料將受到完善保護，僅供保險及活動使用</p>
-    `;
-    
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('dateStep').classList.add('active');
+    document.querySelector('.progress').style.width = '20%'; // 第一步
+    generateCalendar(); // 產生日曆
+}
+    // 產生美觀日曆（未來 3 個月，假資料先，之後連 Supabase）
+function generateCalendar() {
+    const container = document.getElementById('calendarContainer');
+    container.innerHTML = ''; // 清空
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    for (let m = 0; m < 3; m++) { // 顯示 3 個月
+        const monthStart = new Date(today.getFullYear(), today.getMonth() + m, 1);
+        const monthName = monthStart.toLocaleString('zh-TW', { year: 'numeric', month: 'long' });
+
+        let html = `<h4>${monthName}</h4><table class="calendar"><thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead><tbody><tr>`;
+
+        // 補空白
+        let day = monthStart.getDay();
+        for (let i = 0; i < day; i++) html += '<td></td>';
+
+        // 產生日期
+        const daysInMonth = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0).getDate();
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            const dateObj = new Date(dateStr);
+
+            if (dateObj < today) {
+                html += `<td class="disabled">${d}</td>`;
+            } else {
+                // 假資料：模擬名額（之後改成從 Supabase 查）
+                const remaining = Math.floor(Math.random() * 11); // 0~10
+                let className = 'green';
+                let title = '可報名';
+                if (remaining === 0) { className = 'red'; title = '額滿'; }
+                else if (remaining <= 3) { className = 'yellow'; title = `剩 ${remaining} 名`; }
+
+                html += `<td class="${className}" title="${title}" onclick="selectDate('${dateStr}')">${d}</td>`;
+            }
+
+            if ((day + d) % 7 === 0) html += '</tr><tr>';
+        }
+        html += '</tr></tbody></table>';
+        container.innerHTML += html;
+    }
+}
+
+function selectDate(date) {
+    selectedDate = date;
+    alert(`已選擇日期：${date}（可報名）`); // 之後改成查真實名額
+    document.getElementById('dateStep').classList.remove('active');
+    showStep(1); // 進入填資料步驟
+}
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     currentStep = 1;
