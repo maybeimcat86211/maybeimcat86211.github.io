@@ -1,8 +1,7 @@
 // ==================== SUPABASE ====================
-const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';  // 例如：https://abcde.supabase.co
-const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';  // 你的 anon key
-// ==================== SUPABASE ====================
-const MAX_SLOTS_PER_DAY = 10; // 每團上限人數，可自行調整
+const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
+const MAX_SLOTS_PER_DAY = 10;
 // =====================================================
 
 let selectedDate = null;
@@ -65,7 +64,6 @@ function toggleAccordion(header) {
     content.classList.toggle('active');
 }
 
-// 點 header 展開
 document.querySelectorAll('.accordion-header').forEach(header => {
     header.addEventListener('click', () => toggleAccordion(header));
 });
@@ -103,6 +101,11 @@ async function loadRealAvailability() {
 function generateCalendarWithRealData(availability) {
     const container = document.getElementById('calendarContainer');
     container.innerHTML = '';
+    container.style.display = 'flex';
+    container.style.flexWrap = 'nowrap';
+    container.style.overflowX = 'auto';
+    container.style.gap = '30px';
+    container.style.padding = '15px 0';
 
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -111,26 +114,49 @@ function generateCalendarWithRealData(availability) {
         const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
         const monthName = monthDate.toLocaleString('zh-TW', { year: 'numeric', month: 'long' });
 
-        // 建立月份容器 div
         const monthDiv = document.createElement('div');
         monthDiv.className = 'month-calendar';
-        
-        let tableHTML = `
-            <div class="month-title">${monthName}</div>
-            <table class="calendar">
-                <thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead>
-                <tbody><tr>`;
+        monthDiv.style.minWidth = '380px';
+        monthDiv.style.flexShrink = '0';
+
+        const monthTitle = document.createElement('div');
+        monthTitle.className = 'month-title';
+        monthTitle.textContent = monthName;
+
+        const table = document.createElement('table');
+        table.className = 'calendar';
+
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        ['日','一','二','三','四','五','六'].forEach(day => {
+            const th = document.createElement('th');
+            th.textContent = day;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        let tr = document.createElement('tr');
 
         const firstDay = monthDate.getDay();
-        for (let i = 0; i < firstDay; i++) tableHTML += '<td></td>';
+        for (let i = 0; i < firstDay; i++) {
+            tr.appendChild(document.createElement('td'));
+        }
 
         const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= daysInMonth; d++) {
             const dateObj = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
             const dateStr = dateObj.toISOString().split('T')[0];
 
+            const td = document.createElement('td');
+
             if (dateObj < today) {
-                tableHTML += `<td class="disabled"><div class="day-number">${d}</div></td>`;
+                td.className = 'disabled';
+                const dayNum = document.createElement('div');
+                dayNum.className = 'day-number';
+                dayNum.textContent = d;
+                td.appendChild(dayNum);
             } else {
                 const info = availability[dateStr] || { remaining: MAX_SLOTS_PER_DAY };
                 let className = 'green';
@@ -143,17 +169,35 @@ function generateCalendarWithRealData(availability) {
                     className = 'yellow';
                 }
 
-                tableHTML += `<td class="${className}" onclick="selectDate('${dateStr}')">
-                    <div class="day-number">${d}</div>
-                    <div class="status">${statusText}</div>
-                </td>`;
+                td.className = className;
+                td.onclick = () => selectDate(dateStr);
+
+                const dayNum = document.createElement('div');
+                dayNum.className = 'day-number';
+                dayNum.textContent = d;
+                td.appendChild(dayNum);
+
+                const status = document.createElement('div');
+                status.className = 'status';
+                status.textContent = statusText;
+                td.appendChild(status);
             }
 
-            if ((firstDay + d) % 7 === 0) tableHTML += '</tr><tr>';
+            tr.appendChild(td);
+
+            if ((firstDay + d) % 7 === 0) {
+                tbody.appendChild(tr);
+                tr = document.createElement('tr');
+            }
         }
-        tableHTML += '</tr></tbody></table>';
-        
-        monthDiv.innerHTML = tableHTML;
+
+        if (tr.children.length > 0) {
+            tbody.appendChild(tr);
+        }
+
+        table.appendChild(tbody);
+        monthDiv.appendChild(monthTitle);
+        monthDiv.appendChild(table);
         container.appendChild(monthDiv);
     }
 }
@@ -207,9 +251,8 @@ function generateAllParticipantFields() {
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
                     <option value="">請選擇尺寸</option>
-                    <option value="">請選擇尺寸</option>
-                    <option value="19">19 cm</option>     
-                    <option value="19.5">19.5 cm</option> 
+                    <option value="19">19 cm</option>
+                    <option value="19.5">19.5 cm</option>
                     <option value="20">20 cm</option>
                     <option value="20.5">20.5 cm</option>
                     <option value="21">21 cm</option>
@@ -244,14 +287,12 @@ function generateAllParticipantFields() {
     }
 }
 
-// 身分證自動大寫
 document.addEventListener('input', e => {
     if (e.target.classList.contains('id-uppercase')) {
         e.target.value = e.target.value.toUpperCase();
     }
 });
 
-// 送出表單
 document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!document.getElementById('agreeTerms').checked) {
@@ -317,7 +358,6 @@ document.getElementById('bookingForm').addEventListener('submit', async function
     }
 });
 
-// 平滑滾動
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
