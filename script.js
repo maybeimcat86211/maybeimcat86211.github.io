@@ -101,11 +101,6 @@ async function loadRealAvailability() {
 function generateCalendarWithRealData(availability) {
     const container = document.getElementById('calendarContainer');
     container.innerHTML = '';
-    container.style.display = 'flex';
-    container.style.flexWrap = 'nowrap';
-    container.style.overflowX = 'auto';
-    container.style.gap = '30px';
-    container.style.padding = '15px 0';
 
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -116,19 +111,18 @@ function generateCalendarWithRealData(availability) {
 
         const monthDiv = document.createElement('div');
         monthDiv.className = 'month-calendar';
-        monthDiv.style.minWidth = '380px';
-        monthDiv.style.flexShrink = '0';
 
-        const monthTitle = document.createElement('div');
-        monthTitle.className = 'month-title';
-        monthTitle.textContent = monthName;
+        const title = document.createElement('div');
+        title.className = 'month-title';
+        title.textContent = monthName;
+        monthDiv.appendChild(title);
 
         const table = document.createElement('table');
         table.className = 'calendar';
 
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
-        ['日','一','二','三','四','五','六'].forEach(day => {
+        ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
             const th = document.createElement('th');
             th.textContent = day;
             headerRow.appendChild(th);
@@ -137,26 +131,23 @@ function generateCalendarWithRealData(availability) {
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
-        let tr = document.createElement('tr');
+        let row = document.createElement('tr');
 
         const firstDay = monthDate.getDay();
         for (let i = 0; i < firstDay; i++) {
-            tr.appendChild(document.createElement('td'));
+            row.appendChild(document.createElement('td'));
         }
 
         const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= daysInMonth; d++) {
-            const dateObj = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
-            const dateStr = dateObj.toISOString().split('T')[0];
+            const currentDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
+            const dateStr = currentDate.toLocaleDateString('sv-SE'); // 修正時區問題，保證正確日期
 
             const td = document.createElement('td');
 
-            if (dateObj < today) {
+            if (currentDate < today) {
                 td.className = 'disabled';
-                const dayNum = document.createElement('div');
-                dayNum.className = 'day-number';
-                dayNum.textContent = d;
-                td.appendChild(dayNum);
+                td.innerHTML = `<div class="day-number">${d}</div>`;
             } else {
                 const info = availability[dateStr] || { remaining: MAX_SLOTS_PER_DAY };
                 let className = 'green';
@@ -171,32 +162,22 @@ function generateCalendarWithRealData(availability) {
 
                 td.className = className;
                 td.onclick = () => selectDate(dateStr);
-
-                const dayNum = document.createElement('div');
-                dayNum.className = 'day-number';
-                dayNum.textContent = d;
-                td.appendChild(dayNum);
-
-                const status = document.createElement('div');
-                status.className = 'status';
-                status.textContent = statusText;
-                td.appendChild(status);
+                td.innerHTML = `
+                    <div class="day-number">${d}</div>
+                    <div class="status">${statusText}</div>
+                `;
             }
 
-            tr.appendChild(td);
+            row.appendChild(td);
 
             if ((firstDay + d) % 7 === 0) {
-                tbody.appendChild(tr);
-                tr = document.createElement('tr');
+                tbody.appendChild(row);
+                row = document.createElement('tr');
             }
         }
 
-        if (tr.children.length > 0) {
-            tbody.appendChild(tr);
-        }
-
+        if (row.children.length > 0) tbody.appendChild(row);
         table.appendChild(tbody);
-        monthDiv.appendChild(monthTitle);
         monthDiv.appendChild(table);
         container.appendChild(monthDiv);
     }
@@ -251,8 +232,6 @@ function generateAllParticipantFields() {
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
                     <option value="">請選擇尺寸</option>
-                    <option value="19">19 cm</option>
-                    <option value="19.5">19.5 cm</option>
                     <option value="20">20 cm</option>
                     <option value="20.5">20.5 cm</option>
                     <option value="21">21 cm</option>
@@ -277,7 +256,6 @@ function generateAllParticipantFields() {
                     <option value="30.5">30.5 cm</option>
                     <option value="31">31 cm</option>
                 </select>
-                <small>從小孩 19 cm 到大人 31 cm（含半號）</small>
             </div>
             <div class="form-group">
                 <label>需要教練注意的疾病或事項</label>
@@ -287,12 +265,14 @@ function generateAllParticipantFields() {
     }
 }
 
+// 身分證自動大寫
 document.addEventListener('input', e => {
     if (e.target.classList.contains('id-uppercase')) {
         e.target.value = e.target.value.toUpperCase();
     }
 });
 
+// 送出表單
 document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!document.getElementById('agreeTerms').checked) {
@@ -358,6 +338,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
     }
 });
 
+// 平滑滾動
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
