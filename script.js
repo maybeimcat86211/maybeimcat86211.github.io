@@ -1,7 +1,7 @@
 // ==================== 修改這兩行 ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
-const MAX_SLOTS_PER_DAY = 10;
+const MAX_SLOTS_PER_DAY = 10; 
 // =====================================================
 
 let selectedDate = null;
@@ -64,14 +64,31 @@ function toggleAccordion(header) {
     content.classList.toggle('active');
 }
 
+// 所有事件綁定放在 DOMContentLoaded 裡，防止白畫面
 document.addEventListener('DOMContentLoaded', () => {
+    // Accordion 點擊展開
     document.querySelectorAll('.accordion-header').forEach(header => {
         header.addEventListener('click', () => toggleAccordion(header));
     });
+
+    // 確認日期按鈕
+    const confirmDateBtn = document.getElementById('confirmDateBtn');
+    if (confirmDateBtn) {
+        confirmDateBtn.addEventListener('click', () => {
+            if (!selectedDate) {
+                alert('請先選擇一個日期！');
+                return;
+            }
+            document.getElementById('selectedDateDisplay').textContent = `已選：${selectedDate}`;
+            toggleAccordion(document.querySelectorAll('.accordion-header')[0]);
+            toggleAccordion(document.querySelectorAll('.accordion-header')[1]);
+        });
+    }
 });
 
 async function loadRealAvailability() {
     const container = document.getElementById('calendarContainer');
+    if (!container) return;
     container.innerHTML = '<p style="text-align:center; padding:20px;">載入名額中...</p>';
 
     try {
@@ -102,6 +119,7 @@ async function loadRealAvailability() {
 
 function generateCalendarWithRealData(availability) {
     const container = document.getElementById('calendarContainer');
+    if (!container) return;
     container.innerHTML = '';
 
     const today = new Date();
@@ -143,7 +161,7 @@ function generateCalendarWithRealData(availability) {
         const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= daysInMonth; d++) {
             const currentDate = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
-            const dateStr = currentDate.toLocaleDateString('sv-SE');
+            const dateStr = currentDate.toLocaleDateString('sv-SE'); // 修正時區問題
 
             const td = document.createElement('td');
 
@@ -189,19 +207,10 @@ function selectDate(date) {
     selectedDate = date;
 }
 
-document.getElementById('confirmDateBtn').addEventListener('click', () => {
-    if (!selectedDate) {
-        alert('請先選擇一個日期！');
-        return;
-    }
-    document.getElementById('selectedDateDisplay').textContent = `已選：${selectedDate}`;
-    toggleAccordion(document.querySelectorAll('.accordion-header')[0]);
-    toggleAccordion(document.querySelectorAll('.accordion-header')[1]);
-});
-
 function generateAllParticipantFields() {
     const count = parseInt(document.getElementById('participantCount').value);
     const container = document.getElementById('allParticipantFields');
+    if (!container) return;
     container.innerHTML = '';
 
     for (let i = 1; i <= count; i++) {
@@ -269,74 +278,79 @@ function generateAllParticipantFields() {
 
 // 身分證自動大寫
 document.addEventListener('input', e => {
-    if (e.target.classList.contains('id-uppercase')) {
+    if (e.target && e.target.classList.contains('id-uppercase')) {
         e.target.value = e.target.value.toUpperCase();
     }
 });
 
 // 送出表單
-document.getElementById('bookingForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    if (!document.getElementById('agreeTerms').checked) {
-        alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
-        return;
-    }
-    if (!selectedDate) {
-        alert('❌ 請先選擇探險日期');
-        return;
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('bookingForm');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!document.getElementById('agreeTerms').checked) {
+                alert('❌ 請先閱讀並同意活動條款及個人資料使用聲明');
+                return;
+            }
+            if (!selectedDate) {
+                alert('❌ 請先選擇探險日期');
+                return;
+            }
 
-    const submitBtn = document.querySelector('.btn-submit');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = '送出中，請稍候...';
-    submitBtn.disabled = true;
+            const submitBtn = document.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '送出中，請稍候...';
+            submitBtn.disabled = true;
 
-    const commonData = {
-        trip_name: document.getElementById('tripName').value,
-        trip_price: parseInt(document.getElementById('tripPrice').value),
-        trip_date: selectedDate,
-        emergency_name: document.getElementById('emergencyName').value,
-        emergency_phone: document.getElementById('emergencyPhone').value
-    };
+            const commonData = {
+                trip_name: document.getElementById('tripName').value,
+                trip_price: parseInt(document.getElementById('tripPrice').value),
+                trip_date: selectedDate,
+                emergency_name: document.getElementById('emergencyName').value,
+                emergency_phone: document.getElementById('emergencyPhone').value
+            };
 
-    const participants = [];
-    document.querySelectorAll('#allParticipantFields .participant-name').forEach((input, i) => {
-        participants.push({
-            ...commonData,
-            participant_name: input.value.trim(),
-            birth_date: document.querySelectorAll('.participant-birthdate')[i].value,
-            id_number: document.querySelectorAll('.participant-idnumber')[i].value.toUpperCase().trim(),
-            height: parseInt(document.querySelectorAll('.participant-height')[i].value),
-            weight: parseInt(document.querySelectorAll('.participant-weight')[i].value),
-            shoe_size: parseFloat(document.querySelectorAll('.participant-shoesize')[i].value),
-            medical_conditions: document.querySelectorAll('.participant-medical')[i].value.trim() || '無'
+            const participants = [];
+            document.querySelectorAll('#allParticipantFields .participant-name').forEach((input, i) => {
+                participants.push({
+                    ...commonData,
+                    participant_name: input.value.trim(),
+                    birth_date: document.querySelectorAll('.participant-birthdate')[i].value,
+                    id_number: document.querySelectorAll('.participant-idnumber')[i].value.toUpperCase().trim(),
+                    height: parseInt(document.querySelectorAll('.participant-height')[i].value),
+                    weight: parseInt(document.querySelectorAll('.participant-weight')[i].value),
+                    shoe_size: parseFloat(document.querySelectorAll('.participant-shoesize')[i].value),
+                    medical_conditions: document.querySelectorAll('.participant-medical')[i].value.trim() || '無'
+                });
+            });
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(participants)
+                });
+
+                if (response.ok) {
+                    alert(`✅ 預訂申請已成功送出！\n\n親愛的顧客，\n\n感謝您選擇洄瀾溪谷探險！\n\n📍 行程：${commonData.trip_name}\n📅 日期：${selectedDate}\n👥 人數：${participants.length} 位\n\n✉️ 我們會在 24 小時內透過電話與您聯繫確認行程細節。\n\n期待與您一起探索花蓮的秘境溪谷！🌊\n\n洄瀾溪谷探險團隊 敬上`);
+                    closeBooking();
+                } else {
+                    const err = await response.text();
+                    alert('❌ 送出失敗，請稍後再試。\n錯誤訊息：' + err);
+                }
+            } catch (err) {
+                alert('❌ 網路錯誤，請檢查連線後再試');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
-    });
-
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify(participants)
-        });
-
-        if (response.ok) {
-            alert(`✅ 預訂申請已成功送出！\n\n親愛的顧客，\n\n感謝您選擇洄瀾溪谷探險！\n\n📍 行程：${commonData.trip_name}\n📅 日期：${selectedDate}\n👥 人數：${participants.length} 位\n\n✉️ 我們會在 24 小時內透過電話與您聯繫確認行程細節。\n\n期待與您一起探索花蓮的秘境溪谷！🌊\n\n洄瀾溪谷探險團隊 敬上`);
-            closeBooking();
-        } else {
-            const err = await response.text();
-            alert('❌ 送出失敗，請稍後再試。\n錯誤訊息：' + err);
-        }
-    } catch (err) {
-        alert('❌ 網路錯誤，請檢查連線後再試');
-    } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
     }
 });
 
