@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 日曆樣式 */
+        .calendar { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 1.1rem; }
+        .calendar th { background: #2E86AB; color: white; padding: 10px; }
+        .calendar td { padding: 15px; text-align: center; border: 1px solid #ddd; cursor: pointer; }
+        .calendar .green { background: #d4edda; }
+        .calendar .yellow { background: #fff3cd; }
+        .calendar .red { background: #f8d7da; cursor: not-allowed; }
+        .calendar .disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; }
+    </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo"> 洄瀾溪谷探險</div>
+            <div class="logo">洄瀾溪谷探險</div>
             <ul class="nav-links">
                 <li><a href="#home">首頁</a></li>
                 <li><a href="#trips">探險路線</a></li>
@@ -20,6 +30,7 @@
     </header>
 
     <main>
+        <!-- 你的原本內容保持不變 -->
         <section id="home" class="hero">
             <h1>洄瀾溪谷秘境探險</h1>
             <p>體驗花東最特別隱密的溪谷</p>
@@ -44,6 +55,7 @@
                     </div>
                 </div>
 
+                <!-- 其他三個行程保持不變 -->
                 <!-- 翡翠谷 -->
                 <div class="trip-card">
                     <div class="trip-image">
@@ -97,6 +109,7 @@
             </div>
         </section>
 
+        <!-- 其他 section 保持不變 -->
         <section id="about" class="about-section">
             <div class="container">
                 <h2>關於我們</h2>
@@ -116,30 +129,31 @@
         </section>
     </main>
 
-    <!-- 預訂表單彈窗 -->
+    <!-- 預訂彈窗 -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBooking()">&times;</span>
             <h2>🎯 立即預訂探險行程</h2>
             <div id="bookingInfo"></div>
 
-            <!-- 進度條 -->
             <div id="progressBar" class="progress-bar">
-                <div class="progress" style="width: 25%;"></div>
+                <div class="progress" style="width: 20%;"></div>
             </div>
 
             <form id="bookingForm">
-                <input type="hidden" id="tripName" name="tripName">
-                <input type="hidden" id="tripPrice" name="tripPrice">
-                <input type="hidden" id="totalParticipants" name="totalParticipants" value="1">
+                <input type="hidden" id="tripName">
+                <input type="hidden" id="tripPrice">
+
+                <!-- 步驟 0：日期選擇 -->
                 <div class="step step-date active" id="dateStep">
-                    <h3>選擇探險日期</h3>
-                    <p>綠色：可報名　黃色：剩餘少　紅色：額滿</p>
-                    <div id="calendarContainer" style="margin: 20px 0;"></div>
-                    <button type="button" class="btn-next" onclick="if(selectedDate) showStep(1); else alert('請選擇日期！');">確認日期 →</button>
+                    <h3>📅 選擇探險日期</h3>
+                    <p style="color:#555;">綠色：可報名　黃色：剩餘少量　紅色：額滿　灰色：不可選</p>
+                    <div id="calendarContainer"></div>
+                    <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續 →</button>
                 </div>
-                <!-- 步驟 1 -->
-                <div class="step step-1 active">
+
+                <!-- 步驟 1：主報名人 -->
+                <div class="step step-1">
                     <h3>📞 主報名人聯絡資訊</h3>
                     <div class="form-group">
                         <label for="mainPhone">聯絡電話 *</label>
@@ -153,7 +167,7 @@
                     <h3>🚨 緊急聯絡人（全團共用）</h3>
                     <div class="form-group">
                         <label for="emergencyName">姓名 *</label>
-                        <input type="text" id="emergencyName" required placeholder="請填寫家人或朋友">
+                        <input type="text" id="emergencyName" required>
                     </div>
                     <div class="form-group">
                         <label for="emergencyPhone">電話 *</label>
@@ -176,30 +190,28 @@
                             <option value="10">10 位</option>
                         </select>
                     </div>
-
                     <button type="button" class="btn-next">下一步 →</button>
                 </div>
 
                 <div id="participantSteps"></div>
 
                 <div class="step step-final" id="finalStep">
-                    <h3>確認預訂</h3>
-                    <p style="text-align:center; color:#555;">請確認以上所有資料無誤</p>
+                    <h3>✓ 確認預訂</h3>
+                    <p style="text-align:center; color:#555;">請確認所有資料正確</p>
                     <div class="form-group checkbox-group">
                         <label>
                             <input type="checkbox" id="agreeTerms" required>
                             我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
                         </label>
                     </div>
-                    <button type="submit" class="btn-submit">✓ 確認送出預訂申請</button>
-                    <p class="form-note">* 為必填欄位 | 送出後我們會在24小時內與您聯繫確認行程</p>
+                    <button type="submit" class="btn-submit">確認送出預訂申請</button>
                 </div>
             </form>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 洄瀾溪谷秘境探險 版權所有</p>
+        <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p>
         <p>讓我們一起探索花蓮最美的秘境 🌊</p>
     </footer>
 
