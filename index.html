@@ -31,7 +31,7 @@
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
-                        <span class="badge">初級路線 👍</span>
+                        <span class="badge">初級路線</span>
                     </div>
                     <div class="trip-content">
                         <h2>西林秘境</h2>
@@ -48,7 +48,7 @@
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
-                        <span class="badge">進階路線 😎</span>
+                        <span class="badge">進階路線</span>
                     </div>
                     <div class="trip-content">
                         <h2>翡翠谷</h2>
@@ -65,7 +65,7 @@
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
-                        <span class="badge">親子友善 👨‍👩‍👧‍👦</span>
+                        <span class="badge">親子友善</span>
                     </div>
                     <div class="trip-content">
                         <h2>黃金峽谷</h2>
@@ -82,7 +82,7 @@
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
-                        <span class="badge">網美景點 📸</span>
+                        <span class="badge">網美景點</span>
                     </div>
                     <div class="trip-content">
                         <h2>藍色秘境</h2>
@@ -132,7 +132,12 @@
                 <input type="hidden" id="tripName" name="tripName">
                 <input type="hidden" id="tripPrice" name="tripPrice">
                 <input type="hidden" id="totalParticipants" name="totalParticipants" value="1">
-
+                <div class="step step-date active" id="dateStep">
+                    <h3>選擇探險日期</h3>
+                    <p>綠色：可報名　黃色：剩餘少　紅色：額滿</p>
+                    <div id="calendarContainer" style="margin: 20px 0;"></div>
+                    <button type="button" class="btn-next" onclick="if(selectedDate) showStep(1); else alert('請選擇日期！');">確認日期 →</button>
+                </div>
                 <!-- 步驟 1 -->
                 <div class="step step-1 active">
                     <h3>📞 主報名人聯絡資訊</h3>
