@@ -554,3 +554,10 @@ footer p {
         grid-template-columns: 1fr;
     }
 }
+// CSS 加到 styles.css（美化日曆）
+.calendar { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.calendar th, .calendar td { padding: 10px; text-align: center; border: 1px solid #ddd; }
+.calendar .green { background: #d4edda; cursor: pointer; }
+.calendar .yellow { background: #fff3cd; cursor: pointer; }
+.calendar .red { background: #f8d7da; cursor: not-allowed; color: #721c24; }
+.calendar .disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; }
