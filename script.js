@@ -40,13 +40,12 @@ function openBooking(tripName, price) {
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
 
-    // 重置
     selectedDate = null;
     currentStep = 0;
     document.getElementById('participantSteps').innerHTML = '';
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById('dateStep').classList.add('active');
-    document.querySelector('.progress').style.width = '20%';
+    document.querySelector('.progress').style.width = '16.66%';
 
     generateCalendar();
 }
@@ -57,7 +56,6 @@ function closeBooking() {
     document.getElementById('bookingForm').reset();
 }
 
-// 日曆產生（假資料版，先顯示視覺效果）
 function generateCalendar() {
     const container = document.getElementById('calendarContainer');
     container.innerHTML = '';
@@ -69,7 +67,7 @@ function generateCalendar() {
         const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
         const monthName = monthDate.toLocaleString('zh-TW', { year: 'numeric', month: 'long' });
 
-        let table = `<h4 style="text-align:center; color:#2E86AB;">${monthName}</h4>`;
+        let table = `<h4 style="text-align:center;color:#2E86AB;margin:30px 0 10px;">${monthName}</h4>`;
         table += `<table class="calendar"><thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead><tbody><tr>`;
 
         const firstDay = monthDate.getDay();
@@ -81,15 +79,23 @@ function generateCalendar() {
             const dateStr = dateObj.toISOString().split('T')[0];
 
             if (dateObj < today) {
-                table += `<td class="disabled">${d}</td>`;
+                table += `<td class="disabled"><div class="day-number">${d}</div></td>`;
             } else {
                 const remaining = Math.floor(Math.random() * 11); // 假資料 0~10
                 let className = 'green';
-                let title = '可報名';
-                if (remaining === 0) { className = 'red'; title = '額滿'; }
-                else if (remaining <= 3) { className = 'yellow'; title = `剩 ${remaining} 名`; }
+                let statusText = '可報名';
+                if (remaining === 0) {
+                    className = 'red';
+                    statusText = '額滿';
+                } else if (remaining <= 3) {
+                    className = 'yellow';
+                    statusText = `剩 ${remaining} 名`;
+                }
 
-                table += `<td class="${className}" title="${title}" onclick="selectDate('${dateStr}')">${d}<br><small>${title}</small></td>`;
+                table += `<td class="${className}" onclick="selectDate('${dateStr}')">
+                    <div class="day-number">${d}</div>
+                    <div class="status">${statusText}</div>
+                </td>`;
             }
 
             if ((firstDay + d) % 7 === 0) table += '</tr><tr>';
@@ -104,20 +110,82 @@ function selectDate(date) {
     alert(`已選擇 ${date} 作為探險日期！`);
 }
 
-// 確認日期按鈕
 document.getElementById('confirmDateBtn').addEventListener('click', () => {
     if (!selectedDate) {
-        alert('請先選擇一個日期！');
+        alert('請先點選一個綠色或黃色的日期！');
         return;
     }
     showStep(1);
 });
 
-// 其他原本功能保持不變（略，包含 generateParticipantSteps、showStep、validateStep、submit 等）
+function showStep(stepNum) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const steps = ['dateStep', 'step-1', ...Array.from(document.querySelectorAll('#participantSteps .step')).map((_, i) => `step-${i+2}`), 'finalStep'];
+    if (steps[stepNum]) document.getElementById(steps[stepNum]).classList.add('active');
+    else document.getElementById('finalStep').classList.add('active');
 
-// ...（你原本的 generateParticipantSteps、showStep、validateStep、submit 程式碼保持不變，只加 trip_date）
+    const totalSteps = steps.length;
+    document.querySelector('.progress').style.width = `${(stepNum + 1) / totalSteps * 100}%`;
+}
 
-// 送出時加入 trip_date
+function generateParticipantSteps() {
+    const container = document.getElementById('participantSteps');
+    container.innerHTML = '';
+    const count = parseInt(document.getElementById('participantCount').value);
+    for (let i = 1; i <= count; i++) {
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'step';
+        stepDiv.innerHTML = `
+            <h3>參加者 ${i} 詳細資料</h3>
+            <div class="form-group">
+                <label>姓名 *</label>
+                <input type="text" class="participant-name" required>
+            </div>
+            <div class="form-group">
+                <label>出生年月日 *</label>
+                <input type="date" class="participant-birthdate" required>
+            </div>
+            <div class="form-group">
+                <label>身分證 / 護照號碼 *</label>
+                <input type="text" class="participant-idnumber id-uppercase" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>身高 (cm) *</label>
+                    <input type="number" class="participant-height" required min="100" max="250">
+                </div>
+                <div class="form-group">
+                    <label>體重 (kg) *</label>
+                    <input type="number" class="participant-weight" required min="30" max="200">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>溯溪鞋尺寸 (cm) *</label>
+                <select class="participant-shoesize" required>
+                    <option value="">請選擇</option>
+                    <option value="22">22 cm</option><option value="22.5">22.5 cm</option>
+                    <option value="23">23 cm</option><option value="23.5">23.5 cm</option>
+                    <option value="24">24 cm</option><option value="24.5">24.5 cm</option>
+                    <option value="25">25 cm</option><option value="25.5">25.5 cm</option>
+                    <option value="26">26 cm</option><option value="26.5">26.5 cm</option>
+                    <option value="27">27 cm</option><option value="27.5">27.5 cm</option>
+                    <option value="28">28 cm</option><option value="28.5">28.5 cm</option>
+                    <option value="29">29 cm</option><option value="29.5">29.5 cm</option>
+                    <option value="30">30 cm</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>健康狀況</label>
+                <textarea class="participant-medical" rows="3">無</textarea>
+            </div>
+            ${i < count ? '<button type="button" class="btn-next">下一步 →</button>' : ''}
+        `;
+        container.appendChild(stepDiv);
+    }
+}
+
+// 其他函數（validateStep、submit 等）保持你原本成功的版本，只加 trip_date
+
 document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!document.getElementById('agreeTerms').checked) {
@@ -129,18 +197,59 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         return;
     }
 
-    // ...原本收集資料...
+    const submitBtn = document.querySelector('.btn-submit');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '送出中...';
+    submitBtn.disabled = true;
+
     const commonData = {
         trip_name: document.getElementById('tripName').value,
         trip_price: parseInt(document.getElementById('tripPrice').value),
-        trip_date: selectedDate,  // 新增
+        trip_date: selectedDate,
         main_phone: document.getElementById('mainPhone').value,
-        // ...
+        main_address: document.getElementById('mainAddress').value,
+        emergency_name: document.getElementById('emergencyName').value,
+        emergency_phone: document.getElementById('emergencyPhone').value
     };
 
-    // participants 陣列同原本
-    // fetch 時 body: JSON.stringify(participants.map(p => ({ ...commonData, ...p })))
+    const participants = [];
+    document.querySelectorAll('#participantSteps .step').forEach(step => {
+        participants.push({
+            participant_name: step.querySelector('.participant-name').value.trim(),
+            birth_date: step.querySelector('.participant-birthdate').value,
+            id_number: step.querySelector('.participant-idnumber').value.toUpperCase().trim(),
+            height: parseInt(step.querySelector('.participant-height').value),
+            weight: parseInt(step.querySelector('.participant-weight').value),
+            shoe_size: parseFloat(step.querySelector('.participant-shoesize').value),
+            medical_conditions: step.querySelector('.participant-medical').value.trim() || '無'
+        });
+    });
 
-    // 成功訊息加入日期
-    alert(`預訂成功！\n行程：${commonData.trip_name}\n日期：${selectedDate}\n人數：${participants.length}位`);
+    const payload = participants.map(p => ({ ...commonData, ...p }));
+
+    try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert(`✅ 預訂成功！\n行程日期：${selectedDate}\n人數：${participants.length} 位\n我們會在24小時內聯繫您確認`);
+            closeBooking();
+        } else {
+            const err = await response.text();
+            alert('送出失敗：' + err);
+        }
+    } catch (err) {
+        alert('網路錯誤，請再試一次');
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 });
