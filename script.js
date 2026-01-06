@@ -5,6 +5,8 @@ const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';  // 
 const MAX_SLOTS_PER_DAY = 10; // 每團上限人數，可自行調整
 // =====================================================
 
+let selectedDate = null;
+
 const tripDetails = {
     xilin: { title: '西林秘境', description: '西林秘境是教練們於2023年探勘並建置的一條溪谷路線，擁有30公尺高的壯觀瀑布和罕見的S型瀑布景觀。', highlights: ['✓ 30公尺高瀑布垂降','✓ 罕見S型瀑布奇景','✓ 適合初學者體驗','✓ 專業教練全程指導','✓ 提供完整裝備'], duration: '約 4-5 小時', difficulty: '初級', included: '專業教練、完整裝備、保險、午餐、接駁' },
     feicui: { title: '翡翠谷', description: '隱藏在中央山脈深處的秘境，擁有如翡翠般清澈的碧綠深潭，多個刺激的天然滑水道。', highlights: ['✓ 碧綠清澈深潭','✓ 多個天然滑水道','✓ 刺激跳水點','✓ 進階溯溪體驗','✓ 絕佳攝影景點'], duration: '約 5-6 小時', difficulty: '進階', included: '專業教練、完整裝備、保險、午餐、接駁' },
@@ -24,8 +26,6 @@ function showTerms() {
     alert(terms);
 }
 
-let selectedDate = null;
-
 function openBooking(tripName, price) {
     document.getElementById('tripName').value = tripName;
     document.getElementById('tripPrice').value = price;
@@ -43,9 +43,8 @@ function openBooking(tripName, price) {
 
     selectedDate = null;
     document.getElementById('selectedDateDisplay').textContent = '';
-    document.getElementById('participantFields').innerHTML = '';
+    document.getElementById('allParticipantFields').innerHTML = '';
 
-    // 重置 accordion
     document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
     document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.accordion-header')[0].classList.add('active');
@@ -158,63 +157,62 @@ document.getElementById('confirmDateBtn').addEventListener('click', () => {
         return;
     }
     document.getElementById('selectedDateDisplay').textContent = `已選：${selectedDate}`;
-    toggleAccordion(document.querySelectorAll('.accordion-header')[0]); // 收合日期
-    toggleAccordion(document.querySelectorAll('.accordion-header')[1]); // 展開主報人
+    toggleAccordion(document.querySelectorAll('.accordion-header')[0]);
+    toggleAccordion(document.querySelectorAll('.accordion-header')[1]);
 });
 
-function generateParticipantFields() {
+function generateAllParticipantFields() {
     const count = parseInt(document.getElementById('participantCount').value);
-    const container = document.getElementById('participantFields');
+    const container = document.getElementById('allParticipantFields');
     container.innerHTML = '';
-    for (let i = 2; i <= count; i++) {
+
+    for (let i = 1; i <= count; i++) {
+        const title = i === 1 ? '主報人' : `隊員 ${i}`;
         container.innerHTML += `
-            <h4 style="margin:30px 0 15px; color:#2E86AB;">隊員 ${i} 資料</h4>
+            <h4 style="margin:30px 0 15px; color:#2E86AB;">${title} 個人資料（保險用）</h4>
             <div class="form-group">
                 <label>姓名 *</label>
-                <input type="text" class="participant-name" required>
+                <input type="text" class="participant-name" required placeholder="請輸入真實姓名">
             </div>
             <div class="form-group">
                 <label>出生年月日 *</label>
                 <input type="date" class="participant-birthdate" required>
             </div>
             <div class="form-group">
-                <label>身分證 / 護照號碼 *</label>
-                <input type="text" class="participant-idnumber id-uppercase" required>
+                <label>身分證字號 / 護照號碼 *</label>
+                <input type="text" class="participant-idnumber id-uppercase" required placeholder="例如：A123456789">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>身高 (cm) *</label>
-                    <input type="number" class="participant-height" required min="100" max="250">
+                    <input type="number" class="participant-height" required min="100" max="250" placeholder="例如：170">
                 </div>
                 <div class="form-group">
                     <label>體重 (kg) *</label>
-                    <input type="number" class="participant-weight" required min="30" max="200">
+                    <input type="number" class="participant-weight" required min="30" max="200" placeholder="例如：65">
                 </div>
             </div>
             <div class="form-group">
                 <label>溯溪鞋尺寸 (cm) *</label>
                 <select class="participant-shoesize" required>
-                    <option value="">請選擇</option>
-                    <option value="22">22 cm</option><option value="22.5">22.5 cm</option>
-                    <option value="23">23 cm</option><option value="23.5">23.5 cm</option>
-                    <option value="24">24 cm</option><option value="24.5">24.5 cm</option>
-                    <option value="25">25 cm</option><option value="25.5">25.5 cm</option>
-                    <option value="26">26 cm</option><option value="26.5">26.5 cm</option>
-                    <option value="27">27 cm</option><option value="27.5">27.5 cm</option>
-                    <option value="28">28 cm</option><option value="28.5">28.5 cm</option>
-                    <option value="29">29 cm</option><option value="29.5">29.5 cm</option>
-                    <option value="30">30 cm</option>
+                    <option value="">請選擇尺寸</option>
+                    ${Array.from({length: 24}, (_, i) => {
+                        const size = 20 + i * 0.5;
+                        return `<option value="${size}">${size} cm</option>`;
+                    }).join('')}
+                    <option value="31">31 cm</option>
                 </select>
+                <small>從小孩 20 cm 到大人 31 cm（含半號）</small>
             </div>
             <div class="form-group">
-                <label>健康狀況</label>
-                <textarea class="participant-medical" rows="3">無</textarea>
+                <label>需要教練注意的疾病或事項</label>
+                <textarea class="participant-medical" rows="3" placeholder="例如：心臟病、高血壓、氣喘、懼高、不會游泳... 如無請填「無」">無</textarea>
             </div>
         `;
     }
 }
 
-// 點 accordion 標題展開
+// 點 header 展開
 document.querySelectorAll('.accordion-header').forEach(header => {
     header.addEventListener('click', () => toggleAccordion(header));
 });
@@ -240,38 +238,21 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         trip_name: document.getElementById('tripName').value,
         trip_price: parseInt(document.getElementById('tripPrice').value),
         trip_date: selectedDate,
-        main_phone: document.getElementById('mainPhone').value,
-        main_address: document.getElementById('mainAddress').value,
         emergency_name: document.getElementById('emergencyName').value,
         emergency_phone: document.getElementById('emergencyPhone').value
     };
 
     const participants = [];
-
-    // 主報人
-    participants.push({
-        ...commonData,
-        participant_name: '主報人',
-        birth_date: null,
-        id_number: '',
-        height: null,
-        weight: null,
-        shoe_size: null,
-        medical_conditions: '無'
-    });
-
-    // 隊員
-    document.querySelectorAll('#participantFields .participant-name').forEach((input, i) => {
-        const section = input.closest('#participantFields');
+    document.querySelectorAll('#allParticipantFields .participant-name').forEach((input, i) => {
         participants.push({
             ...commonData,
             participant_name: input.value.trim(),
-            birth_date: section.querySelectorAll('.participant-birthdate')[i].value,
-            id_number: section.querySelectorAll('.participant-idnumber')[i].value.toUpperCase().trim(),
-            height: parseInt(section.querySelectorAll('.participant-height')[i].value),
-            weight: parseInt(section.querySelectorAll('.participant-weight')[i].value),
-            shoe_size: parseFloat(section.querySelectorAll('.participant-shoesize')[i].value),
-            medical_conditions: section.querySelectorAll('.participant-medical')[i].value.trim() || '無'
+            birth_date: document.querySelectorAll('.participant-birthdate')[i].value,
+            id_number: document.querySelectorAll('.participant-idnumber')[i].value.toUpperCase().trim(),
+            height: parseInt(document.querySelectorAll('.participant-height')[i].value),
+            weight: parseInt(document.querySelectorAll('.participant-weight')[i].value),
+            shoe_size: parseFloat(document.querySelectorAll('.participant-shoesize')[i].value),
+            medical_conditions: document.querySelectorAll('.participant-medical')[i].value.trim() || '無'
         });
     });
 
@@ -300,15 +281,4 @@ document.getElementById('bookingForm').addEventListener('submit', async function
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }
-});
-
-// 平滑滾動
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
 });
