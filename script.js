@@ -207,37 +207,43 @@ function selectDate(date) {
     selectedDate = date;
 }
 
+// 動態產生參加者欄位
 function generateParticipantFields() {
     const count = parseInt(document.getElementById('participantCount').value);
     const container = document.getElementById('participantFields');
     container.innerHTML = '';
 
     for (let i = 1; i <= count; i++) {
-        const title = i === 1 ? '主報人' : `隊員 ${i}`;
-        const isNotFirst = i > 1;
+        const title = i === 1 ? '主報人' : `參加者 ${i}`;
         container.innerHTML += `
-            <h4 style="margin:30px 0 15px; color:#2E86AB;">${title} 個人資料（保險用）</h4>
+            <h4 style="margin:30px 0 15px; color:#2E86AB;">${title} 個人資料</h4>
             <div class="form-group">
                 <label>姓名 *</label>
-                <input type="text" class="participant-name" required placeholder="請輸入真實姓名">
+                <input type="text" class="participant-name" required>
             </div>
             <div class="form-group">
                 <label>出生年月日 *</label>
                 <input type="date" class="participant-birthdate" required>
             </div>
             <div class="form-group">
-                <label>身分證字號 / 護照號碼 *</label>
-                <input type="text" class="participant-idnumber id-uppercase" required placeholder="例如：A123456789">
+                <label>身分證字號 *</label>
+                <input type="text" class="participant-idnumber id-uppercase" required>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>身高 (cm) *</label>
-                    <input type="number" class="participant-height" required min="100" max="250" placeholder="例如：170">
-                </div>
-                <div class="form-group">
-                    <label>體重 (kg) *</label>
-                    <input type="number" class="participant-weight" required min="30" max="200" placeholder="例如：65">
-                </div>
+            <div class="form-group">
+                <label>本人聯絡電話 *</label>
+                <input type="tel" class="participant-phone" required>
+            </div>
+            <div class="form-group">
+                <label>聯絡地址 *</label>
+                <input type="text" class="participant-address" required>
+            </div>
+            <div class="form-group">
+                <label>緊急聯絡人姓名 *</label>
+                <input type="text" class="participant-emergency-name" required>
+            </div>
+            <div class="form-group">
+                <label>緊急聯絡人電話 *</label>
+                <input type="tel" class="participant-emergency-phone" required>
             </div>
             <div class="form-group">
                 <label>溯溪鞋尺寸 (cm) *</label>
@@ -268,27 +274,22 @@ function generateParticipantFields() {
                     <option value="31">31 cm</option>
                 </select>
             </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>身高 (cm) *</label>
+                    <input type="number" class="participant-height" required min="100" max="250">
+                </div>
+                <div class="form-group">
+                    <label>體重 (kg) *</label>
+                    <input type="number" class="participant-weight" required min="30" max="200">
+                </div>
+            </div>
             <div class="form-group">
-                <label>需要教練注意的疾病或事項</label>
-                <textarea class="participant-medical" rows="3" placeholder="例如：心臟病、高血壓、氣喘... 如無請填「無」">無</textarea>
+                <label>需要教練注意的疾病及事項</label>
+                <textarea class="participant-medical" rows="3">無</textarea>
             </div>
-            ${isNotFirst ? `
-            <div style="text-align:center; margin:20px 0;">
-                <button type="button" class="btn-next copy-btn" onclick="copyMainContactToParticipant(${i})">複製主要聯絡人資料</button>
-            </div>
-            ` : ''}
         `;
     }
-}
-
-function copyMainContactToParticipant(index) {
-    const mainPhone = document.getElementById('mainPhone').value;
-    const mainAddress = document.getElementById('mainAddress').value;
-    if (!mainPhone || !mainAddress) {
-        alert('請先填寫主要聯絡人資料');
-        return;
-    }
-    alert('已複製主要聯絡人資料到隊員 ' + index + '（可自行擴充複製功能）');
 }
 
 // 身分證自動大寫
@@ -318,25 +319,24 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = '送出中...';
             submitBtn.disabled = true;
 
-            const commonData = {
-                trip_name: document.getElementById('tripName').value,
-                trip_price: parseInt(document.getElementById('tripPrice').value),
-                trip_date: selectedDate,
-                main_phone: document.getElementById('mainPhone').value,
-                main_address: document.getElementById('mainAddress').value
-            };
-
             const participants = [];
-            document.querySelectorAll('#participantFields .participant-name').forEach((input, i) => {
+            document.querySelectorAll('#participantFields').forEach((section, i) => {
+                const inputs = section.querySelectorAll('input, select, textarea');
                 participants.push({
-                    ...commonData,
-                    participant_name: input.value.trim(),
-                    birth_date: document.querySelectorAll('.participant-birthdate')[i].value,
-                    id_number: document.querySelectorAll('.participant-idnumber')[i].value.toUpperCase().trim(),
-                    height: parseInt(document.querySelectorAll('.participant-height')[i].value),
-                    weight: parseInt(document.querySelectorAll('.participant-weight')[i].value),
-                    shoe_size: parseFloat(document.querySelectorAll('.participant-shoesize')[i].value),
-                    medical_conditions: document.querySelectorAll('.participant-medical')[i].value.trim() || '無'
+                    trip_name: document.getElementById('tripName').value,
+                    trip_price: parseInt(document.getElementById('tripPrice').value),
+                    trip_date: selectedDate,
+                    participant_name: inputs[0].value.trim(),
+                    birth_date: inputs[1].value,
+                    id_number: inputs[2].value.toUpperCase().trim(),
+                    phone: inputs[3].value,
+                    address: inputs[4].value,
+                    emergency_name: inputs[5].value,
+                    emergency_phone: inputs[6].value,
+                    shoe_size: parseFloat(inputs[7].value),
+                    height: parseInt(inputs[8].value),
+                    weight: parseInt(inputs[9].value),
+                    medical_conditions: inputs[10].value.trim() || '無'
                 });
             });
 
@@ -353,31 +353,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    alert(`✅ 預訂申請已成功送出！\n\n親愛的顧客，\n\n感謝您選擇洄瀾溪谷探險！\n\n📍 行程：${commonData.trip_name}\n📅 日期：${selectedDate}\n👥 人數：${participants.length} 位\n\n✉️ 我們會在 24 小時內透過電話與您聯繫確認行程細節。\n\n期待與您一起探索花蓮的秘境溪谷！🌊\n\n洄瀾溪谷探險團隊 敬上`);
+                    alert(`✅ 預訂申請已成功送出！\n\n人數：${participants.length} 位\n日期：${selectedDate}`);
                     closeBooking();
                 } else {
                     const err = await response.text();
-                    alert('❌ 送出失敗，請稍後再試。\n錯誤訊息：' + err);
+                    alert('送出失敗：' + err);
                 }
             } catch (err) {
-                alert('❌ 網路錯誤，請檢查連線後再試');
+                alert('網路錯誤');
             } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }
         });
     }
-});
-
-// 平滑滾動
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
 });
 
 // 讓 HTML onclick 能呼叫
