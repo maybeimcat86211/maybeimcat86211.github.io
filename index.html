@@ -6,20 +6,62 @@
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* 日曆樣式 */
-        .calendar { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 1.1rem; }
-        .calendar th { background: #2E86AB; color: white; padding: 10px; }
-        .calendar td { padding: 15px; text-align: center; border: 1px solid #ddd; cursor: pointer; }
-        .calendar .green { background: #d4edda; }
-        .calendar .yellow { background: #fff3cd; }
-        .calendar .red { background: #f8d7da; cursor: not-allowed; }
-        .calendar .disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; }
+        /* 日曆美化 */
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+        .calendar th {
+            background: #2E86AB;
+            color: white;
+            padding: 12px;
+        }
+        .calendar td {
+            height: 80px;
+            vertical-align: top;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .calendar .green {
+            background: #d4edda;
+        }
+        .calendar .green:hover {
+            background: #c3e6cb;
+        }
+        .calendar .yellow {
+            background: #fff3cd;
+        }
+        .calendar .yellow:hover {
+            background: #ffeaa7;
+        }
+        .calendar .red {
+            background: #f8d7da;
+            cursor: not-allowed;
+        }
+        .calendar .disabled {
+            background: #f5f5f5;
+            color: #aaa;
+            cursor: not-allowed;
+        }
+        .calendar .day-number {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        .calendar .status {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">洄瀾溪谷探險</div>
+            <div class="logo">🏔️ 洄瀾溪谷探險</div>
             <ul class="nav-links">
                 <li><a href="#home">首頁</a></li>
                 <li><a href="#trips">探險路線</a></li>
@@ -30,7 +72,6 @@
     </header>
 
     <main>
-        <!-- 你的原本內容保持不變 -->
         <section id="home" class="hero">
             <h1>洄瀾溪谷秘境探險</h1>
             <p>體驗花東最特別隱密的溪谷</p>
@@ -42,7 +83,7 @@
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
-                        <span class="badge">初級路線</span>
+                        <span class="badge">初級路線 👍</span>
                     </div>
                     <div class="trip-content">
                         <h2>西林秘境</h2>
@@ -55,12 +96,11 @@
                     </div>
                 </div>
 
-                <!-- 其他三個行程保持不變 -->
-                <!-- 翡翠谷 -->
+                <!-- 其他行程保持不變 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
-                        <span class="badge">進階路線</span>
+                        <span class="badge">進階路線 😎</span>
                     </div>
                     <div class="trip-content">
                         <h2>翡翠谷</h2>
@@ -73,11 +113,10 @@
                     </div>
                 </div>
 
-                <!-- 黃金峽谷 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
-                        <span class="badge">親子友善</span>
+                        <span class="badge">親子友善 👨‍👩‍👧‍👦</span>
                     </div>
                     <div class="trip-content">
                         <h2>黃金峽谷</h2>
@@ -90,11 +129,10 @@
                     </div>
                 </div>
 
-                <!-- 藍色秘境 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
-                        <span class="badge">網美景點</span>
+                        <span class="badge">網美景點 📸</span>
                     </div>
                     <div class="trip-content">
                         <h2>藍色秘境</h2>
@@ -109,7 +147,7 @@
             </div>
         </section>
 
-        <!-- 其他 section 保持不變 -->
+        <!-- about & contact 保持不變 -->
         <section id="about" class="about-section">
             <div class="container">
                 <h2>關於我們</h2>
@@ -137,7 +175,7 @@
             <div id="bookingInfo"></div>
 
             <div id="progressBar" class="progress-bar">
-                <div class="progress" style="width: 20%;"></div>
+                <div class="progress" style="width: 16.66%;"></div>
             </div>
 
             <form id="bookingForm">
@@ -146,10 +184,12 @@
 
                 <!-- 步驟 0：日期選擇 -->
                 <div class="step step-date active" id="dateStep">
-                    <h3>📅 選擇探險日期</h3>
-                    <p style="color:#555;">綠色：可報名　黃色：剩餘少量　紅色：額滿　灰色：不可選</p>
+                    <h3>📅 請選擇探險日期</h3>
+                    <p style="color:#555; margin-bottom:20px;">綠色：可報名　黃色：剩餘少量　紅色：額滿　灰色：不可選</p>
                     <div id="calendarContainer"></div>
-                    <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續 →</button>
+                    <div style="text-align:center; margin-top:20px;">
+                        <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續填寫資料 →</button>
+                    </div>
                 </div>
 
                 <!-- 步驟 1：主報名人 -->
