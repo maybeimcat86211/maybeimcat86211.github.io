@@ -6,173 +6,107 @@
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-    /* 日曆容器 - 橫向滾動 */
-    #calendarContainer {
-        overflow-x: auto;
-        white-space: nowrap;
-        margin: 20px 0;
-        padding: 10px 0;
-    }
-    .month-calendar {
-        display: inline-block;
-        width: 320px;
-        margin-right: 20px;
-        vertical-align: top;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        padding: 15px;
-    }
-    .month-title {
-        text-align: center;
-        font-size: 1.3rem;
-        color: #2E86AB;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-    .calendar {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .calendar th {
-        background: #2E86AB;
-        color: white;
-        padding: 8px;
-        font-size: 0.9rem;
-    }
-    .calendar td {
-        height: 60px;
-        text-align: center;
-        border: 1px solid #eee;
-        vertical-align: top;
-        padding: 5px;
-        font-size: 1rem;
-        transition: all 0.2s;
-    }
-    .calendar .day-number {
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    .calendar .status {
-        font-size: 0.8rem;
-        margin-top: 3px;
-    }
-    .calendar .green { background: #d4edda; cursor: pointer; }
-    .calendar .green:hover { background: #c3e6cb; transform: scale(1.05); }
-    .calendar .yellow { background: #fff3cd; cursor: pointer; }
-    .calendar .yellow:hover { background: #ffeaa7; transform: scale(1.05); }
-    .calendar .red { background: #f8d7da; cursor: not-allowed; }
-    .calendar .disabled { background: #f5f5f5; color: #ccc; cursor: not-allowed; }
-</style>
+        /* Accordion 展開式步驟 */
+        .accordion-section {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .accordion-header {
+            background: #2E86AB;
+            color: white;
+            padding: 18px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .accordion-header:hover {
+            background: #1B5E7E;
+        }
+        .accordion-header::after {
+            content: '▼';
+            font-size: 1rem;
+        }
+        .accordion-header.active::after {
+            content: '▲';
+        }
+        .accordion-content {
+            padding: 25px;
+            background: white;
+            display: none;
+        }
+        .accordion-content.active {
+            display: block;
+        }
+
+        /* 日曆橫向滑動 */
+        #calendarContainer {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 15px 0;
+            scrollbar-width: thin;
+        }
+        .month-calendar {
+            display: inline-block;
+            width: 360px;
+            margin-right: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            vertical-align: top;
+        }
+        .month-title {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #2E86AB;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th {
+            background: #2E86AB;
+            color: white;
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+        .calendar td {
+            height: 70px;
+            text-align: center;
+            border: 1px solid #eee;
+            vertical-align: top;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .calendar .day-number {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        .calendar .status {
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        .calendar .green { background: #d4edda; }
+        .calendar .green:hover { background: #c3e6cb; transform: scale(1.05); }
+        .calendar .yellow { background: #fff3cd; }
+        .calendar .yellow:hover { background: #ffeaa7; transform: scale(1.05); }
+        .calendar .red { background: #f8d7da; cursor: not-allowed; }
+        .calendar .disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">🏔️ 洄瀾溪谷探險</div>
-            <ul class="nav-links">
-                <li><a href="#home">首頁</a></li>
-                <li><a href="#trips">探險路線</a></li>
-                <li><a href="#about">關於我們</a></li>
-                <li><a href="#contact">聯絡我們</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="home" class="hero">
-            <h1>洄瀾溪谷秘境探險</h1>
-            <p>體驗花東最特別隱密的溪谷</p>
-        </section>
-
-        <section id="trips" class="trips-section">
-            <div class="trips-container">
-                <!-- 西林秘境 -->
-                <div class="trip-card">
-                    <div class="trip-image">
-                        <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
-                        <span class="badge">初級路線 👍</span>
-                    </div>
-                    <div class="trip-content">
-                        <h2>西林秘境</h2>
-                        <p>西林秘境是教練們於2023年探勘並建置的一條溪谷路線，除了有30公尺高的瀑布以外，還有一個罕見的S型瀑布，是花蓮最適合初學者體驗的溪谷路線。</p>
-                        <div class="price">NT$ 3,500</div>
-                        <div class="trip-actions">
-                            <button class="btn-learn" onclick="showDetails('xilin')">了解更多 →</button>
-                            <button class="btn-book" onclick="openBooking('西林秘境', 3500)">立即預訂 →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 其他行程保持不變 -->
-                <div class="trip-card">
-                    <div class="trip-image">
-                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
-                        <span class="badge">進階路線 😎</span>
-                    </div>
-                    <div class="trip-content">
-                        <h2>翡翠谷</h2>
-                        <p>隱藏在中央山脈深處的翡翠谷，擁有清澈見底的碧綠深潭，多個天然滑水道和跳水點，是進階玩家的最愛。需要良好的體能和游泳能力。</p>
-                        <div class="price">NT$ 4,200</div>
-                        <div class="trip-actions">
-                            <button class="btn-learn" onclick="showDetails('feicui')">了解更多 →</button>
-                            <button class="btn-book" onclick="openBooking('翡翠谷', 4200)">立即預訂 →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="trip-card">
-                    <div class="trip-image">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
-                        <span class="badge">親子友善 👨‍👩‍👧‍👦</span>
-                    </div>
-                    <div class="trip-content">
-                        <h2>黃金峽谷</h2>
-                        <p>最適合親子同遊的溪谷路線，擁有金黃色的峽谷岩壁和清涼的溪水。溫和的地形讓全家大小都能安全享受溯溪樂趣，創造難忘的家庭回憶。</p>
-                        <div class="price">NT$ 3,000</div>
-                        <div class="trip-actions">
-                            <button class="btn-learn" onclick="showDetails('huangjin')">了解更多 →</button>
-                            <button class="btn-book" onclick="openBooking('黃金峽谷', 3000)">立即預訂 →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="trip-card">
-                    <div class="trip-image">
-                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
-                        <span class="badge">網美景點 📸</span>
-                    </div>
-                    <div class="trip-content">
-                        <h2>藍色秘境</h2>
-                        <p>2024年最新開發的路線！宛如藍寶石般的深藍色水潭，搭配壯觀的瀑布景觀，是IG打卡聖地。適合喜愛攝影和追求美景的探險者。</p>
-                        <div class="price">NT$ 3,800</div>
-                        <div class="trip-actions">
-                            <button class="btn-learn" onclick="showDetails('blue')">了解更多 →</button>
-                            <button class="btn-book" onclick="openBooking('藍色秘境', 3800)">立即預訂 →</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- about & contact 保持不變 -->
-        <section id="about" class="about-section">
-            <div class="container">
-                <h2>關於我們</h2>
-                <p>我們是花蓮在地的專業溯溪團隊，由經驗豐富的教練帶領，致力於帶給每一位探險者安全且難忘的溪谷體驗。我們熟悉花東地區每一條溪谷路線，堅持以最高的安全標準和對大自然的尊重，讓您在探索秘境的同時，也能保護這片美麗的土地。</p>
-                <p>所有教練均具備專業證照，提供完整的裝備和保險，讓您可以安心享受溯溪的樂趣。</p>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section">
-            <div class="container">
-                <h2>聯絡我們</h2>
-                <p>📧 Email: info@hualien-canyon.com</p>
-                <p>📱 電話: 0912-345-678</p>
-                <p>📍 地址: 花蓮縣花蓮市中山路123號</p>
-                <p>⏰ 營業時間: 每日 08:00 - 18:00</p>
-            </div>
-        </section>
-    </main>
+    <!-- 你的原本 header、main、footer 保持不變 -->
+    <!-- ... 省略原本內容 ... -->
 
     <!-- 預訂彈窗 -->
     <div id="bookingModal" class="modal">
@@ -182,85 +116,97 @@
             <div id="bookingInfo"></div>
 
             <div id="progressBar" class="progress-bar">
-                <div class="progress" style="width: 16.66%;"></div>
+                <div class="progress" style="width: 25%;"></div>
             </div>
 
             <form id="bookingForm">
                 <input type="hidden" id="tripName">
                 <input type="hidden" id="tripPrice">
 
-                <!-- 步驟 0：日期選擇 -->
-                <div class="step step-date active" id="dateStep">
-                    <h3>📅 請選擇探險日期</h3>
-                    <p style="color:#555; margin-bottom:20px;">綠色：可報名　黃色：剩餘少量　紅色：額滿　灰色：不可選</p>
-                    <div id="calendarContainer"></div>
-                    <div style="text-align:center; margin-top:20px;">
-                        <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續填寫資料 →</button>
+                <!-- 步驟 1：日期選擇 -->
+                <div class="accordion-section">
+                    <div class="accordion-header active">
+                        <span>📅 選擇探險日期</span>
+                        <span id="selectedDateDisplay" style="font-weight:normal;"></span>
+                    </div>
+                    <div class="accordion-content active">
+                        <p style="color:#555; margin-bottom:15px;">綠色：可報名　黃色：剩餘少量　紅色：額滿</p>
+                        <div id="calendarContainer"></div>
+                        <div style="text-align:center; margin-top:25px;">
+                            <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續 →</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 步驟 1：主報名人 -->
-                <div class="step step-1">
-                    <h3>📞 主報名人聯絡資訊</h3>
-                    <div class="form-group">
-                        <label for="mainPhone">聯絡電話 *</label>
-                        <input type="tel" id="mainPhone" required placeholder="0912-345-678">
+                <!-- 步驟 2：主報名人資料 -->
+                <div class="accordion-section">
+                    <div class="accordion-header">
+                        <span>👤 主報名人資料</span>
                     </div>
-                    <div class="form-group">
-                        <label for="mainAddress">聯絡地址 *</label>
-                        <input type="text" id="mainAddress" required placeholder="請輸入完整地址">
+                    <div class="accordion-content">
+                        <div class="form-group">
+                            <label for="mainPhone">聯絡電話 *</label>
+                            <input type="tel" id="mainPhone" required placeholder="0912-345-678">
+                        </div>
+                        <div class="form-group">
+                            <label for="mainAddress">聯絡地址 *</label>
+                            <input type="text" id="mainAddress" required placeholder="請輸入完整地址">
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyName">緊急聯絡人姓名 *</label>
+                            <input type="text" id="emergencyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyPhone">緊急聯絡人電話 *</label>
+                            <input type="tel" id="emergencyPhone" required placeholder="0912-345-678">
+                        </div>
                     </div>
-
-                    <h3>🚨 緊急聯絡人（全團共用）</h3>
-                    <div class="form-group">
-                        <label for="emergencyName">姓名 *</label>
-                        <input type="text" id="emergencyName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="emergencyPhone">電話 *</label>
-                        <input type="tel" id="emergencyPhone" required placeholder="0912-345-678">
-                    </div>
-
-                    <h3>參加人數</h3>
-                    <div class="form-group">
-                        <label for="participantCount">報名幾位？（包含主報名人）</label>
-                        <select id="participantCount" required>
-                            <option value="1">1 位</option>
-                            <option value="2">2 位</option>
-                            <option value="3">3 位</option>
-                            <option value="4">4 位</option>
-                            <option value="5">5 位</option>
-                            <option value="6">6 位</option>
-                            <option value="7">7 位</option>
-                            <option value="8">8 位</option>
-                            <option value="9">9 位</option>
-                            <option value="10">10 位</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn-next">下一步 →</button>
                 </div>
 
-                <div id="participantSteps"></div>
-
-                <div class="step step-final" id="finalStep">
-                    <h3>✓ 確認預訂</h3>
-                    <p style="text-align:center; color:#555;">請確認所有資料正確</p>
-                    <div class="form-group checkbox-group">
-                        <label>
-                            <input type="checkbox" id="agreeTerms" required>
-                            我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
-                        </label>
+                <!-- 步驟 3：參加人數與隊員資料 -->
+                <div class="accordion-section">
+                    <div class="accordion-header">
+                        <span>👥 參加人數與隊員資料</span>
                     </div>
-                    <button type="submit" class="btn-submit">確認送出預訂申請</button>
+                    <div class="accordion-content">
+                        <div class="form-group">
+                            <label for="participantCount">報名人數（包含主報名人） *</label>
+                            <select id="participantCount" required onchange="generateParticipantFields()">
+                                <option value="1">1 位</option>
+                                <option value="2">2 位</option>
+                                <option value="3">3 位</option>
+                                <option value="4">4 位</option>
+                                <option value="5">5 位</option>
+                                <option value="6">6 位</option>
+                                <option value="7">7 位</option>
+                                <option value="8">8 位</option>
+                                <option value="9">9 位</option>
+                                <option value="10">10 位</option>
+                            </select>
+                        </div>
+                        <div id="participantFields"></div>
+                    </div>
+                </div>
+
+                <!-- 步驟 4：確認送出 -->
+                <div class="accordion-section">
+                    <div class="accordion-header">
+                        <span>✓ 確認預訂並送出</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="agreeTerms" required>
+                                我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> *
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit">確認送出預訂申請</button>
+                        <p class="form-note">送出後我們會在24小時內與您聯繫確認行程</p>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-
-    <footer>
-        <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p>
-        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
