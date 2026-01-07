@@ -680,6 +680,7 @@
     const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
     // ==================== Supabase 配置 ====================
+
     let supabaseClient;
     if (window.supabase) {
         try {
@@ -794,7 +795,7 @@
         document.getElementById('confirmDateBtn').disabled = false;
     };
 
-    // ==================== 表單生成邏輯 ====================
+    // ==================== 表單生成邏輯 (包含地址連動) ====================
 
     document.querySelectorAll('.accordion-header').forEach(header => {
         header.addEventListener('click', () => {
@@ -816,18 +817,67 @@
         updateParticipantFields(parseInt(e.target.value));
     });
 
+    // 處理地址同步的函式
+    window.syncAddress = function(checkbox, index) {
+        const p1Address = document.querySelector('input[name="p1_address"]');
+        const targetAddress = document.querySelector(`input[name="p${index}_address"]`);
+        
+        if (checkbox.checked) {
+            targetAddress.value = p1Address.value;
+            targetAddress.readOnly = true;
+            targetAddress.style.backgroundColor = '#f0f0f0';
+        } else {
+            targetAddress.readOnly = false;
+            targetAddress.style.backgroundColor = 'white';
+            targetAddress.value = ''; // 解除勾選時清空，或保留原值也可
+        }
+    };
+
+    // 當第一位地址變更時，自動更新所有勾選「同上」的欄位
+    function setupAddressSyncListener() {
+        const p1Input = document.querySelector('input[name="p1_address"]');
+        if (p1Input) {
+            p1Input.addEventListener('input', function() {
+                const checkboxes = document.querySelectorAll('.address-sync-checkbox:checked');
+                checkboxes.forEach(cb => {
+                    const index = cb.dataset.index;
+                    const targetInput = document.querySelector(`input[name="p${index}_address"]`);
+                    if (targetInput) {
+                        targetInput.value = this.value;
+                    }
+                });
+            });
+        }
+    }
+
     function updateParticipantFields(count) {
         const container = document.getElementById('participantFields');
         let html = '';
 
         for (let i = 1; i <= count; i++) {
-            // 讓主要聯絡人填寫地址，稍後會自動填入所有人的 address 欄位
-            const mainContactFields = i === 1 ? `
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>通訊地址 (行前通知寄送用) *</label>
-                    <input type="text" name="p${i}_address" required placeholder="請輸入完整地址">
-                </div>
-            ` : '';
+            // 地址欄位邏輯
+            let addressFieldHtml = '';
+            
+            if (i === 1) {
+                // 第一位參加者：普通地址欄位
+                addressFieldHtml = `
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>通訊地址 (行前通知寄送用) *</label>
+                        <input type="text" name="p${i}_address" required placeholder="請輸入完整地址">
+                    </div>`;
+            } else {
+                // 其他參加者：地址欄位 + 同上勾選框
+                addressFieldHtml = `
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <label style="margin-bottom:0;">通訊地址 (行前通知寄送用) *</label>
+                            <label style="font-size:0.9rem; cursor:pointer; color:#2E86AB;">
+                                <input type="checkbox" class="address-sync-checkbox" data-index="${i}" onchange="syncAddress(this, ${i})"> 同第一位地址
+                            </label>
+                        </div>
+                        <input type="text" name="p${i}_address" required placeholder="請輸入完整地址">
+                    </div>`;
+            }
 
             html += `
                 <div class="participant-section" style="border-left: 4px solid #2E86AB;">
@@ -852,7 +902,7 @@
                         </div>
                     </div>
 
-                    ${mainContactFields}
+                    ${addressFieldHtml}
 
                     <div class="form-row" style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
                         <div class="form-group">
@@ -887,6 +937,9 @@
             `;
         }
         container.innerHTML = html;
+        
+        // 重新綁定監聽器 (因為 DOM 重建了)
+        setupAddressSyncListener();
     }
 
     document.getElementById('confirmInfoBtn').addEventListener('click', () => {
@@ -939,7 +992,7 @@
         }
     }
 
-    // ==================== 送出資料到 Supabase (已移除 main_address) ====================
+    // ==================== 送出資料到 Supabase (個別地址) ====================
 
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -952,10 +1005,10 @@
             const count = parseInt(document.getElementById('participantCount').value);
             const bookingRows = [];
             
-            // 抓取第一位參加者填寫的地址
-            const sharedAddress = document.querySelector(`input[name="p1_address"]`)?.value || '';
-
             for(let i = 1; i <= count; i++) {
+                // 直接抓取該位參加者的地址欄位 (無論是手填的還是同步過來的)
+                const individualAddress = document.querySelector(`input[name="p${i}_address"]`).value;
+
                 const rowData = {
                     trip_name: currentTripName,
                     trip_price: currentTripPrice,
@@ -974,8 +1027,8 @@
                     emergency_name: document.querySelector(`input[name="p${i}_emergency_name"]`).value,
                     emergency_phone: document.querySelector(`input[name="p${i}_emergency_phone"]`).value,
 
-                    // 修改處：只寫入 address 欄位
-                    address: sharedAddress, 
+                    // 使用各自的地址
+                    address: individualAddress, 
 
                     created_at: new Date().toISOString()
                 };
