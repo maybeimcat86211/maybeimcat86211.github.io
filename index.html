@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <style>
-        /* 樣式保持不變 */
+        /* CSS 樣式區域 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif; line-height: 1.8; color: #333; background: #f8f9fa; }
         header { background: linear-gradient(135deg, #2E86AB 0%, #1B5E7E 100%); box-shadow: 0 2px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
@@ -81,6 +81,7 @@
     </style>
 </head>
 <body>
+    <!-- HTML 內容區域 -->
     <header>
         <nav>
             <div class="logo">🏔️ 洄瀾溪谷探險</div>
@@ -168,6 +169,7 @@
         </section>
     </main>
 
+    <!-- 預訂彈窗 -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBooking()">×</span>
@@ -240,21 +242,23 @@
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p>
+        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
+    </footer>
+
     <!-- 1. 載入 SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
-        // -----------------------------------------------------------
-        // 1. 初始化全域變數 (保證 UI 一定能跑)
-        // -----------------------------------------------------------
+        // ================= 全域變數定義 =================
         window.supabaseClient = null;
         var selectedDateValue = null;
         var currentTripName = '';
         var currentTripPrice = 0;
 
-        // -----------------------------------------------------------
-        // 2. UI 互動函式
-        // -----------------------------------------------------------
+        // ================= UI 函式 (綁定到 window) =================
+        
         window.openBooking = function(name, price) {
             console.log('開啟預訂視窗:', name, price);
             currentTripName = name;
@@ -273,8 +277,11 @@
                     </div>`;
                 
                 resetForm();
-                // 呼叫日曆渲染
-                renderCalendar();
+                if(typeof renderCalendar === 'function') {
+                    renderCalendar();
+                }
+            } else {
+                alert('錯誤：找不到彈窗元件');
             }
         };
 
@@ -289,9 +296,10 @@
             document.getElementById('confirmDateBtn').disabled = true;
             document.getElementById('participantCount').value = "1";
             
-            updateParticipantFields(1);
+            if(typeof updateParticipantFields === 'function') {
+                updateParticipantFields(1);
+            }
             
-            // 重置區塊顯示
             var sections = document.querySelectorAll('.accordion-section');
             if(sections.length > 0) {
                 toggleSection(0, true);
@@ -316,9 +324,7 @@
             }
         };
 
-        // -----------------------------------------------------------
-        // 3. Supabase 連線
-        // -----------------------------------------------------------
+        // ================= Supabase 初始化 =================
         try {
             const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
@@ -333,15 +339,14 @@
             console.error('❌ Supabase 初始化失敗:', error);
         }
 
-        // -----------------------------------------------------------
-        // 4. 日曆邏輯 (使用標準 Select 讀取資料)
-        // -----------------------------------------------------------
+        // ================= 日曆邏輯 (MAX_SLOTS = 10) =================
+
         window.renderCalendar = async function() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '<div class="loading">正在讀取最新報名狀況...</div>';
             
             const today = new Date();
-            const MAX_SLOTS = 10; 
+            const MAX_SLOTS = 10; // 
             let html = '';
 
             for (let i = 0; i < 3; i++) {
@@ -354,11 +359,9 @@
                 const lastDayStr = `${year}-${String(month + 1).padStart(2, '0')}-${lastDayObj.getDate()}`;
 
                 let counts = {};
-                
-                // 讀取資料庫
+                // 從 Supabase 讀取資料 (需要先執行 SQL 開放 Public Select)
                 if (window.supabaseClient) {
                     try {
-                        // 這裡使用最基本的 SELECT，只要您執行了第一步的 SQL (開放權限)，這裡就能抓到資料
                         const { data: monthBookings, error } = await window.supabaseClient
                             .from('bookings')
                             .select('trip_date')
@@ -366,13 +369,12 @@
                             .gte('trip_date', firstDayStr)
                             .lte('trip_date', lastDayStr);
                         
-                        if (error) {
-                            console.error("讀取失敗 (請確認 RLS 權限已開啟):", error);
-                        } else if (monthBookings) {
-                            console.log(`成功讀取 ${month + 1} 月資料:`, monthBookings.length, "筆");
+                        if (!error && monthBookings) {
                             monthBookings.forEach(row => {
                                 counts[row.trip_date] = (counts[row.trip_date] || 0) + 1;
                             });
+                        } else if(error) {
+                            console.warn("讀取資料失敗，請確認 Supabase RLS Policy 是否允許 Select:", error);
                         }
                     } catch (e) {
                         console.warn("API Error", e);
@@ -396,7 +398,6 @@
                     if (isPast) {
                         html += `<td class="disabled"><div class="day-number">${day}</div></td>`;
                     } else {
-                        // 計算邏輯
                         const bookedCount = counts[dateStr] || 0;
                         const remaining = MAX_SLOTS - bookedCount;
                         let statusClass = 'available';
@@ -429,7 +430,7 @@
             document.getElementById('confirmDateBtn').disabled = false;
         };
 
-        // 監聽器與其他邏輯
+        // 事件監聽與其他邏輯
         window.onclick = function(event) {
             if (event.target == document.getElementById('bookingModal')) closeBooking();
         };
@@ -437,7 +438,6 @@
         document.querySelectorAll('.accordion-header').forEach(header => {
             header.addEventListener('click', () => {
                 const section = header.parentElement;
-                // 手動切換
                 if(section.classList.contains('active')) {
                    section.classList.remove('active');
                    header.classList.remove('active');
@@ -460,7 +460,6 @@
             updateParticipantFields(parseInt(e.target.value));
         });
 
-        // 地址同步邏輯
         window.syncAddress = function(checkbox, index) {
             const p1Val = document.querySelector('input[name="p1_address"]').value;
             const target = document.querySelector(`input[name="p${index}_address"]`);
@@ -567,7 +566,6 @@
                     });
                 }
                 
-                // 執行 INSERT
                 const { error } = await window.supabaseClient.from('bookings').insert(rows);
                 if(error) throw error;
                 
