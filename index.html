@@ -587,11 +587,11 @@
             }
         }
 
-        // ================= 更新欄位 (含鞋號選單 19-31cm) =================
+        
         window.updateParticipantFields = function(count) {
             let html = '';
             
-            // 產生 19-31cm 的選項
+            // 產生選項
             let shoeOptions = '<option value="" selected disabled>請選擇</option>';
             for(let s = 19; s <= 31; s++) {
                 shoeOptions += `<option value="${s}">${s} cm</option>`;
@@ -620,7 +620,7 @@
                             <div class="form-group"><label>身高 (cm)</label><input type="number" name="p${i}_height"></div>
                             <div class="form-group"><label>體重 (kg)</label><input type="number" name="p${i}_weight"></div>
                             <div class="form-group">
-                                <label>鞋號 (cm)</label>
+                                <label>鞋號(平常穿的size即可)</label>
                                 <select name="p${i}_shoes" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;">
                                     ${shoeOptions}
                                 </select>
