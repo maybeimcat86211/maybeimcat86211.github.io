@@ -1,3 +1,4 @@
+console.log('script.js loaded');
 // ==================== 修改這兩行 ====================
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
