@@ -2,6 +2,10 @@
 const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
 const MAX_SLOTS_PER_DAY = 10;
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+)
 // =====================================================
 
 let selectedDate = null;
