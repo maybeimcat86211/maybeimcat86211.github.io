@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <style>
-        /* CSS 樣式區域 */
+        /* 樣式保持不變 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif; line-height: 1.8; color: #333; background: #f8f9fa; }
         header { background: linear-gradient(135deg, #2E86AB 0%, #1B5E7E 100%); box-shadow: 0 2px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
@@ -81,7 +81,6 @@
     </style>
 </head>
 <body>
-    <!-- HTML 內容區域 -->
     <header>
         <nav>
             <div class="logo">🏔️ 洄瀾溪谷探險</div>
@@ -169,7 +168,6 @@
         </section>
     </main>
 
-    <!-- 預訂彈窗 -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBooking()">×</span>
@@ -242,11 +240,6 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p>
-        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
-    </footer>
-
     <!-- 1. 載入 SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -257,7 +250,7 @@
         var currentTripName = '';
         var currentTripPrice = 0;
 
-        // ================= UI 函式 (綁定到 window) =================
+        // ================= UI 函式 =================
         
         window.openBooking = function(name, price) {
             console.log('開啟預訂視窗:', name, price);
@@ -277,11 +270,7 @@
                     </div>`;
                 
                 resetForm();
-                if(typeof renderCalendar === 'function') {
-                    renderCalendar();
-                }
-            } else {
-                alert('錯誤：找不到彈窗元件');
+                if(typeof renderCalendar === 'function') renderCalendar();
             }
         };
 
@@ -296,9 +285,7 @@
             document.getElementById('confirmDateBtn').disabled = true;
             document.getElementById('participantCount').value = "1";
             
-            if(typeof updateParticipantFields === 'function') {
-                updateParticipantFields(1);
-            }
+            if(typeof updateParticipantFields === 'function') updateParticipantFields(1);
             
             var sections = document.querySelectorAll('.accordion-section');
             if(sections.length > 0) {
@@ -339,14 +326,14 @@
             console.error('❌ Supabase 初始化失敗:', error);
         }
 
-        // ================= 日曆邏輯 (MAX_SLOTS = 10) =================
+        // ================= 日曆邏輯 =================
 
         window.renderCalendar = async function() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '<div class="loading">正在讀取最新報名狀況...</div>';
             
             const today = new Date();
-            const MAX_SLOTS = 10; // 
+            const MAX_SLOTS = 10; // 已修改為 10
             let html = '';
 
             for (let i = 0; i < 3; i++) {
@@ -359,7 +346,6 @@
                 const lastDayStr = `${year}-${String(month + 1).padStart(2, '0')}-${lastDayObj.getDate()}`;
 
                 let counts = {};
-                // 從 Supabase 讀取資料 (需要先執行 SQL 開放 Public Select)
                 if (window.supabaseClient) {
                     try {
                         const { data: monthBookings, error } = await window.supabaseClient
@@ -374,7 +360,7 @@
                                 counts[row.trip_date] = (counts[row.trip_date] || 0) + 1;
                             });
                         } else if(error) {
-                            console.warn("讀取資料失敗，請確認 Supabase RLS Policy 是否允許 Select:", error);
+                            console.warn("讀取資料失敗，請確認 RLS 權限:", error);
                         }
                     } catch (e) {
                         console.warn("API Error", e);
@@ -430,7 +416,6 @@
             document.getElementById('confirmDateBtn').disabled = false;
         };
 
-        // 事件監聽與其他邏輯
         window.onclick = function(event) {
             if (event.target == document.getElementById('bookingModal')) closeBooking();
         };
@@ -487,8 +472,16 @@
             }
         }
 
+        // ================= 更新參加者欄位 (含鞋號下拉選單) =================
         window.updateParticipantFields = function(count) {
             let html = '';
+            
+            // 產生 19cm ~ 31cm 的選項
+            let shoeOptions = '<option value="" selected disabled>請選擇</option>';
+            for(let s = 19; s <= 31; s++) {
+                shoeOptions += `<option value="${s}">${s} cm</option>`;
+            }
+
             for(let i=1; i<=count; i++) {
                 const addr = i===1 ? 
                     `<div class="form-group" style="grid-column:1/-1"><label>通訊地址 (行前通知用) *</label><input type="text" name="p${i}_address" required placeholder="請輸入完整地址"></div>` : 
@@ -509,9 +502,14 @@
                             <div class="form-group"><label>🚨 緊急電話*</label><input type="tel" name="p${i}_emergency_phone" required></div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group"><label>身高</label><input type="number" name="p${i}_height"></div>
-                            <div class="form-group"><label>體重</label><input type="number" name="p${i}_weight"></div>
-                            <div class="form-group"><label>鞋號</label><input type="number" name="p${i}_shoes"></div>
+                            <div class="form-group"><label>身高 (cm)</label><input type="number" name="p${i}_height"></div>
+                            <div class="form-group"><label>體重 (kg)</label><input type="number" name="p${i}_weight"></div>
+                            <div class="form-group">
+                                <label>鞋號 (cm)</label>
+                                <select name="p${i}_shoes" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;">
+                                    ${shoeOptions}
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group"><label>病史</label><textarea name="p${i}_medical"></textarea></div>
                     </div>`;
@@ -520,7 +518,7 @@
             setupAddressSync();
         };
 
-        // 初始執行一次
+        // 初始執行
         updateParticipantFields(1);
 
         document.getElementById('confirmInfoBtn').addEventListener('click', () => {
@@ -560,7 +558,7 @@
                         emergency_phone: document.querySelector(`input[name="p${i}_emergency_phone"]`).value,
                         height: document.querySelector(`input[name="p${i}_height"]`).value || null,
                         weight: document.querySelector(`input[name="p${i}_weight"]`).value || null,
-                        shoe_size: document.querySelector(`input[name="p${i}_shoes"]`).value || null,
+                        shoe_size: document.querySelector(`select[name="p${i}_shoes"]`).value || null, // 改為抓取 select
                         medical_conditions: document.querySelector(`textarea[name="p${i}_medical"]`).value || '無',
                         created_at: new Date().toISOString()
                     });
