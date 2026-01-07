@@ -1,1 +1,811 @@
-<!DOCTYPE html> <html lang="zh-TW"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title> <link rel="stylesheet" href="styles.css"> <style> body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif; line-height: 1.8; color: #333; margin: 0; padding: 0; box-sizing: border-box; } .accordion-section { margin-bottom: 20px; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); } .accordion-header { background: #2E86AB; color: white; padding: 18px 25px; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; } .accordion-header:hover { background: #1B5E7E; } .accordion-header::after { content: '▼'; } .accordion-header.active::after { content: '▲'; } .accordion-content { padding: 25px; background: white; display: none; } .accordion-content.active { display: block; } #calendarContainer { display: flex; gap: 30px; overflow-x: auto; padding: 15px 0; scrollbar-width: thin; } .month-calendar { flex: 0 0 auto; width: 380px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px; } .month-title { text-align: center; font-size: 1.4rem; color: #2E86AB; margin-bottom: 15px; font-weight: bold; } .calendar { width: 100%; border-collapse: collapse; } .calendar th { background: #2E86AB; color: white; padding: 10px; } .calendar td { height: 75px; text-align: center; border: 1px solid #eee; vertical-align: top; padding: 8px; cursor: pointer; } .calendar .day-number { font-weight: bold; font-size: 1.3rem; } .calendar .status { font-size: 0.85rem; margin-top: 5px; } .calendar .green { background: #d4edda; } .calendar .green:hover { background: #c3e6cb; } .calendar .yellow { background: #fff3cd; } .calendar .yellow:hover { background: #ffeaa7; } .calendar .red { background: #f8d7da; cursor: not-allowed; } .calendar .disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; } .form-group { margin-bottom: 20px; } .form-group label { display: block; margin-bottom: 8px; font-weight: bold; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; } .form-row { display: flex; gap: 20px; } .form-row .form-group { flex: 1; } .btn-next, .btn-submit { background: #2E86AB; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; } .btn-next:hover, .btn-submit:hover { background: #1B5E7E; } .form-note { font-size: 0.9rem; color: #666; margin-top: 10px; text-align: center; } </style> </head> <body> <header> <nav> <div class="logo">🏔️ 洄瀾溪谷探險</div> <ul class="nav-links"> <li><a href="#home">首頁</a></li> <li><a href="#trips">探險路線</a></li> <li><a href="#about">關於我們</a></li> <li><a href="#contact">聯絡我們</a></li> </ul> </nav> </header> <main> <section id="home" class="hero"> <h1>洄瀾溪谷秘境探險</h1> <p>體驗花東最特別隱密的溪谷</p> </section> <section id="trips" class="trips-section"> <div class="trips-container"> <div class="trip-card"> <div class="trip-image"> <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境"> <span class="badge">初級路線 👍</span> </div> <div class="trip-content"> <h2>西林秘境</h2> <p>西林秘境是教練們於2023年探勘並建置的一條溪谷路線，除了有30公尺高的瀑布以外，還有一個罕見的S型瀑布，是花蓮最適合初學者體驗的溪谷路線。</p> <div class="price">NT$ 3,500</div> <div class="trip-actions"> <button class="btn-learn" onclick="showDetails('xilin')">了解更多 →</button> <button class="btn-book" onclick="openBooking('西林秘境', 3500)">立即預訂 →</button> </div> </div> </div> <!-- 其他三個行程保持不變 --> <!-- (翡翠谷、黃金峽谷、藍色秘境) --> <div class="trip-card"> <div class="trip-image"> <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷"> <span class="badge">進階路線 😎</span> </div> <div class="trip-content"> <h2>翡翠谷</h2> <p>隱藏在中央山脈深處的翡翠谷，擁有清澈見底的碧綠深潭，多個天然滑水道和跳水點，是進階玩家的最愛。需要良好的體能和游泳能力。</p> <div class="price">NT$ 4,200</div> <div class="trip-actions"> <button class="btn-learn" onclick="showDetails('feicui')">了解更多 →</button> <button class="btn-book" onclick="openBooking('翡翠谷', 4200)">立即預訂 →</button> </div> </div> </div> <div class="trip-card"> <div class="trip-image"> <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷"> <span class="badge">親子友善 👨‍👩‍👧‍👦</span> </div> <div class="trip-content"> <h2>黃金峽谷</h2> <p>最適合親子同遊的溪谷路線，擁有金黃色的峽谷岩壁和清涼的溪水。溫和的地形讓全家大小都能安全享受溯溪樂趣，創造難忘的家庭回憶。</p> <div class="price">NT$ 3,000</div> <div class="trip-actions"> <button class="btn-learn" onclick="showDetails('huangjin')">了解更多 →</button> <button class="btn-book" onclick="openBooking('黃金峽谷', 3000)">立即預訂 →</button> </div> </div> </div> <div class="trip-card"> <div class="trip-image"> <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境"> <span class="badge">網美景點 📸</span> </div> <div class="trip-content"> <h2>藍色秘境</h2> <p>2024年最新開發的路線！宛如藍寶石般的深藍色水潭，搭配壯觀的瀑布景觀，是IG打卡聖地。適合喜愛攝影和追求美景的探險者。</p> <div class="price">NT$ 3,800</div> <div class="trip-actions"> <button class="btn-learn" onclick="showDetails('blue')">了解更多 →</button> <button class="btn-book" onclick="openBooking('藍色秘境', 3800)">立即預訂 →</button> </div> </div> </div> </div> </section> <!-- about & contact 保持原本 --> </main> <!-- 預訂彈窗 --> <div id="bookingModal" class="modal"> <div class="modal-content"> <span class="close" onclick="closeBooking()">×</span> <h2>🎯 立即預訂探險行程</h2> <div id="bookingInfo"></div> <form id="bookingForm"> <input type="hidden" id="tripName"> <input type="hidden" id="tripPrice"> <!-- 步驟 1：日期選擇 --> <div class="accordion-section"> <div class="accordion-header active"> <span>📅 選擇探險日期</span> <span id="selectedDateDisplay" style="font-weight:normal;"></span> </div> <div class="accordion-content active"> <p style="color:#555; margin-bottom:15px;">綠色：可報名　黃色：剩餘少量　紅色：額滿</p> <div id="calendarContainer"></div> <div style="text-align:center; margin-top:25px;"> <button type="button" class="btn-next" id="confirmDateBtn">確認日期並繼續 →</button> </div> </div> </div> <!-- 步驟 2：參加人數與個人資料 --> <div class="accordion-section"> <div class="accordion-header"> <span>👥 參加人數與個人資料</span> </div> <div class="accordion-content"> <div class="form-group"> <label for="participantCount">報名人數 *</label> <select id="participantCount" required onchange="generateParticipantFields()"> <option value="1" selected>1 位</option> <option value="2">2 位</option> <option value="3">3 位</option> <option value="4">4 位</option> <option value="5">5 位</option> <option value="6">6 位</option> <option value="7">7 位</option> <option value="8">8 位</option> <option value="9">9 位</option> <option value="10">10 位</option> </select> </div> <div id="participantFields"></div> </div> </div> <!-- 步驟 3：確認送出 --> <div class="accordion-section"> <div class="accordion-header"> <span>✓ 確認預訂並送出</span> </div> <div class="accordion-content"> <div class="form-group checkbox-group"> <label> <input type="checkbox" id="agreeTerms" required> 我已詳細閱讀並同意 <a href="#" onclick="showTerms(); return false;">活動條款及個人資料使用聲明</a> * </label> </div> <button type="submit" class="btn-submit">確認送出預訂申請</button> <p class="form-note">送出後我們會在24小時內與您聯繫確認行程</p> </div> </div> </form> </div> </div> <footer> <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p> <p>讓我們一起探索花蓮最美的秘境 🌊</p> </footer> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script src="script.js" defer></script> </body> </html>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #2E86AB 0%, #1B5E7E 100%);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(46, 134, 171, 0.8), rgba(27, 94, 126, 0.8)),
+                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600') center/cover;
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+        }
+
+        /* Trips Section */
+        .trips-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .trips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .trip-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .trip-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .trip-card:hover .trip-image img {
+            transform: scale(1.05);
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .trip-content {
+            padding: 25px;
+        }
+
+        .trip-content h2 {
+            color: #2E86AB;
+            margin-bottom: 15px;
+        }
+
+        .trip-content p {
+            color: #666;
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            color: #2E86AB;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .trip-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-learn, .btn-book {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-learn {
+            background: #f0f0f0;
+            color: #2E86AB;
+        }
+
+        .btn-learn:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-book {
+            background: #2E86AB;
+            color: white;
+        }
+
+        .btn-book:hover {
+            background: #1B5E7E;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 40px auto;
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .modal-content h2 {
+            color: #2E86AB;
+            margin-bottom: 30px;
+        }
+
+        /* Accordion */
+        .accordion-section {
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .accordion-section.active {
+            border-color: #2E86AB;
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, #2E86AB 0%, #3a95bb 100%);
+            color: white;
+            padding: 18px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, #1B5E7E 0%, #2E86AB 100%);
+        }
+
+        .accordion-header::after {
+            content: '▼';
+            transition: transform 0.3s;
+        }
+
+        .accordion-header.active::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+        }
+
+        .accordion-content.active {
+            padding: 25px;
+            max-height: 2000px;
+        }
+
+        /* Calendar */
+        #calendarContainer {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 15px 0;
+        }
+
+        .month-calendar {
+            flex: 0 0 auto;
+            min-width: 340px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .month-title {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #2E86AB;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .calendar th {
+            background: #2E86AB;
+            color: white;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .calendar td {
+            height: 60px;
+            text-align: center;
+            border: 1px solid #eee;
+            vertical-align: top;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar .day-number {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .calendar .status {
+            font-size: 0.75rem;
+            margin-top: 3px;
+        }
+
+        .calendar .available {
+            background: #d4edda;
+        }
+
+        .calendar .available:hover {
+            background: #c3e6cb;
+            transform: scale(1.05);
+        }
+
+        .calendar .limited {
+            background: #fff3cd;
+        }
+
+        .calendar .limited:hover {
+            background: #ffeaa7;
+            transform: scale(1.05);
+        }
+
+        .calendar .full {
+            background: #f8d7da;
+            cursor: not-allowed;
+        }
+
+        .calendar .disabled {
+            background: #f5f5f5;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .calendar .selected {
+            background: #2E86AB !important;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(46, 134, 171, 0.4);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2E86AB;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .participant-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .participant-section h4 {
+            color: #2E86AB;
+            margin-bottom: 15px;
+        }
+
+        .btn-next, .btn-submit {
+            background: linear-gradient(135deg, #2E86AB 0%, #3a95bb 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background: linear-gradient(135deg, #1B5E7E 0%, #2E86AB 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 134, 171, 0.3);
+        }
+
+        .btn-next:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: #2E86AB;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .month-calendar {
+                min-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🏔️ 洄瀾溪谷探險</div>
+            <ul class="nav-links">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#trips">探險路線</a></li>
+                <li><a href="#about">關於我們</a></li>
+                <li><a href="#contact">聯絡我們</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <h1>洄瀾溪谷秘境探險</h1>
+            <p>體驗花東最特別隱密的溪谷</p>
+        </section>
+
+        <section id="trips" class="trips-section">
+            <div class="trips-container">
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
+                        <span class="badge">初級路線 👍</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>西林秘境</h2>
+                        <p>西林秘境是教練們於2023年探勘並建置的一條溪谷路線，除了有30公尺高的瀑布以外，還有一個罕見的S型瀑布，是花蓮最適合初學者體驗的溪谷路線。</p>
+                        <div class="price">NT$ 3,500</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="alert('詳細資訊：\n\n難度：★☆☆☆☆\n時間：4-5小時\n最低年齡：10歲\n\n包含：專業教練、全套裝備、保險、午餐')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('西林秘境', 3500)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
+                        <span class="badge">進階路線 😎</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>翡翠谷</h2>
+                        <p>隱藏在中央山脈深處的翡翠谷，擁有清澈見底的碧綠深潭，多個天然滑水道和跳水點，是進階玩家的最愛。需要良好的體能和游泳能力。</p>
+                        <div class="price">NT$ 4,200</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="alert('詳細資訊：\n\n難度：★★★★☆\n時間：6-7小時\n最低年齡：16歲\n\n包含：專業教練、全套裝備、保險、午餐')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('翡翠谷', 4200)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
+                        <span class="badge">親子友善 👨‍👩‍👧‍👦</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>黃金峽谷</h2>
+                        <p>最適合親子同遊的溪谷路線，擁有金黃色的峽谷岩壁和清涼的溪水。溫和的地形讓全家大小都能安全享受溯溪樂趣，創造難忘的家庭回憶。</p>
+                        <div class="price">NT$ 3,000</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="alert('詳細資訊：\n\n難度：★☆☆☆☆\n時間：3-4小時\n最低年齡：6歲\n\n包含：專業教練、全套裝備、保險、午餐')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('黃金峽谷', 3000)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trip-card">
+                    <div class="trip-image">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
+                        <span class="badge">網美景點 📸</span>
+                    </div>
+                    <div class="trip-content">
+                        <h2>藍色秘境</h2>
+                        <p>2024年最新開發的路線！宛如藍寶石般的深藍色水潭，搭配壯觀的瀑布景觀，是IG打卡聖地。適合喜愛攝影和追求美景的探險者。</p>
+                        <div class="price">NT$ 3,800</div>
+                        <div class="trip-actions">
+                            <button class="btn-learn" onclick="alert('詳細資訊：\n\n難度：★★☆☆☆\n時間：5-6小時\n最低年齡：12歲\n\n包含：專業教練、全套裝備、保險、午餐、專業攝影')">了解更多 →</button>
+                            <button class="btn-book" onclick="openBooking('藍色秘境', 3800)">立即預訂 →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 預訂彈窗 -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBooking()">×</span>
+            <h2>🎯 立即預訂探險行程</h2>
+            <div id="bookingInfo"></div>
+            
+            <form id="bookingForm">
+                <input type="hidden" id="tripName">
+                <input type="hidden" id="tripPrice">
+                <input type="hidden" id="selectedDate">
+
+                <!-- 步驟 1：日期選擇 -->
+                <div class="accordion-section active">
+                    <div class="accordion-header active">
+                        <span>📅 選擇探險日期</span>
+                        <span id="selectedDateDisplay" style="font-weight:normal;"></span>
+                    </div>
+                    <div class="accordion-content active">
+                        <p style="color:#555; margin-bottom:15px;">🟢 可報名　🟡 剩餘少量　🔴 已額滿</p>
+                        <div id="calendarContainer"></div>
+                        <div style="text-align:center; margin-top:25px;">
+                            <button type="button" class="btn-next" id="confirmDateBtn" disabled>請先選擇日期</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步驟 2：參加人數與個人資料 -->
+                <div class="accordion-section">
+                    <div class="accordion-header">
+                        <span>👥 參加人數與個人資料</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="form-group">
+                            <label for="participantCount">報名人數 *</label>
+                            <select id="participantCount" required>
+                                <option value="1" selected>1 位</option>
+                                <option value="2">2 位</option>
+                                <option value="3">3 位</option>
+                                <option value="4">4 位</option>
+                                <option value="5">5 位</option>
+                                <option value="6">6 位</option>
+                                <option value="7">7 位</option>
+                                <option value="8">8 位</option>
+                                <option value="9">9 位</option>
+                                <option value="10">10 位</option>
+                            </select>
+                        </div>
+                        <div id="participantFields"></div>
+                        <div style="text-align:center; margin-top:25px;">
+                            <button type="button" class="btn-next" id="confirmInfoBtn">確認資料並繼續 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步驟 3：確認送出 -->
+                <div class="accordion-section">
+                    <div class="accordion-header">
+                        <span>✓ 確認預訂並送出</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div id="bookingSummary" style="background:#f8f9fa; padding:20px; border-radius:8px; margin-bottom:20px;"></div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="agreeTerms" required>
+                                我已詳細閱讀並同意活動條款及個人資料使用聲明 *
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit">確認送出預訂申請</button>
+                        <p class="form-note">送出後我們會在24小時內與您聯繫確認行程</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 洄瀾溪谷秘境探險 版權所有</p>
+        <p>讓我們一起探索花蓮最美的秘境 🌊</p>
+    </footer>
+
+    <script>
+        // 全域變數
+        let selectedDateValue = null;
+        let bookingData = {};
+
+        // 模擬日期可用性資料（實際應從後端獲取）
+        function getDateAvailability(date) {
+            const day = date.getDay();
+            const dateNum = date.getDate();
+            
+            // 過去的日期不可選
+            if (date < new Date().setHours(0, 0, 0, 0)) {
+                return 'disabled';
+            }
+            
+            // 模擬邏輯：週六日較熱門
+            if (day === 0 || day === 6) {
+                return dateNum % 3 === 0 ? 'full' : (dateNum % 2 === 0 ? 'limited' : 'available');
+            }
+            return 'available';
+        }
+
+        // 生成日曆
+        function generateCalendar() {
+            const container = document.getElementById('calendarContainer');
+            container.innerHTML = '';
+            
+            const today = new Date();
+            
+            // 生成接下來3個月的日曆
+            for (let i = 0; i < 3; i++) {
+                const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
+                const monthDiv = createMonthCalendar(date);
+                container.appendChild(monthDiv);
+            }
+        }
+
+        function createMonthCalendar(date) {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'month-calendar';
+            
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+            
+            monthDiv.innerHTML = `
+                <div class="month-title">${year} 年 ${monthNames[month]}</div>
+                <table class="calendar">
+                    <thead>
+                        <tr>
+                            <th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-${year}-${month}"></tbody>
+                </table>
+            `;
+            
+            const tbody = monthDiv.querySelector('tbody');
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            let dayCount = 1;
+            let rows = Math.ceil((firstDay + daysInMonth) / 7);
+            
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('tr');
+                
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    
+                    if (i === 0 && j < firstDay) {
+                        cell.className = 'disabled';
+                    } else if (dayCount > daysInMonth) {
+                        cell.className = 'disabled';
+                    } else {
+                        const cellDate = new Date(year, month, dayCount);
+                        const availability = getDateAvailability(cellDate);
+                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}`;
+                        
+                        cell.className = availability;
+                        cell.innerHTML = `
+                            <div class="day-number">${dayCount}</div>
+                            <div class="status">${availability === 'available' ? '可報名' : availability === 'limited' ? '少量' : availability === 'full' ? '額滿' : ''}</div>
+                        `;
+                        
+                        if (availability !== 'disabled' && availability !== 'full') {
+                            cell.onclick = () => selectDate(dateStr, cell);
+                        }
+                        
+                        dayCount++;
+                    }
+                    
+                    row.appendChild(cell);
+                }
+                
+                tbody.appendChild(row);
+            }
+            
+            return monthDiv;
+        }
+
+        // 選擇日期
+        function selectDate(dateStr, cell) {
+            // 移除之前的選擇
+            document.querySelectorAll('.calendar td').forEach(td => {
+                td.classList.remove('selected');
+            });
+            
+            // 標記新選擇
+            cell.classList.add('selected');
+            selectedDateValue = dateStr;
+            document.getElementById('selectedDate').value = dateStr;
+            
+            // 更新顯示
+            const date = new Date(dateStr);
+            const displayDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+            document.getElementById('selectedDateDisplay').textContent = displayDate;
+            
+            // 啟用確認按鈕
+            const confirmBtn = document.getElementById('confirmDateBtn');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = '確認日期並繼續 →';
+        }
+
+        // 生成參加者欄位
+        function
