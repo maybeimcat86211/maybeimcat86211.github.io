@@ -360,7 +360,7 @@
 
                 let counts = {};
                 
-                // 🚀 使用 RPC 呼叫 Supabase 函數
+                //  使用 RPC 呼叫 Supabase 函數
                 if (window.supabaseClient) {
                     try {
                         const { data: monthCounts, error } = await window.supabaseClient.rpc('get_monthly_counts', {
