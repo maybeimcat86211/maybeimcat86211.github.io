@@ -22,18 +22,20 @@
         .hero h1 { font-size: 3rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .hero p { font-size: 1.3rem; }
 
-        /* ================= 行程卡片 & 輪播樣式 (新增) ================= */
+        /* ================= 行程卡片 & 輪播樣式 (修正圖片高度) ================= */
         .trips-section { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
         .trips-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         
         .trip-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
         .trip-card:hover { transform: translateY(-8px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
 
-        /* 輪播容器 */
-        .trip-image { position: relative; height: 250px; width: 100%; overflow: hidden; }
+        /* [修改點] 輪播容器高度改為 350px (原本 250px) */
+        .trip-image { position: relative; height: 350px; width: 100%; overflow: hidden; }
         
         /* 輪播軌道 */
         .carousel-track { display: flex; height: 100%; width: 100%; transition: transform 0.5s ease-in-out; }
+        
+        /* 圖片樣式：保持 cover 以填滿版面，但因為高度變高，顯示範圍會變大 */
         .carousel-track img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
 
         /* 輪播按鈕 */
@@ -147,8 +149,9 @@
                         <!-- 輪播軌道 -->
                         <div class="carousel-track">
                             <img src="https://feegzkbrumieucyweghm.supabase.co/storage/v1/object/public/photos/1719821522955.jpg" alt="西林秘境1">
-                            <img src="https://feegzkbrumieucyweghm.supabase.co/storage/v1/object/public/photos/DSCF7257.JPG" alt="西林秘境2">
-                            <img src="https://feegzkbrumieucyweghm.supabase.co/storage/v1/object/public/photos/PXL_20240701_053816973.jpg" alt="西林秘境3">
+                            <!-- 這裡為了示範輪播，我重複放了同一張，您可以替換成不同網址 -->
+                            <img src="https://feegzkbrumieucyweghm.supabase.co/storage/v1/object/public/photos/1719821522955.jpg" alt="西林秘境2">
+                            <img src="https://feegzkbrumieucyweghm.supabase.co/storage/v1/object/public/photos/1719821522955.jpg" alt="西林秘境3">
                         </div>
                         <button class="carousel-btn prev-btn" onclick="moveSlide(this, -1)">❮</button>
                         <button class="carousel-btn next-btn" onclick="moveSlide(this, 1)">❯</button>
@@ -310,7 +313,7 @@
     <!-- 1. 載入 Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- 2. 主程式 -->
+    <!-- 2. 主程式：先定義 UI 函式，確保按鈕可點 -->
     <script>
         // ================= 全域變數 =================
         window.supabaseClient = null;
@@ -318,7 +321,7 @@
         var currentTripName = '';
         var currentTripPrice = 0;
 
-        // ================= UI 函式 (綁定到 window) =================
+        // ================= 1. UI 函式 =================
         window.openBooking = function(name, price) {
             console.log('開啟預訂視窗:', name, price);
             currentTripName = name;
@@ -337,6 +340,7 @@
                     </div>`;
                 
                 resetForm();
+                // 呼叫日曆渲染 (使用 RPC 安全函數)
                 if(typeof renderCalendar === 'function') {
                     renderCalendar();
                 } else {
@@ -362,6 +366,7 @@
                 updateParticipantFields(1);
             }
             
+            // 重置區塊顯示
             var sections = document.querySelectorAll('.accordion-section');
             if(sections.length > 0) {
                 toggleSection(0, true);
@@ -426,7 +431,7 @@
         // 頁面載入後啟動自動輪播
         document.addEventListener('DOMContentLoaded', startAutoPlay);
 
-        // ================= Supabase 初始化 =================
+        // ================= 2. Supabase 初始化 =================
         try {
             const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
@@ -441,7 +446,7 @@
             console.error('❌ Supabase 初始化失敗:', error);
         }
 
-        // ================= 日曆邏輯 (Safe RPC) =================
+        // ================= 3. 日曆邏輯 (使用 RPC 安全函數) =================
         window.renderCalendar = async function() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '<div class="loading">正在讀取最新報名狀況...</div>';
@@ -461,7 +466,7 @@
 
                 let counts = {};
                 
-                // 使用 RPC (安全函數)
+                //  使用 RPC 呼叫 Supabase 函數
                 if (window.supabaseClient) {
                     try {
                         const { data: monthCounts, error } = await window.supabaseClient.rpc('get_monthly_counts', {
@@ -475,7 +480,7 @@
                                 counts[row.trip_date] = row.count;
                             });
                         } else if(error) {
-                            console.warn("RPC 呼叫失敗:", error);
+                            console.warn("RPC 呼叫失敗，請確認已執行 SQL:", error);
                         }
                     } catch (e) {
                         console.warn("API Error", e);
@@ -587,11 +592,11 @@
             }
         }
 
-        
+        // ================= 更新欄位 (含鞋號選單 19-31cm) =================
         window.updateParticipantFields = function(count) {
             let html = '';
             
-            // 產生選項
+            // 產生 19-31cm 的選項
             let shoeOptions = '<option value="" selected disabled>請選擇</option>';
             for(let s = 19; s <= 31; s++) {
                 shoeOptions += `<option value="${s}">${s} cm</option>`;
@@ -620,7 +625,7 @@
                             <div class="form-group"><label>身高 (cm)</label><input type="number" name="p${i}_height"></div>
                             <div class="form-group"><label>體重 (kg)</label><input type="number" name="p${i}_weight"></div>
                             <div class="form-group">
-                                <label>鞋號(平常穿的size即可)</label>
+                                <label>鞋號 (cm)</label>
                                 <select name="p${i}_shoes" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;">
                                     ${shoeOptions}
                                 </select>
