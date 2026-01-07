@@ -253,6 +253,7 @@
         const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
         // ==================== Supabase 配置 ====================
+        
         // 強制初始化 Supabase
         let supabaseClient = null;
         try {
@@ -610,28 +611,7 @@
                 }
 
                 // 正式寫入資料庫
-                const { data, error } = await supabaseClient
+                // [關鍵修改] 移除 .select() 以避免權限衝突
+                const { error } = await supabaseClient
                     .from('bookings')
-                    .insert(bookingRows)
-                    .select();
-                
-                if (error) throw error;
-                
-                console.log('✅ 預訂成功寫入 DB:', data);
-                alert('🎉 預訂申請已成功送出！\n\n我們已收到您的資料，將盡快與您聯繫確認。');
-                closeBooking();
-
-            } catch (err) {
-                console.error('❌ 寫入失敗:', err);
-                alert(`預訂失敗：${err.message || '請檢查網路連線'}`);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = originalText;
-            }
-        });
-
-        // 初始化
-        updateParticipantFields(1);
-    </script>
-</body>
-</html>
+                    .insert(bookingRows);
