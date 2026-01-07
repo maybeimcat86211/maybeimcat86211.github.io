@@ -102,7 +102,8 @@ async function loadRealAvailability() {
                 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ max_slots: MAX_SLOTS_PER_DAY })
+            body: JSON.stringify({ _max_slots: MAX_SLOTS_PER_DAY })
+
         });
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
