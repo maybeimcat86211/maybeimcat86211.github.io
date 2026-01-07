@@ -18,7 +18,6 @@
             background: #f8f9fa;
         }
 
-        /* Header & Navigation */
         header {
             background: linear-gradient(135deg, #2E86AB 0%, #1B5E7E 100%);
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
@@ -58,7 +57,6 @@
             opacity: 0.8;
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(rgba(46, 134, 171, 0.8), rgba(27, 94, 126, 0.8)),
                         url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600') center/cover;
@@ -77,7 +75,6 @@
             font-size: 1.3rem;
         }
 
-        /* Trips Section */
         .trips-section {
             max-width: 1200px;
             margin: 60px auto;
@@ -188,7 +185,6 @@
             background: #1B5E7E;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -230,7 +226,6 @@
             margin-bottom: 30px;
         }
 
-        /* Accordion */
         .accordion-section {
             margin-bottom: 20px;
             border: 2px solid #e0e0e0;
@@ -278,10 +273,9 @@
 
         .accordion-content.active {
             padding: 25px;
-            max-height: 2000px;
+            max-height: 3000px;
         }
 
-        /* Calendar */
         #calendarContainer {
             display: flex;
             gap: 30px;
@@ -374,7 +368,12 @@
             box-shadow: 0 4px 10px rgba(46, 134, 171, 0.4);
         }
 
-        /* Form */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -434,13 +433,13 @@
             font-weight: bold;
         }
 
-        .btn-next:hover, .btn-submit:hover {
+        .btn-next:hover:not(:disabled), .btn-submit:hover:not(:disabled) {
             background: linear-gradient(135deg, #1B5E7E 0%, #2E86AB 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(46, 134, 171, 0.3);
         }
 
-        .btn-next:disabled {
+        .btn-next:disabled, .btn-submit:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
@@ -463,7 +462,25 @@
             width: auto;
         }
 
-        /* Footer */
+        .success-message, .error-message {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+
         footer {
             background: #2E86AB;
             color: white;
@@ -472,28 +489,6 @@
             margin-top: 60px;
         }
 
-        /* Success Message */
-        .success-message {
-            background: #d4edda;
-            border: 2px solid #c3e6cb;
-            color: #155724;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            border: 2px solid #f5c6cb;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -602,7 +597,6 @@
         </section>
     </main>
 
-    <!-- 預訂彈窗 -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeBooking()">×</span>
@@ -614,7 +608,6 @@
                 <input type="hidden" id="tripPrice">
                 <input type="hidden" id="selectedDate">
 
-                <!-- 步驟 1：日期選擇 -->
                 <div class="accordion-section active">
                     <div class="accordion-header active">
                         <span>📅 選擇探險日期</span>
@@ -629,7 +622,6 @@
                     </div>
                 </div>
 
-                <!-- 步驟 2：參加人數與個人資料 -->
                 <div class="accordion-section">
                     <div class="accordion-header">
                         <span>👥 參加人數與個人資料</span>
@@ -657,7 +649,6 @@
                     </div>
                 </div>
 
-                <!-- 步驟 3：確認送出 -->
                 <div class="accordion-section">
                     <div class="accordion-header">
                         <span>✓ 確認預訂並送出</span>
@@ -683,44 +674,90 @@
         <p>讓我們一起探索花蓮最美的秘境 🌊</p>
     </footer>
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
-        // 全域變數
+        // ==================== Supabase 配置 ====================
+        const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZWd6a2JydW1pZXVjeXdlZ2htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4MzIzMzEsImV4cCI6MjA1MjQwODMzMX0.YOUR_ACTUAL_KEY';
+        const MAX_CAPACITY = 20; // 每日最大容納人數
+
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('✅ Supabase 初始化成功');
+        } catch (error) {
+            console.error('❌ Supabase 初始化失敗:', error);
+        }
+
+        // ==================== 全域變數 ====================
         let selectedDateValue = null;
         let bookingData = {};
 
-        // 模擬日期可用性資料（實際應從後端獲取）
-        function getDateAvailability(date) {
-            const day = date.getDay();
-            const dateNum = date.getDate();
-            
-            // 過去的日期不可選
-            if (date < new Date().setHours(0, 0, 0, 0)) {
-                return 'disabled';
+        // ==================== Supabase 資料庫函式 ====================
+        
+        // 查詢日期可用性
+        async function checkAvailability(date, tripName) {
+            try {
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .select('participant_count')
+                    .eq('booking_date', date)
+                    .eq('trip_name', tripName)
+                    .eq('status', 'confirmed');
+                
+                if (error) throw error;
+                
+                const totalBooked = data.reduce((sum, booking) => sum + booking.participant_count, 0);
+                
+                if (totalBooked >= MAX_CAPACITY) return 'full';
+                if (totalBooked >= 15) return 'limited';
+                return 'available';
+            } catch (error) {
+                console.error('查詢可用性錯誤:', error);
+                return 'available'; // 錯誤時預設為可用
             }
-            
-            // 模擬邏輯：週六日較熱門
-            if (day === 0 || day === 6) {
-                return dateNum % 3 === 0 ? 'full' : (dateNum % 2 === 0 ? 'limited' : 'available');
-            }
-            return 'available';
         }
 
-        // 生成日曆
-        function generateCalendar() {
+        // 提交預訂到資料庫
+        async function submitBooking(bookingData) {
+            try {
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .insert([bookingData])
+                    .select();
+                
+                if (error) throw error;
+                
+                return { success: true, data };
+            } catch (error) {
+                console.error('提交預訂錯誤:', error);
+                return { success: false, error };
+            }
+        }
+
+        // ==================== 日曆生成函式 ====================
+        
+        async function generateCalendar() {
             const container = document.getElementById('calendarContainer');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="loading">⏳ 載入日曆中...</div>';
             
+            const tripName = document.getElementById('tripName').value;
             const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            container.innerHTML = '';
             
             // 生成接下來3個月的日曆
             for (let i = 0; i < 3; i++) {
-                const date = new Date(today.getFullYear(), today.getMonth() + i, 1);
-                const monthDiv = createMonthCalendar(date);
+                const monthDate = new Date(today.getFullYear(), today.getMonth() + i, 1);
+                const monthDiv = await createMonthCalendar(monthDate, tripName);
                 container.appendChild(monthDiv);
             }
         }
 
-        function createMonthCalendar(date) {
+        async function createMonthCalendar(date, tripName) {
             const monthDiv = document.createElement('div');
             monthDiv.className = 'month-calendar';
             
@@ -743,9 +780,11 @@
             const tbody = monthDiv.querySelector('tbody');
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
             let dayCount = 1;
-            let rows = Math.ceil((firstDay + daysInMonth) / 7);
+            const rows = Math.ceil((firstDay + daysInMonth) / 7);
             
             for (let i = 0; i < rows; i++) {
                 const row = document.createElement('tr');
@@ -753,334 +792,4 @@
                 for (let j = 0; j < 7; j++) {
                     const cell = document.createElement('td');
                     
-                    if (i === 0 && j < firstDay) {
-                        cell.className = 'disabled';
-                    } else if (dayCount > daysInMonth) {
-                        cell.className = 'disabled';
-                    } else {
-                        const cellDate = new Date(year, month, dayCount);
-                        const availability = getDateAvailability(cellDate);
-                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}`;
-                        
-                        cell.className = availability;
-                        cell.innerHTML = `
-                            <div class="day-number">${dayCount}</div>
-                            <div class="status">${availability === 'available' ? '可報名' : availability === 'limited' ? '少量' : availability === 'full' ? '額滿' : ''}</div>
-                        `;
-                        
-                        if (availability !== 'disabled' && availability !== 'full') {
-                            cell.onclick = () => selectDate(dateStr, cell);
-                        }
-                        
-                        dayCount++;
-                    }
-                    
-                    row.appendChild(cell);
-                }
-                
-                tbody.appendChild(row);
-            }
-            
-            return monthDiv;
-        }
-
-        // 選擇日期
-        function selectDate(dateStr, cell) {
-            // 移除之前的選擇
-            document.querySelectorAll('.calendar td').forEach(td => {
-                td.classList.remove('selected');
-            });
-            
-            // 標記新選擇
-            cell.classList.add('selected');
-            selectedDateValue = dateStr;
-            document.getElementById('selectedDate').value = dateStr;
-            
-            // 更新顯示
-            const date = new Date(dateStr);
-            const displayDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-            document.getElementById('selectedDateDisplay').textContent = displayDate;
-            
-            // 啟用確認按鈕
-            const confirmBtn = document.getElementById('confirmDateBtn');
-            confirmBtn.disabled = false;
-            confirmBtn.textContent = '確認日期並繼續 →';
-        }
-
-        // 生成參加者欄位
-        function generateParticipantFields() {
-            const count = parseInt(document.getElementById('participantCount').value);
-            const container = document.getElementById('participantFields');
-            container.innerHTML = '';
-            
-            for (let i = 1; i <= count; i++) {
-                const section = document.createElement('div');
-                section.className = 'participant-section';
-                section.innerHTML = `
-                    <h4>參加者 ${i}</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>姓名 *</label>
-                            <input type="text" name="name_${i}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>性別 *</label>
-                            <select name="gender_${i}" required>
-                                <option value="">請選擇</option>
-                                <option value="male">男</option>
-                                <option value="female">女</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>年齡 *</label>
-                            <input type="number" name="age_${i}" min="6" max="99" required>
-                        </div>
-                        <div class="form-group">
-                            <label>聯絡電話 *</label>
-                            <input type="tel" name="phone_${i}" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>電子郵件 ${i === 1 ? '*' : ''}</label>
-                        <input type="email" name="email_${i}" ${i === 1 ? 'required' : ''}>
-                    </div>
-                    <div class="form-group">
-                        <label>緊急聯絡人 ${i === 1 ? '*' : ''}</label>
-                        <input type="text" name="emergency_${i}" ${i === 1 ? 'required' : ''}>
-                    </div>
-                    <div class="form-group">
-                        <label>特殊需求或健康狀況</label>
-                        <textarea name="notes_${i}" rows="2"></textarea>
-                    </div>
-                `;
-                container.appendChild(section);
-            }
-        }
-
-        // 手風琴功能
-        function setupAccordion() {
-            const headers = document.querySelectorAll('.accordion-header');
-            
-            headers.forEach(header => {
-                header.addEventListener('click', () => {
-                    const section = header.parentElement;
-                    const content = section.querySelector('.accordion-content');
-                    
-                    // 切換當前區塊
-                    header.classList.toggle('active');
-                    content.classList.toggle('active');
-                    section.classList.toggle('active');
-                });
-            });
-        }
-
-        // 開啟預訂彈窗
-        function openBooking(tripName, price) {
-            bookingData = { tripName, price };
-            document.getElementById('tripName').value = tripName;
-            document.getElementById('tripPrice').value = price;
-            
-            document.getElementById('bookingInfo').innerHTML = `
-                <div style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:20px;">
-                    <strong>行程：</strong>${tripName}<br>
-                    <strong>價格：</strong>NT$ ${price.toLocaleString()} / 人
-                </div>
-            `;
-            
-            // 重置表單
-            document.getElementById('bookingForm').reset();
-            selectedDateValue = null;
-            document.getElementById('selectedDateDisplay').textContent = '';
-            document.getElementById('confirmDateBtn').disabled = true;
-            document.getElementById('confirmDateBtn').textContent = '請先選擇日期';
-            
-            // 生成日曆和參加者欄位
-            generateCalendar();
-            generateParticipantFields();
-            
-            // 重置手風琴狀態
-            document.querySelectorAll('.accordion-section').forEach((section, index) => {
-                if (index === 0) {
-                    section.classList.add('active');
-                    section.querySelector('.accordion-header').classList.add('active');
-                    section.querySelector('.accordion-content').classList.add('active');
-                } else {
-                    section.classList.remove('active');
-                    section.querySelector('.accordion-header').classList.remove('active');
-                    section.querySelector('.accordion-content').classList.remove('active');
-                }
-            });
-            
-            document.getElementById('bookingModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        // 關閉預訂彈窗
-        function closeBooking() {
-            document.getElementById('bookingModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // 確認日期按鈕
-        document.addEventListener('DOMContentLoaded', () => {
-            setupAccordion();
-            
-            document.getElementById('confirmDateBtn').addEventListener('click', () => {
-                if (selectedDateValue) {
-                    // 展開下一個區塊
-                    const sections = document.querySelectorAll('.accordion-section');
-                    sections[0].querySelector('.accordion-content').classList.remove('active');
-                    sections[0].querySelector('.accordion-header').classList.remove('active');
-                    
-                    sections[1].classList.add('active');
-                    sections[1].querySelector('.accordion-header').classList.add('active');
-                    sections[1].querySelector('.accordion-content').classList.add('active');
-                    
-                    // 滾動到該區塊
-                    sections[1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-            
-            // 確認資料按鈕
-            document.getElementById('confirmInfoBtn').addEventListener('click', () => {
-                const form = document.getElementById('bookingForm');
-                const inputs = form.querySelectorAll('.accordion-section:nth-child(2) input[required], .accordion-section:nth-child(2) select[required]');
-                let allValid = true;
-                
-                inputs.forEach(input => {
-                    if (!input.value) {
-                        allValid = false;
-                        input.style.borderColor = 'red';
-                    } else {
-                        input.style.borderColor = '#e0e0e0';
-                    }
-                });
-                
-                if (allValid) {
-                    // 更新摘要
-                    updateBookingSummary();
-                    
-                    // 展開最後一個區塊
-                    const sections = document.querySelectorAll('.accordion-section');
-                    sections[1].querySelector('.accordion-content').classList.remove('active');
-                    sections[1].querySelector('.accordion-header').classList.remove('active');
-                    
-                    sections[2].classList.add('active');
-                    sections[2].querySelector('.accordion-header').classList.add('active');
-                    sections[2].querySelector('.accordion-content').classList.add('active');
-                    
-                    sections[2].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                } else {
-                    alert('請填寫所有必填欄位');
-                }
-            });
-            
-            // 人數變更時重新生成欄位
-            document.getElementById('participantCount').addEventListener('change', generateParticipantFields);
-            
-            // 表單提交
-            document.getElementById('bookingForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                if (!selectedDateValue) {
-                    alert('請選擇日期');
-                    return;
-                }
-                
-                if (!document.getElementById('agreeTerms').checked) {
-                    alert('請同意活動條款');
-                    return;
-                }
-                
-                // 收集表單資料
-                const formData = new FormData(e.target);
-                const data = {
-                    tripName: document.getElementById('tripName').value,
-                    tripPrice: document.getElementById('tripPrice').value,
-                    date: selectedDateValue,
-                    participantCount: document.getElementById('participantCount').value,
-                    participants: [],
-                    submittedAt: new Date().toISOString()
-                };
-                
-                const count = parseInt(data.participantCount);
-                for (let i = 1; i <= count; i++) {
-                    data.participants.push({
-                        name: formData.get(`name_${i}`),
-                        gender: formData.get(`gender_${i}`),
-                        age: formData.get(`age_${i}`),
-                        phone: formData.get(`phone_${i}`),
-                        email: formData.get(`email_${i}`),
-                        emergency: formData.get(`emergency_${i}`),
-                        notes: formData.get(`notes_${i}`)
-                    });
-                }
-                
-                // 模擬提交（實際應串接 Supabase）
-                try {
-                    console.log('預訂資料：', data);
-                    
-                    // 這裡應該呼叫 Supabase API
-                    // await supabase.from('bookings').insert(data);
-                    
-                    // 顯示成功訊息
-                    const sections = document.querySelectorAll('.accordion-section');
-                    sections[2].querySelector('.accordion-content').innerHTML = `
-                        <div class="success-message">
-                            <h3>🎉 預訂申請已成功送出！</h3>
-                            <p>我們已收到您的預訂申請</p>
-                            <p><strong>預訂編號：</strong>${Date.now()}</p>
-                            <p><strong>行程：</strong>${data.tripName}</p>
-                            <p><strong>日期：</strong>${selectedDateValue}</p>
-                            <p><strong>人數：</strong>${data.participantCount} 位</p>
-                            <p style="margin-top:20px;">我們會在 24 小時內透過電話與您聯繫確認行程細節</p>
-                            <button class="btn-submit" onclick="closeBooking()">關閉</button>
-                        </div>
-                    `;
-                    
-                    // 滾動到成功訊息
-                    sections[2].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    
-                } catch (error) {
-                    alert('預訂失敗，請稍後再試或直接聯繫我們');
-                    console.error('Error:', error);
-                }
-            });
-        });
-
-        // 更新預訂摘要
-        function updateBookingSummary() {
-            const count = parseInt(document.getElementById('participantCount').value);
-            const price = parseInt(document.getElementById('tripPrice').value);
-            const total = count * price;
-            
-            const participants = [];
-            for (let i = 1; i <= count; i++) {
-                const name = document.querySelector(`input[name="name_${i}"]`).value;
-                participants.push(name);
-            }
-            
-            document.getElementById('bookingSummary').innerHTML = `
-                <h3 style="color:#2E86AB; margin-bottom:15px;">預訂摘要</h3>
-                <p><strong>行程：</strong>${document.getElementById('tripName').value}</p>
-                <p><strong>日期：</strong>${selectedDateValue}</p>
-                <p><strong>參加人數：</strong>${count} 位</p>
-                <p><strong>參加者：</strong>${participants.join('、')}</p>
-                <hr style="margin:15px 0; border:none; border-top:1px solid #ddd;">
-                <p style="font-size:1.2rem;"><strong>總金額：</strong><span style="color:#2E86AB; font-size:1.5rem;">NT$ ${total.toLocaleString()}</span></p>
-            `;
-        }
-
-        // 點擊彈窗外部關閉
-        window.onclick = (event) => {
-            const modal = document.getElementById('bookingModal');
-            if (event.target === modal) {
-                closeBooking();
-            }
-        };
-    </script>
-</body>
-</html>
+                    if
