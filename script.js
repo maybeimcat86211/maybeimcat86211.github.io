@@ -6,6 +6,8 @@ const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 )
+
+console.log('supabase client ready', supabase)
 // =====================================================
 
 let selectedDate = null;
