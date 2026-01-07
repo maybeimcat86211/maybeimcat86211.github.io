@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洄瀾溪谷秘境探險 | 花蓮溯溪體驗</title>
     <style>
-        /* 樣式保持不變 */
+        /* 樣式維持不變 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', sans-serif; line-height: 1.8; color: #333; background: #f8f9fa; }
         header { background: linear-gradient(135deg, #2E86AB 0%, #1B5E7E 100%); box-shadow: 0 2px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
@@ -101,6 +101,7 @@
 
         <section id="trips" class="trips-section">
             <div class="trips-container">
+                <!-- 西林秘境 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1533873984035-25970ab07461?w=800" alt="西林秘境">
@@ -117,6 +118,7 @@
                     </div>
                 </div>
 
+                <!-- 翡翠谷 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="翡翠谷">
@@ -133,6 +135,7 @@
                     </div>
                 </div>
 
+                <!-- 黃金峽谷 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="黃金峽谷">
@@ -149,6 +152,7 @@
                     </div>
                 </div>
 
+                <!-- 藍色秘境 -->
                 <div class="trip-card">
                     <div class="trip-image">
                         <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800" alt="藍色秘境">
@@ -243,15 +247,15 @@
     <!-- 1. 載入 SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
+    <!-- 2. 主程式：先定義 UI 函式，確保按鈕可點 -->
     <script>
-        // ================= 全域變數定義 =================
+        // ================= 全域變數 =================
         window.supabaseClient = null;
         var selectedDateValue = null;
         var currentTripName = '';
         var currentTripPrice = 0;
 
-        // ================= UI 函式 =================
-        
+        // ================= 1. UI 函式 =================
         window.openBooking = function(name, price) {
             console.log('開啟預訂視窗:', name, price);
             currentTripName = name;
@@ -270,7 +274,14 @@
                     </div>`;
                 
                 resetForm();
-                if(typeof renderCalendar === 'function') renderCalendar();
+                // 呼叫日曆渲染 (使用 RPC 安全函數)
+                if(typeof renderCalendar === 'function') {
+                    renderCalendar();
+                } else {
+                    document.getElementById('calendarContainer').innerHTML = '載入中...';
+                }
+            } else {
+                alert('錯誤：找不到彈窗元件');
             }
         };
 
@@ -285,8 +296,11 @@
             document.getElementById('confirmDateBtn').disabled = true;
             document.getElementById('participantCount').value = "1";
             
-            if(typeof updateParticipantFields === 'function') updateParticipantFields(1);
+            if(typeof updateParticipantFields === 'function') {
+                updateParticipantFields(1);
+            }
             
+            // 重置區塊顯示
             var sections = document.querySelectorAll('.accordion-section');
             if(sections.length > 0) {
                 toggleSection(0, true);
@@ -311,7 +325,7 @@
             }
         };
 
-        // ================= Supabase 初始化 =================
+        // ================= 2. Supabase 初始化 =================
         try {
             const SUPABASE_URL = 'https://feegzkbrumieucyweghm.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_B_taCjibUltphJ-1jmmWYQ_8__FYb45';
@@ -326,14 +340,13 @@
             console.error('❌ Supabase 初始化失敗:', error);
         }
 
-        // ================= 日曆邏輯 =================
-
+        // ================= 3. 日曆邏輯 (使用 RPC 安全函數) =================
         window.renderCalendar = async function() {
             const container = document.getElementById('calendarContainer');
             container.innerHTML = '<div class="loading">正在讀取最新報名狀況...</div>';
             
             const today = new Date();
-            const MAX_SLOTS = 10; // 已修改為 10
+            const MAX_SLOTS = 10; 
             let html = '';
 
             for (let i = 0; i < 3; i++) {
@@ -346,21 +359,22 @@
                 const lastDayStr = `${year}-${String(month + 1).padStart(2, '0')}-${lastDayObj.getDate()}`;
 
                 let counts = {};
+                
+                // 🚀 使用 RPC 呼叫 Supabase 函數
                 if (window.supabaseClient) {
                     try {
-                        const { data: monthBookings, error } = await window.supabaseClient
-                            .from('bookings')
-                            .select('trip_date')
-                            .eq('trip_name', currentTripName)
-                            .gte('trip_date', firstDayStr)
-                            .lte('trip_date', lastDayStr);
+                        const { data: monthCounts, error } = await window.supabaseClient.rpc('get_monthly_counts', {
+                            target_trip_name: currentTripName,
+                            start_date: firstDayStr,
+                            end_date: lastDayStr
+                        });
                         
-                        if (!error && monthBookings) {
-                            monthBookings.forEach(row => {
-                                counts[row.trip_date] = (counts[row.trip_date] || 0) + 1;
+                        if (!error && monthCounts) {
+                            monthCounts.forEach(row => {
+                                counts[row.trip_date] = row.count;
                             });
                         } else if(error) {
-                            console.warn("讀取資料失敗，請確認 RLS 權限:", error);
+                            console.warn("RPC 呼叫失敗，請確認已執行 SQL:", error);
                         }
                     } catch (e) {
                         console.warn("API Error", e);
@@ -472,11 +486,11 @@
             }
         }
 
-        // ================= 更新參加者欄位 (含鞋號下拉選單) =================
+        // ================= 更新欄位 (含鞋號選單 19-31cm) =================
         window.updateParticipantFields = function(count) {
             let html = '';
             
-            // 產生 19cm ~ 31cm 的選項
+            // 產生 19-31cm 的選項
             let shoeOptions = '<option value="" selected disabled>請選擇</option>';
             for(let s = 19; s <= 31; s++) {
                 shoeOptions += `<option value="${s}">${s} cm</option>`;
@@ -518,7 +532,6 @@
             setupAddressSync();
         };
 
-        // 初始執行
         updateParticipantFields(1);
 
         document.getElementById('confirmInfoBtn').addEventListener('click', () => {
@@ -558,7 +571,7 @@
                         emergency_phone: document.querySelector(`input[name="p${i}_emergency_phone"]`).value,
                         height: document.querySelector(`input[name="p${i}_height"]`).value || null,
                         weight: document.querySelector(`input[name="p${i}_weight"]`).value || null,
-                        shoe_size: document.querySelector(`select[name="p${i}_shoes"]`).value || null, // 改為抓取 select
+                        shoe_size: document.querySelector(`select[name="p${i}_shoes"]`).value || null,
                         medical_conditions: document.querySelector(`textarea[name="p${i}_medical"]`).value || '無',
                         created_at: new Date().toISOString()
                     });
